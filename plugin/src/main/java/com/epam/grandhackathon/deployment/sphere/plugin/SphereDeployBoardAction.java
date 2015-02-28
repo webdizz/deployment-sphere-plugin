@@ -1,7 +1,6 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.Messages;
 import com.epam.grandhackathon.deployment.sphere.plugin.service.EnvironmentDataService;
 import hudson.Extension;
 import hudson.model.RootAction;
@@ -15,7 +14,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
-import java.util.List;
+import java.util.Collection;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
@@ -25,8 +24,9 @@ public class SphereDeployBoardAction implements RootAction, AccessControlled {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
+
     @Inject
-    private EnvironmentDataService environmentDataService;
+    private EnvironmentDao environmentDao;
 
     @Override
     public String getIconFileName () {
@@ -44,8 +44,8 @@ public class SphereDeployBoardAction implements RootAction, AccessControlled {
     }
 
     @Exported
-    public List<EnvironmentMetaData> getEnvironments () {
-        return environmentDataService.getAllEnvironments();
+    public Collection<EnvironmentMetaData> getEnvironments () {
+        return environmentDao.findAll();
     }
 
     @Nonnull
