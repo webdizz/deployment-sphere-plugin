@@ -11,9 +11,7 @@ import lombok.EqualsAndHashCode;
 @ExportedBean
 public class DeploymentMetaData extends ApplicationMetaData {
     @Exported
-    private String deployedVersion;
-    @Exported
-    private String jobName;
+    private String buildVersion;
     @Exported
     private DateTime deployedAt;
 }

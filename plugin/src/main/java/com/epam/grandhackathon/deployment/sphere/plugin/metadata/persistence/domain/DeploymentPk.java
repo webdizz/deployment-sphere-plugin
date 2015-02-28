@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BuildPk implements Serializable {
+public class DeploymentPk implements Serializable {
     private String applicationName;
-    private Long number;
+    private String buildVersion;
 }
+
+

@@ -15,7 +15,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
 
     @Inject
-    private DeploymentMetaDataDao metadataDao;
+    private DeploymentMetaDataDao deploymentMetaDataDao;
 
     public DeployVersionMetaDataCollector() {
         Jenkins.getInstance().getInjector().injectMembers(this);
@@ -28,12 +28,12 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
         String applicationName = "";
 
         // persist data
-        DeploymentMetaData metaData = new DeploymentMetaData();
-        metaData.setApplicationName(applicationName);
-        metaData.setJobName(build.getDisplayName());
-        metaData.setDeployedAt(new DateTime(build.due()));
-        metaData.setDeployedVersion(String.format("0.0.%s", buildVersion));
-        return metaData;
+        DeploymentMetaData deploymentMetaData = new DeploymentMetaData();
+        deploymentMetaData.setApplicationName(applicationName);
+        deploymentMetaData.setDeployedAt(new DateTime(build.due()));
+        deploymentMetaData.setBuildVersion(buildVersion);
+        deploymentMetaDataDao.save(deploymentMetaData);
+        return deploymentMetaData;
     }
 
 }

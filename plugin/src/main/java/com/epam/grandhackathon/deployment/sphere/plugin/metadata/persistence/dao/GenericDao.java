@@ -8,15 +8,8 @@ import javax.persistence.EntityManager;
 import org.jenkinsci.plugins.database.jpa.PersistenceService;
 import org.modelmapper.ModelMapper;
 import jenkins.model.Jenkins;
-import lombok.extern.java.Log;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.BuildPk;
-
-@Log
-public class BuildMetaDataDao {
-
+public class GenericDao {
     @Inject
     private PersistenceService persistenceService;
 
@@ -24,7 +17,11 @@ public class BuildMetaDataDao {
 
     private ModelMapper modelMapper = new ModelMapper();
 
-    public BuildMetaDataDao() {
+    public GenericDao() {
+        initializeEntityManager();
+    }
+
+    private void initializeEntityManager() {
         Jenkins.getInstance().getInjector().injectMembers(this);
         try {
             entityManager = persistenceService.getGlobalEntityManagerFactory().createEntityManager();
@@ -33,13 +30,11 @@ public class BuildMetaDataDao {
         }
     }
 
-    public void save(final BuildMetaData buildMetaData) {
-        Build mappedBuild = modelMapper.map(buildMetaData, Build.class);
-        entityManager.persist(mappedBuild);
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
-    public BuildMetaData find(final String jobName, final Long number) {
-        Build foundBuild = entityManager.find(Build.class, new BuildPk(number, jobName));
-        return modelMapper.map(foundBuild, BuildMetaData.class);
+    public ModelMapper getModelMapper() {
+        return modelMapper;
     }
 }
