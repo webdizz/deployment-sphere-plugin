@@ -23,14 +23,10 @@ allprojects {
     }
 }
 
-apply from: file('gradle/ide.gradle')
-
 subprojects {
-    group = "com.epam.grand-hackathon.${githubProjectName}" // TEMPLATE: Set to organization of project
+    group = "com.epam.grand-hackathon.${githubProjectName}"
 
-    apply plugin: 'java'
     apply plugin: 'groovy'
-    apply plugin: 'maven'
 
     sourceCompatibility = javaSourceCompatibilityVersion
     targetCompatibility = javaSourceCompatibilityVersion

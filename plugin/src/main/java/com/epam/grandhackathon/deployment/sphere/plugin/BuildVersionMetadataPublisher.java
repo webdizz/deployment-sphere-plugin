@@ -11,13 +11,14 @@ import hudson.Launcher;
 import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Notifier;
 import lombok.extern.java.Log;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetadataCollector;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 
 @Log
-public class BuildVersionMetadataPublisher extends hudson.tasks.Notifier {
+public class BuildVersionMetadataPublisher extends Notifier {
 
     @DataBoundConstructor
     public BuildVersionMetadataPublisher() {

@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin.model;
+package com.epam.grandhackathon.deployment.sphere.plugin.metadata.model;
 
 import lombok.Data;
 

@@ -46,6 +46,4 @@ jenkinsPlugin {
 
 dependencies {
     jenkinsPlugins 'com.cloudbees.plugins:build-flow-plugin:0.17@jar'
-    compile 'org.jgrapht:jgrapht-jdk1.5:0.7.3'
-    compile 'xmlunit:xmlunit:1.4'
 }
