@@ -21,6 +21,7 @@ jenkinsPlugin {
     maskClasses = 'groovy.grape'
     compatibleSinceVersion = '1.20'
     pluginFirstClassLoader = true
+    shortName = 'deployment-sphere'
     developers {
         developer {
             id 'webdizz'
