@@ -12,21 +12,17 @@ buildscript {
 
 apply plugin: 'org.jenkins-ci.jpi'
 
-description = 'Jenkins plugin to programmatic create builds from inside Jenkins.'
+description = 'Jenkins plugin to provide insides for your deployments.'
 
 
 jenkinsPlugin {
     coreVersion = '1.591'
-    displayName = 'Jobolizer - DSL to treat build like a code'
-    gitHubUrl = 'https://github.com/webdizz/jobolizer'
+    displayName = 'Deployment Sphere'
+    gitHubUrl = 'https://github.com/webdizz/deployment-sphere'
     maskClasses = 'groovy.grape'
     compatibleSinceVersion = '1.20'
     pluginFirstClassLoader = true
     developers {
-        developer {
-            id 'Alex'
-            name 'Alex Sholokh'
-        }
         developer {
             id 'webdizz'
             name 'Izzet Mustafaiev'
@@ -42,10 +38,6 @@ jenkinsPlugin {
             email 'zinur@mustafaiev.com'
         }
         developer {
-            id 'max'
-            name 'Max Bilenko'
-        }
-        developer {
             id 'tair'
             name 'Tair Mustafaiev'
             email 'tair@mustafaiev.com'
@@ -56,8 +48,6 @@ jenkinsPlugin {
 dependencies {
     jenkinsPlugins 'com.cloudbees.plugins:build-flow-plugin:0.17@jar'
     compile 'org.jgrapht:jgrapht-jdk1.5:0.7.3'
-    compile 'org.jenkinsci.plugins:job-dsl-core:1.17@jar'
-    compile 'org.jenkinsci.plugins:job-dsl:1.17@jar'
     compile 'xmlunit:xmlunit:1.4'
 
 }
