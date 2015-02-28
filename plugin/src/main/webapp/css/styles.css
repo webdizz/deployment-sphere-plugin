@@ -1,0 +1,7 @@
+.main-panel-content tr.collapse-pointer {
+    cursor: pointer;
+}
+
+.main-panel-content tr.collapse-pointer:hover {
+    background-color: #f5f5f5;
+}
