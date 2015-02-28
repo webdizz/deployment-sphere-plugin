@@ -40,9 +40,9 @@ public class BuildVersionMetadataPublisher extends Notifier {
         checkArgument(null != build, "Current build is null, something was wrong.");
 
         listener.getLogger().append("[deployment-sphere] Collecting build metadata\n");
-        
+
         Collector<BuildMetaData> collector = new BuildVersionMetadataCollector();
-        BuildMetaData buildMetaData = collector.collect(build);
+        BuildMetaData buildMetaData = collector.collect(build, listener);
         log.log(Level.FINEST, format("Next build metadata was collected %s", buildMetaData));
 
         return true;

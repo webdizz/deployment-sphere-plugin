@@ -41,9 +41,9 @@ public class DeployVersionMetadataPublisher extends hudson.tasks.Notifier {
         listener.getLogger().append("[deployment-sphere] Collecting deploy metadata\n");
 
         Collector<DeployMetaData> collector = new DeployVersionMetadataCollector();
-        DeployMetaData metaData = collector.collect(build);
+        DeployMetaData metaData = collector.collect(build, listener);
 
-        log.log(Level.FINEST, format("Next deploy metadata has been collected %s", metaData));
+        log.log(Level.FINEST, format("New deploy metadata has been collected %s", metaData));
 
         return true;
     }
