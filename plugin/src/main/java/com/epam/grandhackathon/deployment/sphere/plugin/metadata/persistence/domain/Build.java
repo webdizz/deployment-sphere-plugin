@@ -10,5 +10,5 @@ public class Build implements Serializable {
     private String applicationName;
     private String buildVersion;
     private Long number;
-    private DateTime builtAt;
+    private Long builtAt;
 }

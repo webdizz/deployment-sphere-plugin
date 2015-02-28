@@ -9,6 +9,6 @@ import lombok.Data;
 //@GlobalTable
 public class Environment implements Serializable {
 //    @Id
-    private String key;
+    private String identity;
     private String title;
 }
