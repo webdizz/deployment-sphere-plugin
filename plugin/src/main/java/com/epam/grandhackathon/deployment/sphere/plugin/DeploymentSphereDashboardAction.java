@@ -1,22 +1,20 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import java.util.Collection;
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
-
-import org.acegisecurity.AccessDeniedException;
-import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.stapler.export.ExportedBean;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import hudson.Extension;
 import hudson.model.RootAction;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
 import jenkins.model.Jenkins;
+import org.acegisecurity.AccessDeniedException;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.Messages;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+import java.util.Collection;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension

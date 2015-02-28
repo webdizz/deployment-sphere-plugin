@@ -1,5 +1,6 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
@@ -9,9 +10,7 @@ import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 import org.joda.time.DateTime;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
+import javax.inject.Inject;
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {

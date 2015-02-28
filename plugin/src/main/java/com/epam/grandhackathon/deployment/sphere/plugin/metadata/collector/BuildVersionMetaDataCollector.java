@@ -1,21 +1,24 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
-import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
-import static com.epam.grandhackathon.deployment.sphere.plugin.TempConstants.APP_NAME;
-import hudson.model.TaskListener;
-import hudson.model.AbstractBuild;
-import hudson.scm.ChangeLogSet;
-
-import java.io.PrintStream;
-
-import javax.inject.Inject;
-
-import jenkins.model.Jenkins;
-import lombok.extern.java.Log;
-
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
+import com.google.common.base.Strings;
+import hudson.model.AbstractBuild;
+import hudson.model.TaskListener;
+import hudson.scm.ChangeLogSet;
+import jenkins.model.Jenkins;
+import lombok.extern.java.Log;
+import org.joda.time.DateTime;
+
+import javax.inject.Inject;
+import java.io.PrintStream;
+
+import static com.epam.grandhackathon.deployment.sphere.plugin.TempConstants.APP_NAME;
+import static com.google.common.base.Preconditions.checkState;
+import static java.lang.String.format;
 
 @Log
 public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
@@ -48,7 +51,7 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         buildMetaData.setNumber(buildNumber);
         buildMetaData.setApplicationName(APP_NAME);
         buildMetaData.setJobName(build.getDisplayName());
-        buildMetaData.setBuiltAt(new DateTime(build.due()));
+        buildMetaData.setBuiltAt(DateFormatUtil.formatDate(new DateTime(build.due())));
 
         final EnvVarsResolver envResolver = new EnvVarsResolver(build, listener);
         final String buildVersion = envResolver.getValue(Constants.BUILD_VERSION);
