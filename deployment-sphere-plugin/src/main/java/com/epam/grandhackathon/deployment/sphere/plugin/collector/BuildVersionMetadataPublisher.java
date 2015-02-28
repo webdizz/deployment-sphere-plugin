@@ -1,4 +1,4 @@
-package com.epam.grand.hackathon.deployment.sphere.plugin.collector.version.version;
+package com.epam.grandhackathon.deployment.sphere.plugin.collector;
 
 import hudson.tasks.BuildStepMonitor;
 
