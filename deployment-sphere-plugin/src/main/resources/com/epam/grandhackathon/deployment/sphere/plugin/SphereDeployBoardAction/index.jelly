@@ -6,7 +6,7 @@
     <script type="text/javascript" src="${rootURL}/plugin/deployment-sphere/js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="${rootURL}/plugin/deployment-sphere/js/bootstrap.min.js"></script>
 
-    <l:layout title="${%Leaderboard.title}">
+    <l:layout title="Deployment Sphere">
         <st:include page="sidepanel.jelly"/>
         <l:main-panel>
             <div>Main Panel</div>
