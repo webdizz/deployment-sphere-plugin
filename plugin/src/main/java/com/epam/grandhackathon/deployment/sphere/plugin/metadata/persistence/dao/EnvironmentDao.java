@@ -2,12 +2,10 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.da
 
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
 import com.google.common.collect.Lists;
 import jenkins.model.Jenkins;
 import org.jenkinsci.plugins.database.jpa.PersistenceService;
-import org.joda.time.DateTime;
 import org.modelmapper.ModelMapper;
 
 import javax.inject.Inject;
