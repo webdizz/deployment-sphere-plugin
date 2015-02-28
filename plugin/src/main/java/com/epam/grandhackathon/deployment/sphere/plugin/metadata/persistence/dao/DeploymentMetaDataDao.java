@@ -27,7 +27,7 @@ public class DeploymentMetaDataDao extends GenericDao {
 //        BuildPk buildPk = new BuildPk(applicationName, buildVersion);
 //        TypedQuery<Build> query = getEntityManager().createQuery("SELECT b FROM Build AS b", Build.class);
 //        List<Build> resultList = query.getResultList();
-//        log.fine(format("There are builds number in database '%s'", resultList.size()));
+//        log.fine(format("There are builds buildNumber in database '%s'", resultList.size()));
 //
 //        Build build = getEntityManager().find(Build.class, buildPk);
 //        checkArgument(null != build, format("Cannot find build for given application '%s' and build version '%s'", applicationName, buildVersion));

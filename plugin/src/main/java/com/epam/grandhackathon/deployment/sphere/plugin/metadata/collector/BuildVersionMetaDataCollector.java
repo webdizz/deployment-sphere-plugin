@@ -44,7 +44,7 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
         String buildId = build.getId();
         ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry> changeSet = build.getChangeSet();
-        log.fine(format("Resolved build number: %s, build id: %s, changeSet emptiness: %s", buildNumber, buildId,
+        log.fine(format("Resolved build buildNumber: %s, build id: %s, changeSet emptiness: %s", buildNumber, buildId,
                 changeSet.isEmptySet()));
 
         final BuildMetaData buildMetaData = new BuildMetaData();

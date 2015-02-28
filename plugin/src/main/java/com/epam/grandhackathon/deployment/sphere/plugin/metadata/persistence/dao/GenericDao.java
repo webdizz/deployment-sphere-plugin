@@ -9,10 +9,6 @@ import org.skife.jdbi.v2.DBI;
 import javax.inject.Inject;
 
 public class GenericDao {
-//    @Inject
-//    private PersistenceService persistenceService;
-//
-//    private EntityManager entityManager;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -22,18 +18,6 @@ public class GenericDao {
     public GenericDao () {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
-
-//    private void initializeEntityManager() {
-//        try {
-//            entityManager = persistenceService.getGlobalEntityManagerFactory().createEntityManager();
-//        } catch (SQLException | IOException exc) {
-//            throw new IllegalStateException("Unable to instantiate EntityManager for BuildMetadataDao", exc);
-//        }
-//    }
-
-//    public EntityManager getEntityManager() {
-//        return entityManager;
-//    }
 
     public DBI database () {
         return databaseProvider.database();
