@@ -29,26 +29,41 @@
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
+                                                    <th>Deploy Version</th>
                                                     <th>Application</th>
-                                                    <th>Version</th>
                                                     <th>Deployment Time</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <j:forEach indexVar="deploymentIndex" var="deployment" items="${env.deployments}">
-                                                    <tr class="collapse-pointer" data-toggle="collapse" data-target="#collapseExample${deploymentIndex}" aria-expanded="false" aria-controls="collapseExample${deploymentIndex}">
-                                                        <td>
-                                                            ${deployment.applicationName}
-                                                        </td>
+                                                    <tr class="collapse-pointer collapse-pointer-hover" data-toggle="collapse" data-target="#collapseExample${deploymentIndex}" aria-expanded="false" aria-controls="collapseExample${deploymentIndex}">
                                                         <td>
                                                             ${deployment.buildVersion}
+                                                        </td>
+                                                        <td>
+                                                            ${deployment.applicationName}
                                                         </td>
                                                         <td>${deployment.deployedAt}</td>
                                                     </tr>
                                                     <tr class="collapse" id="collapseExample${deploymentIndex}">
                                                         <td colspan="3">
-                                                            <div class="well">
-                                                                Build Info
+                                                            <div class="well-custom">
+                                                                <table class="table no-margin table-striped">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Build Version</th>
+                                                                        <th>Build Job</th>
+                                                                        <th>Build Time</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>${deployment.build.buildVersion}</td>
+                                                                            <td><a href="/job/${deployment.build.jobName}/${deployment.build.number}">${deployment.build.jobName} #${deployment.build.number}</a></td>
+                                                                            <td>${deployment.build.builtAt}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
                                                             </div>
                                                         </td>
                                                     </tr>

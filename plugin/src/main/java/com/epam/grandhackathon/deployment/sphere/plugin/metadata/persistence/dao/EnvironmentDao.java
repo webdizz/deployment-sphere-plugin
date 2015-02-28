@@ -1,5 +1,6 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
@@ -33,11 +34,22 @@ public class EnvironmentDao  extends GenericDao {
             log.fine(format("There are builds buildNumber in database '%s'", builds.size()));
         }
 
+        BuildMetaData cqBuild = new BuildMetaData();
+        cqBuild.setApplicationName("CQ");
+        cqBuild.setNumber(1L);
+        cqBuild.setBuildVersion("0.0.43");
+        cqBuild.setBuiltAt(DateFormatUtil.formatDate(DateTime.now()));
+        cqBuild.setJobName("test_build");
+
+
         EnvironmentMetaData production = new EnvironmentMetaData("Production");
+
         DeploymentMetaData prodDeploy1 = new DeploymentMetaData();
         prodDeploy1.setBuildVersion("123123123");
         prodDeploy1.setDeployedAt(DateFormatUtil.formatDate(DateTime.now()));
         prodDeploy1.setApplicationName("CQ");
+        prodDeploy1.setBuild(cqBuild);
+
         DeploymentMetaData prodDeploy2 = new DeploymentMetaData();
         prodDeploy2.setBuildVersion("1231231234");
         prodDeploy2.setDeployedAt(DateFormatUtil.formatDate(DateTime.now()));
