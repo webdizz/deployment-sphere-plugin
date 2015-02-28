@@ -1,10 +1,8 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.model;
 
-import org.joda.time.DateTime;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.kohsuke.stapler.export.ExportedBean;
+
 import org.joda.time.DateTime;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
