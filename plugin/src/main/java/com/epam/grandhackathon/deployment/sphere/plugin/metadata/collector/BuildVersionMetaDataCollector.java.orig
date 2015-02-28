@@ -42,7 +42,12 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         buildMetaData.setApplicationName(APP_NAME);
         buildMetaData.setJobName(build.getDisplayName());
         buildMetaData.setBuiltAt(new DateTime(build.due()));
+<<<<<<< HEAD
 
+=======
+        final EnvVarsExtractor envExtractor = new EnvVarsExtractor(build, taskListener);
+        buildMetaData.setBuildVersion(envExtractor.getValue(Constants.BUILD_VERSION));
+>>>>>>> [Hackathon2015]-added form field
         metadataDao.save(buildMetaData);
         return buildMetaData;
     }

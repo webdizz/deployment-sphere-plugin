@@ -1,11 +1,19 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
+import java.io.IOException;
 import java.util.logging.Level;
+
+import javax.servlet.ServletException;
+
+import org.kohsuke.stapler.QueryParameter;
+
+import com.google.common.base.Strings;
 
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
+import hudson.util.FormValidation;
 import jenkins.YesNoMaybe;
 import lombok.extern.java.Log;
 
@@ -24,8 +32,17 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
         return true;
     }
 
-
     public String getDisplayName() {
         return "Collect Build Metadata";
     }
+
+    public FormValidation doCheckVersionPattern(@QueryParameter String versionPattern) throws IOException,
+            ServletException {
+        if (Strings.isNullOrEmpty(versionPattern)) {
+            return FormValidation
+                    .error("Please set the version pattern in the following format. x.x.{v}, where x - is any string value");
+        }
+        return FormValidation.ok();
+    }
+
 }
