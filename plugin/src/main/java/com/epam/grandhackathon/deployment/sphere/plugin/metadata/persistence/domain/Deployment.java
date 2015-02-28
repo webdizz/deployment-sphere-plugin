@@ -4,7 +4,7 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.do
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
 
 import org.jenkinsci.plugins.database.jpa.GlobalTable;
 import org.joda.time.DateTime;
@@ -13,11 +13,12 @@ import lombok.Data;
 @Entity
 @Data
 @GlobalTable
-@IdClass(DeploymentPk.class)
 public class Deployment implements Serializable {
     @Id
-    private String applicationName;
-    @Id
-    private String buildVersion;
+    private Long identity;
     private DateTime deployedAt;
+    @ManyToOne
+    private Build build;
+    @ManyToOne
+    private Environment environment;
 }

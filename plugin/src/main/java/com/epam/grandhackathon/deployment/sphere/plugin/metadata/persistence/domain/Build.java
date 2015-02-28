@@ -17,7 +17,7 @@ public class Build implements Serializable {
     @Id
     private String applicationName;
     @Id
-    private Long number;
     private String buildVersion;
+    private Long number;
     private DateTime builtAt;
 }

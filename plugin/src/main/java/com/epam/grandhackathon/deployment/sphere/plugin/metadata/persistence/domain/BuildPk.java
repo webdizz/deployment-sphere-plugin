@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BuildPk implements Serializable {
     private String applicationName;
-    private Long number;
+    private String buildVersion;
 }

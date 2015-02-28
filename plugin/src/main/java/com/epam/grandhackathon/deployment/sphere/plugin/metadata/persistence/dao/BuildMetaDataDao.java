@@ -14,8 +14,8 @@ public class BuildMetaDataDao extends GenericDao {
         getEntityManager().persist(mappedBuild);
     }
 
-    public BuildMetaData find(final String applicationName, final Long number) {
-        Build foundBuild = getEntityManager().find(Build.class, new BuildPk(applicationName, number));
+    public BuildMetaData find(final String applicationName, final String buildVersion) {
+        Build foundBuild = getEntityManager().find(Build.class, new BuildPk(applicationName, buildVersion));
         return getModelMapper().map(foundBuild, BuildMetaData.class);
     }
 }
