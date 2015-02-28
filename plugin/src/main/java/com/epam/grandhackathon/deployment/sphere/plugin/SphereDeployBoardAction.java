@@ -1,7 +1,7 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.service.EnvironmentDataService;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import hudson.Extension;
 import hudson.model.RootAction;
 import hudson.security.ACL;
@@ -11,6 +11,7 @@ import jenkins.model.Jenkins;
 import org.acegisecurity.AccessDeniedException;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
+import com.epam.grandhackathon.deployment.sphere.plugin.Messages;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
