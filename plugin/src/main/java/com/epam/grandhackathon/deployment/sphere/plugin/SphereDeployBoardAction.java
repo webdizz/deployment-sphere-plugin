@@ -1,6 +1,7 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.Messages;
 import com.epam.grandhackathon.deployment.sphere.plugin.service.EnvironmentDataService;
 import hudson.Extension;
 import hudson.model.RootAction;
@@ -24,7 +25,6 @@ public class SphereDeployBoardAction implements RootAction, AccessControlled {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
-
     @Inject
     private EnvironmentDataService environmentDataService;
 
@@ -35,7 +35,7 @@ public class SphereDeployBoardAction implements RootAction, AccessControlled {
 
     @Override
     public String getDisplayName () {
-        return "Deployment Sphere";
+        return Messages.plugin_title();
     }
 
     @Override

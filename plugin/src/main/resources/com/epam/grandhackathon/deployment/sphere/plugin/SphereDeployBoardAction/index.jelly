@@ -11,7 +11,6 @@
         <l:main-panel>
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <j:forEach indexVar="index" var="env" items="${it.environments}">
-
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading${index + 1}">
                             <h4 class="panel-title">
@@ -26,11 +25,8 @@
                             </div>
                         </div>
                     </div>
-
                 </j:forEach>
-
             </div>
-
         </l:main-panel>
     </l:layout>
 
