@@ -16,7 +16,7 @@ public class DatabaseProvider {
 
     static {
         Handle handle = DBI.open();
-        handle.execute("create table deployments (identity long primary key, applicationName varchar(255))");
+        handle.execute("CREATE TABLE IF NOT EXISTS deployments (identity long primary key, applicationName varchar(255))");
         handle.close();
     }
 
