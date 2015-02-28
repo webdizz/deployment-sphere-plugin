@@ -45,4 +45,11 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
         return FormValidation.ok();
     }
 
+    public FormValidation doCheckAppName(@QueryParameter String appName) throws IOException, ServletException {
+        if (Strings.isNullOrEmpty(appName)) {
+            return FormValidation.error("Please set the application name");
+        }
+        return FormValidation.ok();
+    }
+
 }

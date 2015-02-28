@@ -10,6 +10,8 @@ import hudson.tasks.Notifier;
 
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 import lombok.extern.java.Log;
@@ -29,6 +31,8 @@ public class BuildVersionMetaDataPublisher extends Notifier {
 
     @DataBoundSetter
     private String versionPattern;
+    @DataBoundSetter
+    private String appName;
 
     @DataBoundConstructor
     public BuildVersionMetaDataPublisher() {
@@ -41,6 +45,10 @@ public class BuildVersionMetaDataPublisher extends Notifier {
 
     public String getVersionPattern() {
         return versionPattern;
+    }
+
+    public String getAppName() {
+        return appName;
     }
 
     @Override
@@ -75,7 +83,11 @@ public class BuildVersionMetaDataPublisher extends Notifier {
 
         final String buildVersion = pattern.replace("{v}", String.valueOf(build.getNumber()));
 
-        build.addAction(new DynamicVariablesStorageAction(Constants.BUILD_VERSION, buildVersion));
+        Map<String, String> envVars = new HashMap<>();
+        envVars.put(Constants.BUILD_VERSION, buildVersion);
+        envVars.put(Constants.BUILD_APP_NAME, this.appName);
+
+        build.addAction(new DynamicVariablesStorageAction(envVars));
 
         return true;
     }

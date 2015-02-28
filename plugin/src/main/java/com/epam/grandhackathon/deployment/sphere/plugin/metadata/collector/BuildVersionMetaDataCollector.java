@@ -49,15 +49,18 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
         final BuildMetaData buildMetaData = new BuildMetaData();
         buildMetaData.setNumber(buildNumber);
-        buildMetaData.setApplicationName(APP_NAME);
         buildMetaData.setJobName(build.getDisplayName());
         buildMetaData.setBuiltAt(DateFormatUtil.formatDate(new DateTime(build.due())));
 
         final EnvVarsResolver envResolver = new EnvVarsResolver(build, listener);
+
         final String buildVersion = envResolver.getValue(Constants.BUILD_VERSION);
         checkState(!Strings.isNullOrEmpty(buildVersion), String.format("Build version '%s' is not valid", buildVersion));
-
         buildMetaData.setBuildVersion(buildVersion);
+
+        final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
+        checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
+        buildMetaData.setApplicationName(appName);
 
         metadataDao.save(buildMetaData);
         return buildMetaData;
