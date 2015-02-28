@@ -1,12 +1,12 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.service;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 
 import java.util.List;
 
 public interface EnvironmentDataService {
 
-    List<EnvironmentData> getAllEnvironments();
+    List<EnvironmentMetaData> getAllEnvironments();
 
-    EnvironmentData getEnvironment(String title);
+    EnvironmentMetaData getEnvironment(String title);
 }
