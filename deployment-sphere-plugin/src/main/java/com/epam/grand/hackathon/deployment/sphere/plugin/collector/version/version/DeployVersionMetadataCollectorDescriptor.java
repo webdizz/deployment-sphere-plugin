@@ -10,7 +10,7 @@ import jenkins.YesNoMaybe;
 public class DeployVersionMetadataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
 
     public DeployVersionMetadataCollectorDescriptor() {
-        super(BuildVersionMetadataPublisher.class);
+        super(DeployVersionMetadataPublisher.class);
     }
 
     @Override
