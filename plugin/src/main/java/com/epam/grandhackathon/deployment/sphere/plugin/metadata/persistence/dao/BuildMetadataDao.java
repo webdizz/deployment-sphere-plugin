@@ -6,11 +6,13 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import org.jenkinsci.plugins.database.jpa.PersistenceService;
+import org.modelmapper.ModelMapper;
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.BuildPk;
 
 @Log
 public class BuildMetadataDao {
@@ -19,6 +21,8 @@ public class BuildMetadataDao {
     private PersistenceService persistenceService;
 
     private EntityManager entityManager;
+
+    private ModelMapper modelMapper = new ModelMapper();
 
     public BuildMetadataDao() {
         Jenkins.getInstance().getInjector().injectMembers(this);
@@ -30,9 +34,12 @@ public class BuildMetadataDao {
     }
 
     public void save(final BuildMetaData buildMetaData) {
-        Build build = new Build();
-        build.setJobName(buildMetaData.getJobName());
-        build.setNumber(buildMetaData.getNumber());
-        entityManager.persist(build);
+        Build mappedBuild = modelMapper.map(buildMetaData, Build.class);
+        entityManager.persist(mappedBuild);
+    }
+
+    public BuildMetaData find(final String jobName, final Long number) {
+        Build foundBuild = entityManager.find(Build.class, new BuildPk(number, jobName));
+        return modelMapper.map(foundBuild, BuildMetaData.class);
     }
 }

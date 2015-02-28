@@ -26,7 +26,7 @@ public class BuildVersionMetadataCollector implements Collector<BuildMetaData> {
 
     @Override
     public BuildMetaData collect(AbstractBuild<?, ?> build, final TaskListener taskListener) {
-        int buildNumber = build.getNumber();
+        Long buildNumber = (long) build.getNumber();
 
         String buildId = build.getId();
         ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry> changeSet = build.getChangeSet();

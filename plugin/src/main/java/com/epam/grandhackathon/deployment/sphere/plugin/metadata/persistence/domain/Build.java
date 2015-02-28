@@ -16,7 +16,7 @@ import lombok.Data;
 public class Build implements Serializable {
 
     @Id
-    private Integer number;
+    private Long number;
     @Id
     private String jobName;
     private DateTime builtAt;

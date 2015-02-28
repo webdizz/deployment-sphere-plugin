@@ -50,4 +50,5 @@ dependencies {
     jenkinsPlugins 'org.jenkins-ci.plugins:database-h2:1.0@jar'
     compile 'org.hibernate:hibernate-entitymanager:3.6.10.Final'
     compile 'org.hibernate:hibernate-core:3.6.10.Final'
+    compile 'org.modelmapper:modelmapper:0.7.3'
 }
