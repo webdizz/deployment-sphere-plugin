@@ -2,6 +2,7 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
 import static java.lang.String.format;
 
+import org.joda.time.DateTime;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.scm.ChangeLogSet;
@@ -18,7 +19,12 @@ public class BuildVersionMetadataCollector<P extends AbstractProject<P, R>, R ex
         String buildId = build.getId();
         ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry> changeSet = build.getChangeSet();
         log.fine(format("Resolved build number: %s, build id: %s, changeSet emptiness: %s", buildNumber, buildId, changeSet.isEmptySet()));
-//        return new BuildMetaData(number: buildNumber, name: build.displayName, builtAt: new DateTime(build.time.time))
-        return null;
+        BuildMetaData buildMetaData = new BuildMetaData();
+        buildMetaData.setNumber(buildNumber);
+        buildMetaData.setApplicationName("Some app name");
+        buildMetaData.setJobName(build.getDisplayName());
+        buildMetaData.setBuiltAt(new DateTime(build.due()));
+        buildMetaData.setBuildVersion(String.format("0.0.%s", buildNumber));
+        return buildMetaData;
     }
 }
