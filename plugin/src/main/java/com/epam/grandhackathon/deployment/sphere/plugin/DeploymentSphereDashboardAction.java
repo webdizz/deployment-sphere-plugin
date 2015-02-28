@@ -19,9 +19,9 @@ import java.util.Collection;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
-public class SphereDeployBoardAction implements RootAction, AccessControlled {
+public class DeploymentSphereDashboardAction implements RootAction, AccessControlled {
 
-    public SphereDeployBoardAction () {
+    public DeploymentSphereDashboardAction () {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 

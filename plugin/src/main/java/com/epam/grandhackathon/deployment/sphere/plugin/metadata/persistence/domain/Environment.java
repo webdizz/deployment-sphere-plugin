@@ -1,12 +1,10 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.Entity;
+
 import org.jenkinsci.plugins.database.jpa.GlobalTable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -19,6 +17,7 @@ public class Environment implements Serializable {
     private String title;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="BUILD_ID", unique= true, nullable=true, insertable=true, updatable=true)
     private Build build;
 
 
