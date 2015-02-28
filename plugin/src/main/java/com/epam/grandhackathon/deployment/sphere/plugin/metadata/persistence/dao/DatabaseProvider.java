@@ -1,10 +1,12 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao;
 
-import javax.sql.DataSource;
-
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.Handle;
+import org.skife.jdbi.v2.util.StringMapper;
+
+import javax.sql.DataSource;
+import java.util.List;
 
 public class DatabaseProvider {
 
@@ -21,12 +23,27 @@ public class DatabaseProvider {
         handle.execute("CREATE TABLE IF NOT EXISTS DEPLOYMENTS (identity long primary key, applicationName varchar(255))");
         handle.execute("CREATE TABLE IF NOT EXISTS ENVIRONMENTS (identity long primary key, title varchar(255))");
 
+        List<String> rs = handle.createQuery("SELECT title FROM ENVIRONMENTS ORDER BY identity")
+                .map(StringMapper.FIRST)
+                .list();
 
-//        handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (1, 'ci')");
-//        handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (2, 'qa')");
-//        handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (3, 'st')");
-//        handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (4, 'pre-prod')");
-//        handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (5, 'prod')");
+        if(!rs.contains("ci")) {
+            handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (1, 'ci')");
+        }
+        if(!rs.contains("qa")) {
+            handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (2, 'qa')");
+        }
+        if(!rs.contains("st")) {
+            handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (3, 'st')");
+        }
+
+        if(!rs.contains("pre-prod")) {
+            handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (4, 'pre-prod')");
+        }
+        if(!rs.contains("prod")) {
+            handle.execute("INSERT INTO  ENVIRONMENTS (identity,title ) VALUES (5, 'prod')");
+        }
+
 
         handle.close();
     }
