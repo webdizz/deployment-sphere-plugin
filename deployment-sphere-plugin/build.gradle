@@ -1,0 +1,63 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url 'http://repo.jenkins-ci.org/releases/'
+        }
+    }
+    dependencies {
+        classpath 'org.jenkins-ci.tools:gradle-jpi-plugin:0.9.1'
+    }
+}
+
+apply plugin: 'org.jenkins-ci.jpi'
+
+description = 'Jenkins plugin to programmatic create builds from inside Jenkins.'
+
+
+jenkinsPlugin {
+    coreVersion = '1.591'
+    displayName = 'Jobolizer - DSL to treat build like a code'
+    gitHubUrl = 'https://github.com/webdizz/jobolizer'
+    maskClasses = 'groovy.grape'
+    compatibleSinceVersion = '1.20'
+    pluginFirstClassLoader = true
+    developers {
+        developer {
+            id 'Alex'
+            name 'Alex Sholokh'
+        }
+        developer {
+            id 'webdizz'
+            name 'Izzet Mustafaiev'
+            email 'izzet@mustafaiev.com'
+        }
+        developer {
+            id 'fevz'
+            name 'Fevzi Anifeiev'
+        }
+        developer {
+            id 'zinur'
+            name 'Zinur Mustafaiev'
+            email 'zinur@mustafaiev.com'
+        }
+        developer {
+            id 'max'
+            name 'Max Bilenko'
+        }
+        developer {
+            id 'tair'
+            name 'Tair Mustafaiev'
+            email 'tair@mustafaiev.com'
+        }
+    }
+}
+
+dependencies {
+    jenkinsPlugins 'com.cloudbees.plugins:build-flow-plugin:0.17@jar'
+    compile 'org.jgrapht:jgrapht-jdk1.5:0.7.3'
+    compile 'org.jenkinsci.plugins:job-dsl-core:1.17@jar'
+    compile 'org.jenkinsci.plugins:job-dsl:1.17@jar'
+    compile 'xmlunit:xmlunit:1.4'
+
+}
