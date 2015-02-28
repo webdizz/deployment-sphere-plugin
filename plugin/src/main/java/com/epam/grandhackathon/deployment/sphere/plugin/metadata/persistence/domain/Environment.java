@@ -1,6 +1,7 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -9,4 +10,7 @@ import lombok.Data;
 public class Environment implements Serializable {
     private String identity;
     private String title;
+
+    private List<Deployment> deployments;
+
 }
