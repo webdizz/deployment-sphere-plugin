@@ -9,7 +9,9 @@ import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 import org.joda.time.DateTime;
 
-import javax.inject.Inject;
+import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
@@ -24,8 +26,8 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
     @Override
     public DeploymentMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         // next variables should be resolved from context
-        String buildVersion = "0.0.15";
-        String applicationName = "";
+        String buildVersion = "0.0.30";
+        String applicationName = TempConstants.APP_NAME;
 
         // persist data
         DeploymentMetaData deploymentMetaData = new DeploymentMetaData();

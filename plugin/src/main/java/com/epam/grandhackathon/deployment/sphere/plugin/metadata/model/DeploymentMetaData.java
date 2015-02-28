@@ -13,4 +13,6 @@ public class DeploymentMetaData extends ApplicationMetaData {
     private String buildVersion;
     @Exported
     private String deployedAt;
+    @Exported
+    private String environmentKey;
 }

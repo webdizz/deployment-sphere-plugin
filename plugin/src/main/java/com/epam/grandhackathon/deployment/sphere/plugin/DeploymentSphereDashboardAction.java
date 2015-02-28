@@ -1,31 +1,33 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
+import java.util.Collection;
+import javax.annotation.Nonnull;
+import javax.inject.Inject;
+
+import org.acegisecurity.AccessDeniedException;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 import hudson.Extension;
 import hudson.model.RootAction;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
 import jenkins.model.Jenkins;
-import org.acegisecurity.AccessDeniedException;
-import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.stapler.export.ExportedBean;
 
-import javax.annotation.Nonnull;
-import javax.inject.Inject;
-import java.util.Collection;
+import com.epam.grandhackathon.deployment.sphere.plugin.Messages;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
 public class DeploymentSphereDashboardAction implements RootAction, AccessControlled {
 
+    @Inject
+    private EnvironmentDao environmentDao;
+
     public DeploymentSphereDashboardAction() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
-
-    @Inject
-    private EnvironmentDao environmentDao;
 
     @Override
     public String getIconFileName() {
