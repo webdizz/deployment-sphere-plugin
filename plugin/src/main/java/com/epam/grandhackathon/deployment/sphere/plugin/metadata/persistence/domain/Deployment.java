@@ -1,5 +1,6 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain;
 
+
 import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -12,12 +13,11 @@ import lombok.Data;
 @Entity
 @Data
 @GlobalTable
-@IdClass(BuildPk.class)
-public class Build implements Serializable {
+@IdClass(DeploymentPk.class)
+public class Deployment implements Serializable {
     @Id
     private String applicationName;
     @Id
-    private Long number;
     private String buildVersion;
-    private DateTime builtAt;
+    private DateTime deployedAt;
 }

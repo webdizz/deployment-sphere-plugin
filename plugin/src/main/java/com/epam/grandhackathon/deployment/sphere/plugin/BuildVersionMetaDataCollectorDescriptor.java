@@ -11,10 +11,10 @@ import lombok.extern.java.Log;
 
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
-public class BuildVersionMetadataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
+public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
 
-    public BuildVersionMetadataCollectorDescriptor() {
-        super(BuildVersionMetadataPublisher.class);
+    public BuildVersionMetaDataCollectorDescriptor() {
+        super(BuildVersionMetaDataPublisher.class);
         load();
     }
 
