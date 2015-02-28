@@ -1,22 +1,18 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 
-import org.jenkinsci.plugins.database.jpa.GlobalTable;
 import org.joda.time.DateTime;
 import lombok.Data;
 
-@Entity
+//@Entity
 @Data
-@GlobalTable
-@IdClass(BuildPk.class)
+//@GlobalTable
+//@IdClass(BuildPk.class)
 public class Build implements Serializable {
-    @Id
+//    @Id
     private String applicationName;
-    @Id
+//    @Id
     private String buildVersion;
     private Long number;
     private DateTime builtAt;

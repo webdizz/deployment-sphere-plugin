@@ -1,17 +1,14 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
-import org.jenkinsci.plugins.database.jpa.GlobalTable;
 import lombok.Data;
 
-@Entity
+//@Entity
 @Data
-@GlobalTable
+//@GlobalTable
 public class Environment implements Serializable {
-    @Id
+//    @Id
     private String key;
     private String title;
 }

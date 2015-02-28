@@ -1,44 +1,41 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao;
 
-import static java.lang.String.format;
-import static com.google.common.base.Preconditions.checkArgument;
-
 import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.BuildPk;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Deployment;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.DeploymentPk;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
 
 @Log
 public class DeploymentMetaDataDao extends GenericDao {
     public void save(final DeploymentMetaData deploymentMetaData) {
-        Build build = findBuild(deploymentMetaData.getApplicationName(), deploymentMetaData.getBuildVersion());
-        Environment environment = findEnvironment(deploymentMetaData.getEnvironmentKey());
+//        Build build = findBuild(deploymentMetaData.getApplicationName(), deploymentMetaData.getBuildVersion());
+//        Environment environment = findEnvironment(deploymentMetaData.getEnvironmentKey());
 
         Deployment deployment = getModelMapper().map(deploymentMetaData, Deployment.class);
-        deployment.setBuild(build);
-        deployment.setEnvironment(environment);
-        getEntityManager().persist(deployment);
+//        deployment.setBuild(build);
+//        deployment.setEnvironment(environment);
+//        getEntityManager().persist(deployment);
     }
 
-    protected Environment findEnvironment(final String environmentKey) {
-        Environment environment = getEntityManager().find(Environment.class, environmentKey);
-        checkArgument(null != environment, format("Cannot find environment for given key %s", environmentKey));
-        return environment;
-    }
+//    protected Environment findEnvironment(final String environmentKey) {
+//        Environment environment = getEntityManager().find(Environment.class, environmentKey);
+//        checkArgument(null != environment, format("Cannot find environment for given key %s", environmentKey));
+//        return environment;
+//    }
 
-    protected Build findBuild(final String applicationName, final String buildVersion) {
-        BuildPk buildPk = new BuildPk(applicationName, buildVersion);
-        Build build = getEntityManager().find(Build.class, buildPk);
-        checkArgument(null != build, format("Cannot find build for given application %s and build version %s", applicationName, buildVersion));
-        return build;
-    }
+//    protected Build findBuild(final String applicationName, final String buildVersion) {
+//        BuildPk buildPk = new BuildPk(applicationName, buildVersion);
+//        TypedQuery<Build> query = getEntityManager().createQuery("SELECT b FROM Build AS b", Build.class);
+//        List<Build> resultList = query.getResultList();
+//        log.fine(format("There are builds number in database '%s'", resultList.size()));
+//
+//        Build build = getEntityManager().find(Build.class, buildPk);
+//        checkArgument(null != build, format("Cannot find build for given application '%s' and build version '%s'", applicationName, buildVersion));
+//        return build;
+//    }
 
-    public DeploymentMetaData find(final String applicationName, final String buildVersion) {
-        Deployment foundDeployment = getEntityManager().find(Deployment.class, new DeploymentPk(applicationName, buildVersion));
-        return getModelMapper().map(foundDeployment, DeploymentMetaData.class);
-    }
+//    public DeploymentMetaData find(final String applicationName, final String buildVersion) {
+//        Deployment foundDeployment = getEntityManager().find(Deployment.class, new DeploymentPk(applicationName, buildVersion));
+//        return getModelMapper().map(foundDeployment, DeploymentMetaData.class);
+//    }
 }

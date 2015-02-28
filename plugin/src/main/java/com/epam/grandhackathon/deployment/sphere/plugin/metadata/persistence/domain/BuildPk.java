@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BuildPk implements Serializable {
-    private String applicationName;
-    private String buildVersion;
+    String applicationName;
+    String buildVersion;
 }
