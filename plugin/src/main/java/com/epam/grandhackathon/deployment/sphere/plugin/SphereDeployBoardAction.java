@@ -1,16 +1,16 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
 
+import javax.annotation.Nonnull;
+
+import org.acegisecurity.AccessDeniedException;
+import org.kohsuke.stapler.export.ExportedBean;
 import hudson.Extension;
 import hudson.model.RootAction;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
 import hudson.security.Permission;
 import jenkins.model.Jenkins;
-import org.acegisecurity.AccessDeniedException;
-import org.kohsuke.stapler.export.ExportedBean;
-
-import javax.annotation.Nonnull;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
@@ -23,12 +23,12 @@ public class SphereDeployBoardAction implements RootAction, AccessControlled {
 
     @Override
     public String getDisplayName () {
-        return "sphere";
+        return "Deployment Sphere";
     }
 
     @Override
     public String getUrlName () {
-        return "/sphere";
+        return "/deployment-sphere";
     }
 
     @Nonnull
