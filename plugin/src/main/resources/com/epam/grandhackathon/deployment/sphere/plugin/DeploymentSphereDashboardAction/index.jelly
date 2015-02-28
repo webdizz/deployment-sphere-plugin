@@ -9,7 +9,9 @@
     <l:layout title="Deployment Sphere">
         <st:include page="sidepanel.jelly"/>
         <l:main-panel>
-            <div class="panel-group col-xs-12 col-md-16" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="col-xs-12 col-md-16">
+                <h1>Environments State</h1>
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <j:forEach indexVar="index" var="env" items="${it.environments}">
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="heading${index + 1}">
@@ -19,34 +21,42 @@
                                 </a>
                             </h4>
                         </div>
-                        <div id="collapse${index + 1}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${index + 1}">
+                        <div id="collapse${index + 1}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading${index + 1}">
                             <div class="panel-body">
 
-                                <table class="table table-striped table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Application</th>
-                                            <th>Version</th>
-                                            <th>Deployment Time</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <j:forEach indexVar="deploymentIndex" var="deployment" items="${env.deployments}">
-                                            <tr onclick="document.location = '${it.urlName}/${deployment.buildVersion}';">
-                                                <td>
-                                                    <a href="${it.urlName}/${deployment.buildVersion}">${deployment.applicationName}</a>
-                                                </td>
-                                                <td><a href="${it.urlName}/${deployment.buildVersion}">${deployment.buildVersion}</a></td>
-                                                <td>${deployment.deployedAt}</td>
-                                            </tr>
-                                        </j:forEach>
-                                    </tbody>
-                                </table>
+                                <j:choose>
+                                    <j:when test="${env.deployments.size() > 0}">
+                                        <table class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Application</th>
+                                                    <th>Version</th>
+                                                    <th>Deployment Time</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <j:forEach indexVar="deploymentIndex" var="deployment" items="${env.deployments}">
+                                                    <tr onclick="document.location = '${it.urlName}/${deployment.buildVersion}';">
+                                                        <td>
+                                                            <a href="${it.urlName}/${deployment.buildVersion}">${deployment.applicationName}</a>
+                                                        </td>
+                                                        <td><a href="${it.urlName}/${deployment.buildVersion}">${deployment.buildVersion}</a></td>
+                                                        <td>${deployment.deployedAt}</td>
+                                                    </tr>
+                                                </j:forEach>
+                                            </tbody>
+                                        </table>
+                                    </j:when>
+                                    <j:otherwise>
+                                        No deployments
+                                    </j:otherwise>
+                                </j:choose>
 
                             </div>
                         </div>
                     </div>
                 </j:forEach>
+            </div>
             </div>
         </l:main-panel>
     </l:layout>
