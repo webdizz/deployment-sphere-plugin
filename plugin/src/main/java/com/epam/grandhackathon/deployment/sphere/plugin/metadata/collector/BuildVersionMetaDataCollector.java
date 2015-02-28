@@ -51,7 +51,6 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
         final BuildMetaData buildMetaData = new BuildMetaData();
         buildMetaData.setNumber(buildNumber);
-        buildMetaData.setBuildVersion(String.format("0.0.%s", buildNumber));
         buildMetaData.setApplicationName(APP_NAME);
         buildMetaData.setJobName(build.getDisplayName());
         buildMetaData.setBuiltAt(new DateTime(build.due()));
