@@ -17,7 +17,6 @@ public class Environment implements Serializable {
     private String title;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="BUILD_ID", unique= true, nullable=true, insertable=true, updatable=true)
     private Build build;
 
 
