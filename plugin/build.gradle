@@ -20,7 +20,6 @@ jenkinsPlugin {
     gitHubUrl = 'https://github.com/webdizz/deployment-sphere'
     maskClasses = 'groovy.grape'
     compatibleSinceVersion = '1.20'
-    pluginFirstClassLoader = true
     shortName = 'deployment-sphere'
     developers {
         developer {
@@ -48,4 +47,7 @@ jenkinsPlugin {
 dependencies {
     jenkinsPlugins 'com.cloudbees.plugins:build-flow-plugin:0.17@jar'
     jenkinsPlugins 'org.jenkins-ci.plugins:database:1.3@jar'
+    jenkinsPlugins 'org.jenkins-ci.plugins:database-h2:1.0@jar'
+    compile 'org.hibernate:hibernate-entitymanager:3.6.10.Final'
+    compile 'org.hibernate:hibernate-core:3.6.10.Final'
 }
