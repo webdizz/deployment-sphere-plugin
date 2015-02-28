@@ -1,10 +1,9 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.model;
 
-import org.joda.time.DateTime;
-import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.stapler.export.ExportedBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -13,5 +12,5 @@ public class DeploymentMetaData extends ApplicationMetaData {
     @Exported
     private String buildVersion;
     @Exported
-    private DateTime deployedAt;
+    private String deployedAt;
 }

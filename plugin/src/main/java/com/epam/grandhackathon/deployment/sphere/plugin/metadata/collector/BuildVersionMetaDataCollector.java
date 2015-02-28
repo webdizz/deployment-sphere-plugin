@@ -1,18 +1,18 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
-import static java.lang.String.format;
-
-import javax.inject.Inject;
-
-import org.joda.time.DateTime;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import hudson.scm.ChangeLogSet;
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
+import org.joda.time.DateTime;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
+import javax.inject.Inject;
+
+import static java.lang.String.format;
 
 @Log
 public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
@@ -36,7 +36,7 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         buildMetaData.setNumber(buildNumber);
         buildMetaData.setApplicationName("Some app name");
         buildMetaData.setJobName(build.getDisplayName());
-        buildMetaData.setBuiltAt(new DateTime(build.due()));
+        buildMetaData.setBuiltAt(DateFormatUtil.formatDate(new DateTime(build.due())));
         buildMetaData.setBuildVersion(String.format("0.0.%s", buildNumber));
         metadataDao.save(buildMetaData);
         return buildMetaData;

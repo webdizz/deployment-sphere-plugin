@@ -1,11 +1,10 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.model;
 
-import org.joda.time.DateTime;
-import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.stapler.export.ExportedBean;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -18,7 +17,7 @@ public class BuildMetaData extends ApplicationMetaData {
     @Exported
     private String jobName;
     @Exported
-    private DateTime builtAt;
+    private String builtAt;
     @Exported
     private String buildVersion;
 }

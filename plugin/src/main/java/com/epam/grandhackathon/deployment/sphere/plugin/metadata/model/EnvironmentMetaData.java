@@ -4,6 +4,8 @@ import lombok.Data;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
+import java.util.List;
+
 @Data
 @ExportedBean
 public class EnvironmentMetaData {
@@ -13,6 +15,6 @@ public class EnvironmentMetaData {
     @Exported
     private final String title;
     @Exported
-    private DeploymentMetaData deployment;
+    private List<DeploymentMetaData> deployments;
 
 }

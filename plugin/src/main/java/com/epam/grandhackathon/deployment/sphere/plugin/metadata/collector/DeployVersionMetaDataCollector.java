@@ -1,15 +1,15 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
-import javax.inject.Inject;
-
-import org.joda.time.DateTime;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
+import org.joda.time.DateTime;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
+import javax.inject.Inject;
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
@@ -30,7 +30,7 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
         // persist data
         DeploymentMetaData deploymentMetaData = new DeploymentMetaData();
         deploymentMetaData.setApplicationName(applicationName);
-        deploymentMetaData.setDeployedAt(new DateTime(build.due()));
+        deploymentMetaData.setDeployedAt(DateFormatUtil.formatDate(new DateTime(build.due())));
         deploymentMetaData.setBuildVersion(buildVersion);
         deploymentMetaDataDao.save(deploymentMetaData);
         return deploymentMetaData;
