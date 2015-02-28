@@ -4,14 +4,21 @@ import org.joda.time.DateTime;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
 @ToString(callSuper = true)
+@ExportedBean
 public class BuildMetaData extends ApplicationMetaData {
 
+    @Exported
     private Integer number;
+    @Exported
     private String jobName;
+    @Exported
     private DateTime builtAt;
+    @Exported
     private String buildVersion;
 }
