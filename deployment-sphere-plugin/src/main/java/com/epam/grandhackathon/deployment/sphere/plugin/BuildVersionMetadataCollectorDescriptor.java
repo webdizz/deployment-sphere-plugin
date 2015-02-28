@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin.collector;
+package com.epam.grandhackathon.deployment.sphere.plugin;
 
 import java.util.logging.Level;
 
@@ -20,7 +20,7 @@ public class BuildVersionMetadataCollectorDescriptor extends BuildStepDescriptor
 
     @Override
     public boolean isApplicable(final Class<? extends AbstractProject> jobType) {
-        log.log(Level.FINE, "Current project is of type %s", jobType);
+        log.log(Level.FINE, String.format("Current project is of type %s", jobType));
         return true;
     }
 

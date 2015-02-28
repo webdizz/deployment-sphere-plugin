@@ -1,4 +1,7 @@
-package com.epam.grandhackathon.deployment.sphere.plugin.collector;
+package com.epam.grandhackathon.deployment.sphere.plugin;
+
+import static java.lang.String.format;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -9,6 +12,9 @@ import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStepMonitor;
 import lombok.extern.java.Log;
+
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetadataCollector;
 
 @Log
 public class BuildVersionMetadataPublisher extends hudson.tasks.Notifier {
@@ -25,6 +31,15 @@ public class BuildVersionMetadataPublisher extends hudson.tasks.Notifier {
     @Override
     public boolean perform(final AbstractBuild<?, ?> build, final Launcher launcher, final BuildListener listener) throws InterruptedException, IOException {
         log.log(Level.FINE, "Is about to collect build metadata");
+
+        checkArgument(null != listener, "Listener is null, something was wrong.");
+        checkArgument(null != build, "Current build is null, something was wrong.");
+
+
+        listener.getLogger().append("[deployment-sphere] Collecting build metadata\n");
+        BuildMetaData buildMetaData = new BuildVersionMetadataCollector().collect(build);
+        log.log(Level.FINEST, format("Next build metadata was collected %s", buildMetaData));
+
         return true;
     }
 }
