@@ -12,18 +12,16 @@ import hudson.model.AbstractBuild;
 import hudson.model.BuildListener;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
-import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetadataCollector;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetaDataCollector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 
 @Log
-public class BuildVersionMetadataPublisher extends Notifier {
+public class BuildVersionMetaDataPublisher extends Notifier {
 
     @DataBoundConstructor
-    public BuildVersionMetadataPublisher() {
-        Jenkins.getInstance().getInjector().injectMembers(this);
+    public BuildVersionMetaDataPublisher() {
     }
 
     @Override
@@ -41,7 +39,7 @@ public class BuildVersionMetadataPublisher extends Notifier {
 
         listener.getLogger().append("[deployment-sphere] Collecting build metadata\n");
 
-        BuildMetaData buildMetaData = new BuildVersionMetadataCollector().collect(build, listener);
+        BuildMetaData buildMetaData = new BuildVersionMetaDataCollector().collect(build, listener);
         log.log(Level.FINEST, format("Next build metadata was collected %s", buildMetaData));
 
         return true;

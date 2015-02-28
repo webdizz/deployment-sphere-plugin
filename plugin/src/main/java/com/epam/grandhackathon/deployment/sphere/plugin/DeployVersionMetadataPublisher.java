@@ -15,14 +15,14 @@ import lombok.extern.java.Log;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.Collector;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.DeployVersionMetadataCollector;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeployMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.DeployVersionMetaDataCollector;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 
 @Log
-public class DeployVersionMetadataPublisher extends hudson.tasks.Notifier {
+public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
 
     @DataBoundConstructor
-    public DeployVersionMetadataPublisher() {
+    public DeployVersionMetaDataPublisher() {
     }
 
     @Override
@@ -40,8 +40,8 @@ public class DeployVersionMetadataPublisher extends hudson.tasks.Notifier {
 
         listener.getLogger().append("[deployment-sphere] Collecting deploy metadata\n");
 
-        Collector<DeployMetaData> collector = new DeployVersionMetadataCollector();
-        DeployMetaData metaData = collector.collect(build, listener);
+        Collector<DeploymentMetaData> collector = new DeployVersionMetaDataCollector();
+        DeploymentMetaData metaData = collector.collect(build, listener);
 
         log.log(Level.FINEST, format("New deploy metadata has been collected %s", metaData));
 

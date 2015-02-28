@@ -12,11 +12,11 @@ import lombok.extern.java.Log;
 
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
-public class DeployVersionMetadataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
+public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
     private static final String DISPLAY_NAME = "Collect Deploy Metadata";
 
-    public DeployVersionMetadataCollectorDescriptor() {
-        super(DeployVersionMetadataPublisher.class);
+    public DeployVersionMetaDataCollectorDescriptor() {
+        super(DeployVersionMetaDataPublisher.class);
         load();
     }
 

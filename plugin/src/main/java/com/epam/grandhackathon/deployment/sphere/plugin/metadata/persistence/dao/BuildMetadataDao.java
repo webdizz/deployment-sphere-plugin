@@ -15,7 +15,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dom
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.BuildPk;
 
 @Log
-public class BuildMetadataDao {
+public class BuildMetaDataDao {
 
     @Inject
     private PersistenceService persistenceService;
@@ -24,7 +24,7 @@ public class BuildMetadataDao {
 
     private ModelMapper modelMapper = new ModelMapper();
 
-    public BuildMetadataDao() {
+    public BuildMetaDataDao() {
         Jenkins.getInstance().getInjector().injectMembers(this);
         try {
             entityManager = persistenceService.getGlobalEntityManagerFactory().createEntityManager();

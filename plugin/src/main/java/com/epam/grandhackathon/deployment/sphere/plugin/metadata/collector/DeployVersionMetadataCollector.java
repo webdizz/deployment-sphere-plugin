@@ -1,33 +1,38 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
-import static java.lang.String.format;
-import hudson.model.TaskListener;
-import hudson.model.AbstractBuild;
-import hudson.scm.ChangeLogSet;
-import lombok.extern.java.Log;
+import javax.inject.Inject;
 
 import org.joda.time.DateTime;
+import hudson.model.AbstractBuild;
+import hudson.model.TaskListener;
+import jenkins.model.Jenkins;
+import lombok.extern.java.Log;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeployMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
 
 @Log
-public final class DeployVersionMetadataCollector implements Collector<DeployMetaData> {
+public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
+
+    @Inject
+    private DeploymentMetaDataDao metadataDao;
+
+    public DeployVersionMetaDataCollector() {
+        Jenkins.getInstance().getInjector().injectMembers(this);
+    }
 
     @Override
-    public DeployMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
-        int buildNumber = build.getNumber();
-        String buildId = build.getId();
+    public DeploymentMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
+        // next variables should be resolved from context
+        String buildVersion = "0.0.15";
+        String applicationName = "";
 
-        ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry> changeSet = build.getChangeSet();
-        log.fine(format("Resolved build number: %s, build id: %s, changeSet emptiness: %s", buildNumber, buildId,
-                changeSet.isEmptySet()));
-
-        DeployMetaData metaData = new DeployMetaData();
-        metaData.setNumber(build.getNumber());
-        metaData.setApplicationName("Some app name");
+        // persist data
+        DeploymentMetaData metaData = new DeploymentMetaData();
+        metaData.setApplicationName(applicationName);
         metaData.setJobName(build.getDisplayName());
         metaData.setDeployedAt(new DateTime(build.due()));
-        metaData.setDeployedVersion(String.format("0.0.%s", buildNumber));
+        metaData.setDeployedVersion(String.format("0.0.%s", buildVersion));
         return metaData;
     }
 

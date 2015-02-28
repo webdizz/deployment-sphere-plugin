@@ -12,15 +12,15 @@ import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetadataDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 
 @Log
-public class BuildVersionMetadataCollector implements Collector<BuildMetaData> {
+public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
     @Inject
-    private BuildMetadataDao metadataDao;
+    private BuildMetaDataDao metadataDao;
 
-    public BuildVersionMetadataCollector() {
+    public BuildVersionMetaDataCollector() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
