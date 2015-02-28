@@ -37,15 +37,16 @@ public class EnvironmentDao {
 
     public Collection<EnvironmentMetaData> findAll () {
 
-        Query query = entityManager.createQuery("SELECT e FROM Environment e", Environment.class);
-
-        final Collection<Environment> environments = (Collection<Environment>) query.getResultList();
-        List<EnvironmentMetaData> environmentMetaDatas = Lists.newArrayList();
-        for (Environment environment : environments) {
-            modelMapper.map(environment, EnvironmentMetaData.class);
-        }
-
-        return environmentMetaDatas;
+//        Query query = entityManager.createQuery("SELECT e FROM Environment e", Environment.class);
+//
+//        final Collection<Environment> environments = (Collection<Environment>) query.getResultList();
+//        List<EnvironmentMetaData> environmentMetaDatas = Lists.newArrayList();
+//        for (Environment environment : environments) {
+//            modelMapper.map(environment, EnvironmentMetaData.class);
+//        }
+        return Lists.newArrayList(new EnvironmentMetaData("Production"), new EnvironmentMetaData("QA"), new EnvironmentMetaData(
+                "Staging"));
+//        return environmentMetaDatas;
     }
 
 
