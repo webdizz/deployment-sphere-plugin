@@ -8,8 +8,7 @@ import lombok.Data;
 
 @Data
 public class Deployment implements Serializable {
-    private Long identity;
-    private DateTime deployedAt;
     private Build build;
     private Environment environment;
+    private DateTime deployedAt;
 }

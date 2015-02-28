@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class Environment implements Serializable {
-    private String identity;
+    private String key;
     private String title;
 
     private List<Deployment> deployments;

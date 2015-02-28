@@ -1,41 +1,67 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao;
 
+import static java.lang.String.format;
+
+import java.util.List;
+import javax.annotation.Nullable;
+
+import org.skife.jdbi.v2.Handle;
 import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Deployment;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.DeploymentQuery;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 @Log
 public class DeploymentMetaDataDao extends GenericDao {
+
     public void save(final DeploymentMetaData deploymentMetaData) {
-//        Build build = findBuild(deploymentMetaData.getApplicationName(), deploymentMetaData.getBuildVersion());
-//        Environment environment = findEnvironment(deploymentMetaData.getEnvironmentKey());
+        Build build = new Build();
+        build.setApplicationName(deploymentMetaData.getApplicationName());
+        build.setBuildVersion(deploymentMetaData.getBuildVersion());
+
+        Environment environment = new Environment();
+        environment.setKey(deploymentMetaData.getEnvironmentKey());
 
         Deployment deployment = getModelMapper().map(deploymentMetaData, Deployment.class);
-//        deployment.setBuild(build);
-//        deployment.setEnvironment(environment);
-//        getEntityManager().persist(deployment);
+        deployment.setBuild(build);
+        deployment.setEnvironment(environment);
+        deployment.setDeployedAt(DateFormatUtil.toDate(deploymentMetaData.getDeployedAt()));
+
+        try (Handle handle = database().open()) {
+            DeploymentQuery query = handle.attach(DeploymentQuery.class);
+            query.save(deployment);
+            log.fine(format("Deployment '%s' was saved", deployment));
+        }
     }
 
-//    protected Environment findEnvironment(final String environmentKey) {
-//        Environment environment = getEntityManager().find(Environment.class, environmentKey);
-//        checkArgument(null != environment, format("Cannot find environment for given key %s", environmentKey));
-//        return environment;
-//    }
+    public DeploymentMetaData find(final String applicationName, final String buildVersion, final String environmentKey) {
+        try (Handle handle = database().open()) {
+            DeploymentQuery query = handle.attach(DeploymentQuery.class);
+            Deployment deployment = query.find(applicationName, buildVersion, environmentKey);
+            log.fine(format("Here is a deployment found '%s'", deployment));
+            return getModelMapper().map(deployment, DeploymentMetaData.class);
+        }
+    }
 
-//    protected Build findBuild(final String applicationName, final String buildVersion) {
-//        BuildPk buildPk = new BuildPk(applicationName, buildVersion);
-//        TypedQuery<Build> query = getEntityManager().createQuery("SELECT b FROM Build AS b", Build.class);
-//        List<Build> resultList = query.getResultList();
-//        log.fine(format("There are builds buildNumber in database '%s'", resultList.size()));
-//
-//        Build build = getEntityManager().find(Build.class, buildPk);
-//        checkArgument(null != build, format("Cannot find build for given application '%s' and build version '%s'", applicationName, buildVersion));
-//        return build;
-//    }
+    public List<DeploymentMetaData> find(final String applicationName, final String environmentKey) {
+        try (Handle handle = database().open()) {
+            DeploymentQuery query = handle.attach(DeploymentQuery.class);
+            List<Deployment> deployments = query.find(applicationName, environmentKey);
+            log.fine(format("Here is a deployment list found '%s'", deployments));
+            return Lists.transform(deployments, new Function<Deployment, DeploymentMetaData>() {
+                @Nullable
+                @Override
+                public DeploymentMetaData apply(final Deployment input) {
+                    return getModelMapper().map(input, DeploymentMetaData.class);
+                }
+            });
+        }
+    }
 
-//    public DeploymentMetaData find(final String applicationName, final String buildVersion) {
-//        Deployment foundDeployment = getEntityManager().find(Deployment.class, new DeploymentPk(applicationName, buildVersion));
-//        return getModelMapper().map(foundDeployment, DeploymentMetaData.class);
-//    }
 }
