@@ -11,7 +11,6 @@ import jenkins.model.Jenkins;
 import org.acegisecurity.AccessDeniedException;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
-import com.epam.grandhackathon.deployment.sphere.plugin.Messages;
 
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
@@ -21,48 +20,47 @@ import java.util.Collection;
 @Extension
 public class DeploymentSphereDashboardAction implements RootAction, AccessControlled {
 
-    public DeploymentSphereDashboardAction () {
+    public DeploymentSphereDashboardAction() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
-
 
     @Inject
     private EnvironmentDao environmentDao;
 
     @Override
-    public String getIconFileName () {
+    public String getIconFileName() {
         return "/plugin/deployment-sphere/icons/main_logo.jpg";
     }
 
     @Override
-    public String getDisplayName () {
+    public String getDisplayName() {
         return Messages.plugin_title();
     }
 
     @Override
-    public String getUrlName () {
+    public String getUrlName() {
         return "/deployment-sphere";
     }
 
     @Exported
-    public Collection<EnvironmentMetaData> getEnvironments () {
+    public Collection<EnvironmentMetaData> getEnvironments() {
         return environmentDao.findAll();
     }
 
     @Nonnull
     @Override
-    public ACL getACL () {
+    public ACL getACL() {
         return Jenkins.getInstance().getACL();
     }
 
     @Override
-    public void checkPermission (@Nonnull final Permission permission) throws AccessDeniedException {
+    public void checkPermission(@Nonnull final Permission permission) throws AccessDeniedException {
         getACL().checkPermission(permission);
 
     }
 
     @Override
-    public boolean hasPermission (@Nonnull final Permission permission) {
+    public boolean hasPermission(@Nonnull final Permission permission) {
         return getACL().hasPermission(permission);
     }
 }

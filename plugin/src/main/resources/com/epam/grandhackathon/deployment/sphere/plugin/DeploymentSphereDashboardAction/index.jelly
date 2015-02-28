@@ -21,7 +21,9 @@
                         </div>
                         <div id="collapse${index + 1}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading${index + 1}">
                             <div class="panel-body">
+
                                 Some Data for ${env.title}
+
                             </div>
                         </div>
                     </div>

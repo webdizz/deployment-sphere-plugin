@@ -9,6 +9,10 @@ import org.kohsuke.stapler.export.ExportedBean;
 public class EnvironmentMetaData {
 
     @Exported
+    private Long identity;
+    @Exported
     private final String title;
+    @Exported
+    private DeploymentMetaData deployment;
 
 }
