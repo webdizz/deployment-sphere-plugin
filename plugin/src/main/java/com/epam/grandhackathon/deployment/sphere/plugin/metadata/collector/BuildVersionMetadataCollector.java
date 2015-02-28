@@ -2,6 +2,7 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
 import static java.lang.String.format;
 import hudson.model.AbstractBuild;
+import hudson.model.TaskListener;
 import hudson.scm.ChangeLogSet;
 import lombok.extern.java.Log;
 
@@ -13,7 +14,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMeta
 public class BuildVersionMetadataCollector implements Collector<BuildMetaData> {
 
     @Override
-    public BuildMetaData collect(AbstractBuild<?, ?> build) {
+    public BuildMetaData collect(AbstractBuild<?, ?> build, final TaskListener taskListener) {
         int buildNumber = build.getNumber();
 
         String buildId = build.getId();

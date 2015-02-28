@@ -20,6 +20,7 @@ public class DeployVersionMetadataCollectorDescriptor extends BuildStepDescripto
         load();
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public boolean isApplicable(final Class<? extends AbstractProject> jobType) {
         log.log(Level.FINE, String.format("Current project is of type %s", jobType));
