@@ -14,9 +14,8 @@ apply plugin: 'org.jenkins-ci.jpi'
 
 description = 'Jenkins plugin to provide insides for your deployments.'
 
-
 jenkinsPlugin {
-    coreVersion = '1.591'
+    coreVersion = '1.580.3'
     displayName = 'Deployment Sphere'
     gitHubUrl = 'https://github.com/webdizz/deployment-sphere'
     maskClasses = 'groovy.grape'
