@@ -4,11 +4,9 @@ import java.io.Serializable;
 
 import lombok.Data;
 
-//@Entity
+
 @Data
-//@GlobalTable
 public class Environment implements Serializable {
-//    @Id
     private String identity;
     private String title;
 }
