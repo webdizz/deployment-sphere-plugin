@@ -23,19 +23,20 @@ allprojects {
     }
 }
 
-apply from: file('gradle/ide.gradle')
-
 subprojects {
-    group = "com.epam.grand-hackathon.${githubProjectName}" // TEMPLATE: Set to organization of project
+    group = "com.epam.grand-hackathon.${githubProjectName}"
 
-    apply plugin: 'java'
     apply plugin: 'groovy'
-    apply plugin: 'maven'
+
+    sourceCompatibility = javaSourceCompatibilityVersion
+    targetCompatibility = javaSourceCompatibilityVersion
 
     dependencies {
         compile "org.codehaus.groovy:groovy-all:2.4.1"
         compile "org.slf4j:slf4j-api:$slf4jApiVersion"
         compile 'org.projectlombok:lombok:1.16.2'
+        compile 'com.google.guava:guava:18.0'
+        compile 'joda-time:joda-time:2.7'
         testCompile "org.mockito:mockito-core:$mockitoVersion"
         testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
 

@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin.collector;
+package com.epam.grandhackathon.deployment.sphere.plugin;
 
 import hudson.Extension;
 import hudson.model.AbstractProject;

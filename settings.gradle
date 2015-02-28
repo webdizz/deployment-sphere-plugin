@@ -1,1 +1,1 @@
-rootProject.name = 'deployment-sphere'include ':deployment-sphere-plugin'
+rootProject.name = 'deployment-sphere'include ':plugin'
