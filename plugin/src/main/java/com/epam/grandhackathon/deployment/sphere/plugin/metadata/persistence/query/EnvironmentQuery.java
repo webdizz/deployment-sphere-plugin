@@ -27,6 +27,9 @@ public interface EnvironmentQuery {
     @SqlQuery("SELECT * FROM ENVIRONMENTS WHERE key = :key AND title = :title")
     Environment find(@Bind("key") String applicationName, @Bind("title") String title);
 
+    @SqlQuery("SELECT * FROM ENVIRONMENTS WHERE title = :title")
+    Environment find(@Bind("title") String title);
+
     @SqlUpdate("INSERT INTO ENVIRONMENTS (key, title) values (:key, :title)")
     int save(@BindEnvironment Environment build);
 

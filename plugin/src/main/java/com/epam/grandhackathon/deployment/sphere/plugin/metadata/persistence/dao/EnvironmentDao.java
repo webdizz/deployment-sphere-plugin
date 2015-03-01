@@ -25,6 +25,14 @@ import static java.lang.String.format;
 @Log
 public class EnvironmentDao extends GenericDao {
 
+    public Environment find(final String evnKey) {
+        try (Handle handle = database().open()) {
+            EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
+            Environment environment = query.find(evnKey);
+            return environment;
+        }
+    }
+
 
     public Collection<EnvironmentMetaData> findAll () {
 
@@ -60,16 +68,18 @@ public class EnvironmentDao extends GenericDao {
 
             final BuildQuery query = handle.attach(BuildQuery.class);
             Build foundBuild = query.find(deployment.getBuild().getBuildVersion());
+            if (foundBuild!=null) {
+                final BuildMetaData cqBuild = new BuildMetaData();
+                cqBuild.setApplicationName(foundBuild.getApplicationName());
+                cqBuild.setNumber(foundBuild.getBuildNumber());
+                cqBuild.setBuildVersion(foundBuild.getBuildVersion());
+                cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
+                //Added Job Name
+                cqBuild.setJobName(foundBuild.getApplicationName());
 
-            final BuildMetaData cqBuild = new BuildMetaData();
-            cqBuild.setApplicationName(foundBuild.getApplicationName());
-            cqBuild.setNumber(foundBuild.getBuildNumber());
-            cqBuild.setBuildVersion(foundBuild.getBuildVersion());
-            cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
-            //Added Job Name
-            cqBuild.setJobName(foundBuild.getApplicationName());
+                prodDeploy.setBuild(cqBuild);
+            }
 
-            prodDeploy.setBuild(cqBuild);
             environmentMetaData.getDeployments().add(prodDeploy);
         }
     }

@@ -1,15 +1,13 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
-import static com.google.common.base.Preconditions.checkState;
-
-import javax.inject.Inject;
-
-import org.joda.time.DateTime;
-
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
+import com.google.common.base.Strings;
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import jenkins.model.Jenkins;
@@ -17,13 +15,8 @@ import lombok.extern.java.Log;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
-import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
-import com.google.common.base.Strings;
+
+import static com.google.common.base.Preconditions.checkState;
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
@@ -31,12 +24,15 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
     @Inject
     private DeploymentMetaDataDao deploymentMetaDataDao;
 
-    public DeployVersionMetaDataCollector() {
+    @Inject
+    private EnvironmentDao environmentDao;
+
+    public DeployVersionMetaDataCollector () {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
     @Override
-    public DeploymentMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
+    public DeploymentMetaData collect (final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         // next variables should be resolved from context
         EnvVarsResolver envVarsResolver = new EnvVarsResolver(build, taskListener);
 
@@ -45,16 +41,19 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
 
         String applicationName = envVarsResolver.getValue(Constants.BUILD_APP_NAME);
         checkState(!Strings.isNullOrEmpty(applicationName), String.format("Invalid application name", applicationName));
-        
+
         String envName = envVarsResolver.getValue(Constants.ENV_NAME);
         checkState(!Strings.isNullOrEmpty(envName), String.format("Invalid env name", envName));
+
+
+        Environment environment = environmentDao.find(envName);
 
         // persist data
         DeploymentMetaData deploymentMetaData = new DeploymentMetaData();
         deploymentMetaData.setApplicationName(applicationName);
         deploymentMetaData.setDeployedAt(DateFormatUtil.formatDate(new DateTime(build.due())));
         deploymentMetaData.setBuildVersion(buildVersion);
-        deploymentMetaData.setEnvironmentKey("2");
+        deploymentMetaData.setEnvironmentKey(environment.getKey());
         deploymentMetaDataDao.save(deploymentMetaData);
         return deploymentMetaData;
     }
