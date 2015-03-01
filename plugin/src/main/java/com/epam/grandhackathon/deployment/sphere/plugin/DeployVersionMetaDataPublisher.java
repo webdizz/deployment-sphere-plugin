@@ -1,6 +1,7 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 import hudson.Launcher;
 import hudson.model.BuildListener;
@@ -24,6 +25,7 @@ import lombok.extern.java.Log;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.Collector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.DeployVersionMetaDataCollector;
@@ -82,20 +84,18 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
     public boolean prebuild(final AbstractBuild<?, ?> build, final BuildListener listener) {
 
         final String appName = getDeployedAppName();
+        checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name", appName));
+        build.addAction(new DynamicVariablesStorageAction(Constants.BUILD_APP_NAME, appName));
 
-        if (!Strings.isNullOrEmpty(appName)) {
-            AbstractProject<?, ?> project = build.getProject();
+        ParameterDefinition buildVersions = getBuildVersionChoices(appName);
+        ParameterDefinition envs = getEnvChoices();
 
-            ParameterDefinition buildVersions = getBuildVersionChoices(appName);
-            ParameterDefinition envs = getEnvChoices();
-            try {
-                project.addProperty(new ParametersDefinitionProperty(envs, buildVersions));
-            } catch (IOException e) {
-                Throwables.propagate(e);
-            }
-            return true;
+        try {
+            build.getProject().addProperty(new ParametersDefinitionProperty(envs, buildVersions));
+        } catch (IOException e) {
+            Throwables.propagate(e);
         }
-        return false;
+        return true;
     }
 
     private ParameterDefinition getBuildVersionChoices(final String appName) {

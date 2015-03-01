@@ -12,7 +12,9 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.que
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
 import lombok.extern.java.Log;
+
 import org.skife.jdbi.v2.Handle;
 
 import java.util.Collection;

@@ -1,22 +1,27 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
+<<<<<<< HEAD
 import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
+=======
 import static com.google.common.base.Preconditions.checkState;
 
 import javax.inject.Inject;
 
 import org.joda.time.DateTime;
 
+>>>>>>> [Hackatho2015]-added app name auto complete for deploy
 import hudson.model.AbstractBuild;
 import hudson.model.TaskListener;
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 import org.joda.time.DateTime;
 
+<<<<<<< HEAD
 import javax.inject.Inject;
+=======
 import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
@@ -24,6 +29,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.google.common.base.Strings;
+>>>>>>> [Hackatho2015]-added app name auto complete for deploy
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
@@ -38,6 +44,10 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
     @Override
     public DeploymentMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         // next variables should be resolved from context
+<<<<<<< HEAD
+        String buildVersion = "0.0." + (build.getNumber());
+        String applicationName = TempConstants.APP_NAME;
+=======
         EnvVarsResolver envVarsResolver = new EnvVarsResolver(build, taskListener);
 
         String buildVersion = envVarsResolver.getValue(Constants.BUILD_VERSION);
@@ -48,6 +58,7 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
         
         String envName = envVarsResolver.getValue(Constants.ENV_NAME);
         checkState(!Strings.isNullOrEmpty(envName), String.format("Invalid env name", envName));
+>>>>>>> [Hackatho2015]-added app name auto complete for deploy
 
         // persist data
         DeploymentMetaData deploymentMetaData = new DeploymentMetaData();
