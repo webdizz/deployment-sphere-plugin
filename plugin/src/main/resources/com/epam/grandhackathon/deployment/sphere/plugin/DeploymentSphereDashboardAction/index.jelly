@@ -33,7 +33,7 @@
                                             </thead>
                                             <tbody>
                                                 <j:forEach indexVar="deploymentIndex" var="deployment" items="${env.deployments}">
-                                                    <tr class="collapse-pointer collapse-pointer-hover" data-toggle="collapse" data-target="#collapseExample${deploymentIndex}" aria-expanded="false" aria-controls="collapseExample${deploymentIndex}">
+                                                    <tr class="collapse-pointer collapse-pointer-hover" data-toggle="collapse" data-target="#collapseExample${deploymentIndex}${env.title}" aria-expanded="false" aria-controls="collapseExample${deploymentIndex}${env.title}">
                                                         <td>
                                                             ${deployment.buildVersion}
                                                         </td>
@@ -42,7 +42,7 @@
                                                         </td>
                                                         <td>${deployment.deployedAt}</td>
                                                     </tr>
-                                                    <tr class="collapse" id="collapseExample${deploymentIndex}">
+                                                    <tr class="collapse" id="collapseExample${deploymentIndex}${env.title}">
                                                         <td colspan="3">
                                                             <div class="well-custom">
                                                                 <table class="table no-margin table-striped">
