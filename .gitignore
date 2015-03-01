@@ -45,6 +45,8 @@ Thumbs.db
 /build
 */build
 /work
+.data-deployment-sphere.h2.db
+.data-deployment-sphere.lock.db
 
 # IntelliJ specific files/directories
 out
