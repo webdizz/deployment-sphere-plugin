@@ -15,11 +15,11 @@
                 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                 <j:forEach indexVar="index" var="env" items="${it.environments}">
                     <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="heading${index}">
+                        <div class="panel-heading collapse-pointer" role="tab" id="heading${index}" data-toggle="collapse" data-parent="#accordion" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse${index}" aria-expanded="true" aria-controls="collapse${index + 1}">
-                                    ${env.title}
-                                </a>
+                                <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">-->
+                                <span class="underline">${env.title}</span>
+                                <!--</a>-->
                             </h4>
                         </div>
                         <div id="collapse${index}" class="panel-collapse collapse ${index == 0 ? 'in' : ''}" role="tabpanel" aria-labelledby="heading${index}">
@@ -29,7 +29,7 @@
                                         <table class="table table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Deploy Version</th>
+                                                    <th>Build Version</th>
                                                     <th>Application</th>
                                                     <th>Deployment Time</th>
                                                 </tr>
@@ -51,14 +51,12 @@
                                                                 <table class="table no-margin table-striped">
                                                                     <thead>
                                                                     <tr>
-                                                                        <th>Build Version</th>
                                                                         <th>Build Job</th>
                                                                         <th>Build Time</th>
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td>${deployment.build.buildVersion}</td>
                                                                             <td><a href="/job/${deployment.build.jobName}/${deployment.build.number}">${deployment.build.jobName} #${deployment.build.number}</a></td>
                                                                             <td>${deployment.build.builtAt}</td>
                                                                         </tr>
