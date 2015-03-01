@@ -22,7 +22,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 
-
 @Log
 public class EnvironmentDao extends GenericDao {
 
@@ -34,26 +33,24 @@ public class EnvironmentDao extends GenericDao {
         }
     }
 
-
     public Collection<EnvironmentMetaData> findAll() {
 
-        List<EnvironmentMetaData> environmentMetaDatas = Lists.newArrayList();
+        List<EnvironmentMetaData> environmentMetaDataList = Lists.newArrayList();
 
         try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
-            List<Environment> builds = query.all();
-            for (Environment environment : builds) {
+            List<Environment> environments = query.all();
+            for (Environment environment : environments) {
                 EnvironmentMetaData environmentMetaData = new EnvironmentMetaData(environment.getTitle());
                 loadDeployInfo(handle, environment, environmentMetaData);
 
                 environmentMetaData.setIdentity(environment.getKey());
-                environmentMetaDatas.add(environmentMetaData);
-
+                environmentMetaDataList.add(environmentMetaData);
             }
-            log.fine(format("There are builds buildNumber in database '%s'", builds.size()));
+            log.fine(format("There are environments in database '%s'", environments.size()));
         }
 
-        return environmentMetaDatas;
+        return environmentMetaDataList;
     }
 
     private void loadDeployInfo(final Handle handle, final Environment environment,

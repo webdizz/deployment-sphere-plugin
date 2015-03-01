@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.skife.jdbi.v2.Handle;
-
 import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -34,7 +33,7 @@ public class BuildMetaDataDao extends GenericDao {
         try (Handle handle = database().open()) {
             BuildQuery query = handle.attach(BuildQuery.class);
             Build foundBuild = query.find(applicationName, buildVersion);
-            log.fine(format("Here is a build found '%s'", foundBuild));
+            log.fine(format("Here is a build found '%s' for version '%s'", foundBuild, buildVersion));
             return getModelMapper().map(foundBuild, BuildMetaData.class);
         }
     }
@@ -42,10 +41,9 @@ public class BuildMetaDataDao extends GenericDao {
     public Collection<BuildMetaData> findByAppName(final String applicationName) {
         try (Handle handle = database().open()) {
             BuildQuery query = handle.attach(BuildQuery.class);
-            List<Build> foundBuild = query.findByApp(applicationName);
-            log.fine(format("Here is a build found '%s'", foundBuild));
-
-            return Lists.transform(foundBuild, new Function<Build, BuildMetaData>() {
+            List<Build> foundBuilds = query.findByApp(applicationName);
+            log.fine(format("Here are a builds found '%s' for application '%s'", foundBuilds.size(), applicationName));
+            return Lists.transform(foundBuilds, new Function<Build, BuildMetaData>() {
                 @Override
                 public BuildMetaData apply(final Build build) {
                     return getModelMapper().map(build, BuildMetaData.class);
