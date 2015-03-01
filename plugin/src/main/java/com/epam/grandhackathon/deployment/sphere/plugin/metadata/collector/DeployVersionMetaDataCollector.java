@@ -26,8 +26,7 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
     @Override
     public DeploymentMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         // next variables should be resolved from context
-        int buildNumber = 78;
-        String buildVersion = "0.0." + (buildNumber += 1);
+        String buildVersion = "0.0." + (build.getNumber() + 50);
         String applicationName = TempConstants.APP_NAME;
 
         // persist data
