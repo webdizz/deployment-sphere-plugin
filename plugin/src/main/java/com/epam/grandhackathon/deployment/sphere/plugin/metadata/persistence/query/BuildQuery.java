@@ -32,14 +32,13 @@ public interface BuildQuery {
     @SqlQuery("SELECT * FROM BUILDS WHERE build_version = :build_version")
     Build find( @Bind("build_version") String buildVersion);
 
-    @SqlQuery("SELECT * FROM BUILDS WHERE application_name = :application_name")
+    @SqlQuery("SELECT * FROM BUILDS WHERE application_name = :application_name ORDER BY built_at ASC")
     List<Build> findByApp(@Bind("application_name") String applicationName);
-
 
     @SqlUpdate("INSERT INTO BUILDS (application_name, build_version, build_number, built_at) values (:application_name, :build_version, :build_number, :built_at)")
     int save(@BindBuild Build build);
 
-    @SqlQuery("SELECT * FROM BUILDS")
+    @SqlQuery("SELECT * FROM BUILDS ORDER BY built_at ASC")
     List<Build> all();
 
     @BindingAnnotation(BindBuild.BinderFactory.class)

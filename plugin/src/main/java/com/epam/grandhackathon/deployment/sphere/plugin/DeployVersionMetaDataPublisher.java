@@ -1,29 +1,26 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
+import static java.lang.String.format;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
-import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.ChoiceParameterDefinition;
-import hudson.model.ParameterDefinition;
-import hudson.model.ParametersDefinitionProperty;
-import hudson.tasks.BuildStepMonitor;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
-
 import javax.inject.Inject;
-
-import jenkins.model.Jenkins;
-import lombok.extern.java.Log;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
+import hudson.Launcher;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
+import hudson.model.ChoiceParameterDefinition;
+import hudson.model.ParameterDefinition;
+import hudson.model.ParametersDefinitionProperty;
+import hudson.tasks.BuildStepMonitor;
+import jenkins.model.Jenkins;
+import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
@@ -77,25 +74,38 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
 
         log.log(Level.FINEST, format("New deploy metadata has been collected %s", metaData));
 
+        repopulateValues(build);
         return true;
     }
 
     @Override
     public boolean prebuild(final AbstractBuild<?, ?> build, final BuildListener listener) {
+        repopulateValues(build);
+        return true;
+    }
 
+    private void repopulateValues(final AbstractBuild<?, ?> build) {
+        getDescriptor().load();
         final String appName = getDeployedAppName();
         checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name", appName));
         build.addAction(new DynamicVariablesStorageAction(Constants.BUILD_APP_NAME, appName));
 
-        ParameterDefinition buildVersions = getBuildVersionChoices(appName);
-        ParameterDefinition envs = getEnvChoices();
-
         try {
+            if (null != build.getProject().getProperty(ParametersDefinitionProperty.class)) {
+                log.log(Level.FINE, "Is about to remove project property");
+                build.getProject().removeProperty(ParametersDefinitionProperty.class);
+                build.getProject().save();
+            }
+            ParameterDefinition buildVersions = getBuildVersionChoices(appName);
+            ParameterDefinition envs = getEnvChoices();
             build.getProject().addProperty(new ParametersDefinitionProperty(envs, buildVersions));
+            build.getProject().save();
+            build.getProject().doReload();
+            build.getProject().doReload();
+
         } catch (IOException e) {
             Throwables.propagate(e);
         }
-        return true;
     }
 
     private ParameterDefinition getBuildVersionChoices(final String appName) {
@@ -105,9 +115,8 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
         for (BuildMetaData build : builds) {
             versions.add(build.getBuildVersion());
         }
-        ChoiceParameterDefinition choices = new ChoiceParameterDefinition(Constants.BUILD_VERSION,
+        return new ChoiceParameterDefinition(Constants.BUILD_VERSION,
                 versions.toArray(new String[versions.size()]), "");
-        return choices;
     }
 
     private ParameterDefinition getEnvChoices() {
