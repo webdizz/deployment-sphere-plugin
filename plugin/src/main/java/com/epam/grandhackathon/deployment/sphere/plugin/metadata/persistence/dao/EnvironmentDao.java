@@ -1,5 +1,13 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao;
 
+import static java.lang.String.format;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.skife.jdbi.v2.Handle;
+import lombok.extern.java.Log;
+
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
@@ -13,14 +21,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
-import lombok.extern.java.Log;
 
-import org.skife.jdbi.v2.Handle;
-
-import java.util.Collection;
-import java.util.List;
-
-import static java.lang.String.format;
 
 @Log
 public class EnvironmentDao extends GenericDao {
@@ -34,7 +35,7 @@ public class EnvironmentDao extends GenericDao {
     }
 
 
-    public Collection<EnvironmentMetaData> findAll () {
+    public Collection<EnvironmentMetaData> findAll() {
 
         List<EnvironmentMetaData> environmentMetaDatas = Lists.newArrayList();
 
@@ -55,12 +56,12 @@ public class EnvironmentDao extends GenericDao {
         return environmentMetaDatas;
     }
 
-    private void loadDeployInfo (final Handle handle, final Environment environment,
-            final EnvironmentMetaData environmentMetaData) {
+    private void loadDeployInfo(final Handle handle, final Environment environment,
+                                final EnvironmentMetaData environmentMetaData) {
         final DeploymentQuery deploymentQuery = handle.attach(DeploymentQuery.class);
         List<Deployment> deploymentList = deploymentQuery.find(environment.getKey());
         Deployment deployment = Iterables.getFirst(deploymentList, null);
-        if(deployment != null) {
+        if (deployment != null) {
             final DeploymentMetaData prodDeploy = new DeploymentMetaData();
             prodDeploy.setBuildVersion(deployment.getBuild().getBuildVersion());
             prodDeploy.setDeployedAt(DateFormatUtil.formatDate(deployment.getDeployedAt()));
