@@ -9,7 +9,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dom
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.BuildQuery;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.DeploymentQuery;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.EnvironmentQuery;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.java.Log;
 import org.skife.jdbi.v2.Handle;
