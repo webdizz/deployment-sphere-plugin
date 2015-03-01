@@ -11,7 +11,7 @@ import lombok.extern.java.Log;
 import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {

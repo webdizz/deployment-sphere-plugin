@@ -3,7 +3,7 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.google.common.base.Strings;
 import hudson.model.AbstractBuild;
@@ -16,7 +16,6 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 import java.io.PrintStream;
 
-import static com.epam.grandhackathon.deployment.sphere.plugin.TempConstants.APP_NAME;
 import static com.google.common.base.Preconditions.checkState;
 import static java.lang.String.format;
 

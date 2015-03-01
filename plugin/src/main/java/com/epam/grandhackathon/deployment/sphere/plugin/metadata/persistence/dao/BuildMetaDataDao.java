@@ -8,7 +8,7 @@ import lombok.extern.java.Log;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.BuildQuery;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 
 @Log
 public class BuildMetaDataDao extends GenericDao {

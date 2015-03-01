@@ -2,7 +2,6 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
          xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:define="jelly:define" >
     <link href="${rootURL}/plugin/deployment-sphere/css/bootstrap.min.css" rel="stylesheet"/>
-    <!--<link href="${rootURL}/plugin/deployment-sphere/css/bootstrap-theme.min.css" rel="stylesheet" />-->
     <link href="${rootURL}/plugin/deployment-sphere/css/styles.css" rel="stylesheet" />
     <script type="text/javascript" src="${rootURL}/plugin/deployment-sphere/js/jquery-1.11.2.min.js"></script>
     <script type="text/javascript" src="${rootURL}/plugin/deployment-sphere/js/bootstrap.min.js"></script>
@@ -17,9 +16,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading collapse-pointer" role="tab" id="heading${index}" data-toggle="collapse" data-parent="#accordion" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
                             <h4 class="panel-title">
-                                <!--<a data-toggle="collapse" data-parent="#accordion" href="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">-->
                                 <span class="underline">${env.title}</span>
-                                <!--</a>-->
                             </h4>
                         </div>
                         <div id="collapse${index}" class="panel-collapse collapse ${index == 0 ? 'in' : ''}" role="tabpanel" aria-labelledby="heading${index}">

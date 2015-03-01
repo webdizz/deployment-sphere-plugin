@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin.metadata.util;
+package com.epam.grandhackathon.deployment.sphere.plugin.utils;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

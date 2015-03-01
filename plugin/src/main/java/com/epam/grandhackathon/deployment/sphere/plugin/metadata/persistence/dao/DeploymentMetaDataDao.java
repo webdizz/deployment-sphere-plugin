@@ -13,7 +13,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dom
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Deployment;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.DeploymentQuery;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
