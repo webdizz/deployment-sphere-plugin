@@ -1,17 +1,16 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
-import javax.inject.Inject;
-
-import org.joda.time.DateTime;
-import hudson.model.AbstractBuild;
-import hudson.model.TaskListener;
-import jenkins.model.Jenkins;
-import lombok.extern.java.Log;
-
 import com.epam.grandhackathon.deployment.sphere.plugin.TempConstants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
+import hudson.model.AbstractBuild;
+import hudson.model.TaskListener;
+import jenkins.model.Jenkins;
+import lombok.extern.java.Log;
+import org.joda.time.DateTime;
+
+import javax.inject.Inject;
 
 @Log
 public final class DeployVersionMetaDataCollector implements Collector<DeploymentMetaData> {
@@ -26,7 +25,7 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
     @Override
     public DeploymentMetaData collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         // next variables should be resolved from context
-        String buildVersion = "0.0." + (build.getNumber() + 50);
+        String buildVersion = "0.0." + (build.getNumber());
         String applicationName = TempConstants.APP_NAME;
 
         // persist data

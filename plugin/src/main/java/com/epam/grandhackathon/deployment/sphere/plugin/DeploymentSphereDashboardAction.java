@@ -3,6 +3,7 @@ package com.epam.grandhackathon.deployment.sphere.plugin;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import hudson.Extension;
+import hudson.Functions;
 import hudson.model.RootAction;
 import hudson.security.ACL;
 import hudson.security.AccessControlled;
@@ -40,6 +41,11 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
     @Override
     public String getUrlName() {
         return "/deployment-sphere";
+    }
+
+    @Exported
+    public String getResourceUrl() {
+        return Functions.getResourcePath();
     }
 
     @Exported
