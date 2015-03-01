@@ -27,7 +27,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dom
 @RegisterMapper(DeploymentQuery.Mapper.class)
 public interface DeploymentQuery {
 
-    @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND build_version = :build_version AND environment_key = :environment_key ORDER BY deployed_at ASC")
+    @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND build_version = :build_version AND environment_key = :environment_key")
     Deployment find(@Bind("application_name") String applicationName, @Bind("build_version") String buildVersion, @Bind("environment_key") String environmentKey);
 
     @SqlUpdate("INSERT INTO DEPLOYMENTS (application_name, build_version, environment_key, deployed_at) values (:application_name, :build_version, :environment_key, :deployed_at)")
@@ -36,10 +36,10 @@ public interface DeploymentQuery {
     @SqlQuery("SELECT * FROM DEPLOYMENTS")
     List<Deployment> all();
 
-    @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND environment_key = :environment_key ORDER BY deployed_at ASC")
+    @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND environment_key = :environment_key ORDER BY deployed_at DESC")
     List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String environmentKey);
 
-    @SqlQuery("SELECT DISTINCT * FROM DEPLOYMENTS WHERE environment_key = :environment_key ORDER BY  deployed_at ASC")
+    @SqlQuery("SELECT DISTINCT * FROM DEPLOYMENTS WHERE environment_key = :environment_key ORDER BY  deployed_at DESC")
     List<Deployment> find( @Bind("environment_key") String environmentKey);
 
     @BindingAnnotation(BindDeployment.BinderFactory.class)

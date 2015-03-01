@@ -100,8 +100,6 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
             ParameterDefinition envs = getEnvChoices();
             build.getProject().addProperty(new ParametersDefinitionProperty(envs, buildVersions));
             build.getProject().save();
-            build.getProject().doReload();
-            build.getProject().doReload();
 
         } catch (IOException e) {
             Throwables.propagate(e);
