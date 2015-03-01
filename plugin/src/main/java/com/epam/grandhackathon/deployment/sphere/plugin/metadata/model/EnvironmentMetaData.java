@@ -11,7 +11,7 @@ import java.util.List;
 public class EnvironmentMetaData {
 
     @Exported
-    private Long identity;
+    private String identity;
     @Exported
     private final String title;
     @Exported

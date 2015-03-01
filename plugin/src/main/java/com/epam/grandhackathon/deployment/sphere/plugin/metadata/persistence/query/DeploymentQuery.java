@@ -39,6 +39,9 @@ public interface DeploymentQuery {
     @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND environment_key = :environment_key")
     List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String environmentKey);
 
+    @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE environment_key = :environment_key")
+    List<Deployment> find( @Bind("environment_key") String environmentKey);
+
     @BindingAnnotation(BindDeployment.BinderFactory.class)
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.PARAMETER})
