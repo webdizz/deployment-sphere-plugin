@@ -3,8 +3,10 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.da
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Build;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Deployment;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.BuildQuery;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.DeploymentQuery;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.query.EnvironmentQuery;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.util.DateFormatUtil;
@@ -44,20 +46,24 @@ public class EnvironmentDao extends GenericDao {
 
     private void loadDeployInfo (final Handle handle, final Environment build,
             final EnvironmentMetaData environmentMetaData) {
-        DeploymentQuery deploymentQuery = handle.attach(DeploymentQuery.class);
+        final DeploymentQuery deploymentQuery = handle.attach(DeploymentQuery.class);
         List<Deployment> deploymentList = deploymentQuery.find(build.getKey());
         for (Deployment deployment : deploymentList) {
-            DeploymentMetaData prodDeploy = new DeploymentMetaData();
+            final DeploymentMetaData prodDeploy = new DeploymentMetaData();
             prodDeploy.setBuildVersion(deployment.getBuild().getBuildVersion());
             prodDeploy.setDeployedAt(DateFormatUtil.formatDate(deployment.getDeployedAt()));
             prodDeploy.setApplicationName(deployment.getBuild().getApplicationName());
 
-            BuildMetaData cqBuild = new BuildMetaData();
-            cqBuild.setApplicationName(deployment.getBuild().getApplicationName());
-            cqBuild.setNumber(deployment.getBuild().getBuildNumber());
-            cqBuild.setBuildVersion(deployment.getBuild().getBuildVersion());
-            cqBuild.setBuiltAt(DateFormatUtil.formatDate(deployment.getBuild().getBuiltAt()));
-            cqBuild.setJobName(deployment.getBuild().getApplicationName());
+            final BuildQuery query = handle.attach(BuildQuery.class);
+            Build foundBuild = query.find(deployment.getBuild().getBuildVersion());
+
+            final BuildMetaData cqBuild = new BuildMetaData();
+            cqBuild.setApplicationName(foundBuild.getApplicationName());
+            cqBuild.setNumber(foundBuild.getBuildNumber());
+            cqBuild.setBuildVersion(foundBuild.getBuildVersion());
+            cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
+            //Added Job Name
+            cqBuild.setJobName(foundBuild.getApplicationName());
 
             prodDeploy.setBuild(cqBuild);
             environmentMetaData.getDeployments().add(prodDeploy);

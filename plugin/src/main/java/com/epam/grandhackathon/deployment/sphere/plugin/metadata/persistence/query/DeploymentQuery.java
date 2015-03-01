@@ -72,6 +72,7 @@ public interface DeploymentQuery {
             Build build = new Build();
             build.setApplicationName(resultSet.getString("application_name"));
             build.setBuildVersion(resultSet.getString("build_version"));
+            build.setBuiltAt(new DateTime(resultSet.getLong("deployed_at")));
             deployment.setBuild(build);
 
             Environment environment = new Environment();

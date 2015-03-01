@@ -28,6 +28,12 @@ public interface BuildQuery {
     @SqlQuery("SELECT * FROM BUILDS WHERE application_name = :application_name AND build_version = :build_version")
     Build find(@Bind("application_name") String applicationName, @Bind("build_version") String buildVersion);
 
+
+    @SqlQuery("SELECT * FROM BUILDS WHERE build_version = :build_version")
+    Build find( @Bind("build_version") String buildVersion);
+
+
+
     @SqlUpdate("INSERT INTO BUILDS (application_name, build_version, build_number, built_at) values (:application_name, :build_version, :build_number, :built_at)")
     int save(@BindBuild Build build);
 

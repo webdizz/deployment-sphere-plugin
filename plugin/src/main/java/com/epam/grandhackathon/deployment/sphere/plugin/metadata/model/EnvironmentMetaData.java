@@ -1,5 +1,6 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.model;
 
+import com.google.common.collect.Lists;
 import lombok.Data;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
@@ -15,6 +16,6 @@ public class EnvironmentMetaData {
     @Exported
     private final String title;
     @Exported
-    private List<DeploymentMetaData> deployments;
+    private List<DeploymentMetaData> deployments = Lists.newArrayList();
 
 }

@@ -34,7 +34,7 @@ public final class DeployVersionMetaDataCollector implements Collector<Deploymen
         deploymentMetaData.setApplicationName(applicationName);
         deploymentMetaData.setDeployedAt(DateFormatUtil.formatDate(new DateTime(build.due())));
         deploymentMetaData.setBuildVersion(buildVersion);
-        deploymentMetaData.setEnvironmentKey("qa");
+        deploymentMetaData.setEnvironmentKey("2");
         deploymentMetaDataDao.save(deploymentMetaData);
         return deploymentMetaData;
     }
