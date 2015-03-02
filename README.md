@@ -1,4 +1,4 @@
-jobolizer
+deployment-sphere
 =======
 
 Jenkins plugin to have a bird's eye view of your continuous deployment pipeline.
