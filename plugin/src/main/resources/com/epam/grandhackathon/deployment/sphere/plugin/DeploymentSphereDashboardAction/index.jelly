@@ -54,7 +54,7 @@
                                                                     </thead>
                                                                     <tbody>
                                                                         <tr>
-                                                                            <td><a href="/job/${deployment.build.jobName}/${deployment.build.number}">${deployment.build.jobName} #${deployment.build.number}</a></td>
+                                                                            <td><a href="/${deployment.build.buildUrl}">${deployment.build.jobName} #${deployment.build.number}</a></td>
                                                                             <td>${deployment.build.builtAt}</td>
                                                                         </tr>
                                                                     </tbody>

@@ -18,7 +18,7 @@ public class DatabaseProvider {
 
     static {
         Handle handle = DBI.open();
-        handle.execute("CREATE TABLE IF NOT EXISTS BUILDS (application_name varchar(255) NOT NULL, build_version varchar(255) NOT NULL, build_number long, built_at long, PRIMARY KEY(application_name, build_version))");
+        handle.execute("CREATE TABLE IF NOT EXISTS BUILDS (application_name varchar(255) NOT NULL, build_version varchar(255) NOT NULL, build_url varchar(255) NOT NULL, build_number long, built_at long, PRIMARY KEY(application_name, build_version))");
 
         handle.execute("CREATE TABLE IF NOT EXISTS DEPLOYMENTS (application_name varchar(255) NOT NULL, build_version varchar(255) NOT NULL, environment_key varchar(255) NOT NULL, deployed_at long, PRIMARY KEY(application_name, build_version, environment_key))");
 
