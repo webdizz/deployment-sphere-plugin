@@ -35,7 +35,7 @@ public interface BuildQuery {
     @SqlQuery("SELECT * FROM BUILDS WHERE application_name = :application_name ORDER BY built_at ASC")
     List<Build> findByApp(@Bind("application_name") String applicationName);
 
-    @SqlUpdate("INSERT INTO BUILDS (application_name, build_version, build_number, built_at) values (:application_name, :build_version, :build_number, :built_at)")
+    @SqlUpdate("INSERT INTO BUILDS (application_name, build_version, build_number, built_at, build_url) values (:application_name, :build_version, :build_number, :built_at, :build_url)")
     int save(@BindBuild Build build);
 
     @SqlQuery("SELECT * FROM BUILDS ORDER BY built_at ASC")
@@ -54,6 +54,7 @@ public interface BuildQuery {
                         q.bind("application_name", arg.getApplicationName());
                         q.bind("build_version", arg.getBuildVersion());
                         q.bind("build_number", arg.getBuildNumber());
+                        q.bind("build_url", arg.getBuildUrl());
                         if (null != arg.getBuiltAt()) {
                             q.bind("built_at", arg.getBuiltAt().getMillis());
                         }
@@ -69,6 +70,7 @@ public interface BuildQuery {
             Build build = new Build();
             build.setApplicationName(resultSet.getString("application_name"));
             build.setBuildVersion(resultSet.getString("build_version"));
+            build.setBuildUrl(resultSet.getString("build_url"));
             build.setBuildNumber(resultSet.getLong("build_number"));
             build.setBuiltAt(new DateTime(resultSet.getLong("built_at")));
             return build;
