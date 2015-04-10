@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin;
+package com.epam.grandhackathon.deployment.sphere.plugin.parameter;
 
 import hudson.Extension;
 import hudson.model.ChoiceParameterDefinition;
@@ -25,11 +25,14 @@ import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.PluginConstants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
 @Log
@@ -43,7 +46,11 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
     private String buildVersion;
     private String applicationName;
 
-	@DataBoundConstructor
+    public DeployMetaDataParameterDefinition(String name, String description, String applicationName) {
+		this(name, description, "", "", applicationName);
+	}
+    
+    @DataBoundConstructor
 	public DeployMetaDataParameterDefinition(String name, String description, String environmentKey, String buildVersion, String applicationName) {
 		super(name, description);
 		this.environmentKey = environmentKey;
@@ -67,32 +74,36 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
 		return new DeployMetaDataParameterValue(getName(), this.environmentKey, this.buildVersion, this.applicationName, "Deploy meta data parameter");
 	}
 	
-	public List<String> getBuildVersions() {
+	public Collection<String> getBuildVersions() {
 		Jenkins.getInstance().getInjector().injectMembers(this);
 		Collection<BuildMetaData> builds = buildMetaDataDao.findByAppName(applicationName);
-        List<String> versions = Lists.newArrayList();
-        for (BuildMetaData build : builds) {
-            versions.add(build.getBuildVersion());
-        }
-        return versions;
+		Function<BuildMetaData, String> function = new Function<BuildMetaData, String>() {
+			@Override
+			public String apply(BuildMetaData data) {
+				return data.getBuildVersion();
+			}
+		};
+		return  Collections2.transform(builds, function);
     }
 
-    public List<String> getEnvironmentKeys() {
+    public Collection<String> getEnvironmentKeys() {
     	Jenkins.getInstance().getInjector().injectMembers(this);
     	Collection<EnvironmentMetaData> envs = environmentDao.findAll();
-        List<String> environments = Lists.newArrayList();
-        for (EnvironmentMetaData env : envs) {
-            environments.add(env.getTitle());
-        }
-        return environments;
+		Function<EnvironmentMetaData, String> function = new Function<EnvironmentMetaData, String>() {
+			@Override
+			public String apply(EnvironmentMetaData data) {
+				return data.getTitle();
+			}
+		};
+		return Collections2.transform(envs, function);
     }
 
 	@Extension
-	public static final class DescriptorImpl extends ParameterDescriptor {
+	public static final class DeployMetaDataParameterDescriptorImpl extends ParameterDescriptor {
 
 		@Override
 		public String getDisplayName() {
-			return "Deploy meta data parameter";
+			return PluginConstants.DEPLOY_JOB_PARAMETER;
 		}
 	}
 }

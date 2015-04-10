@@ -1,5 +1,6 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.listener;
 
+import static org.junit.Assert.*;
 import hudson.model.FreeStyleProject;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParametersDefinitionProperty;
@@ -20,21 +21,21 @@ public class DeployVersionMetaDataListenerTest {
     public JenkinsRule j = new JenkinsRule();
 	
 	@Test
-	public void testOnCreatedItem() throws Exception {
+	public void shouldCreateConfigParameterOnCreate() throws Exception {
 		LOGGER.info("Create project with Deployment Sphere plugin");
-		checkProjectConfigurationWithPlugin();
+		assertTrue(checkProjectConfigurationWithPlugin());
 		LOGGER.info("Done.");
 		
 	}
 
 	@Test
-	public void testOnUpdatedItem() throws Exception{
+	public void shouldCreateConfigParameterOnUpdate() throws Exception{
 		LOGGER.info("Update project with Deployment Sphere plugin");
 		checkProjectConfigurationWithPlugin();
 		LOGGER.info("Done.");	
 	}
 	
-	private void checkProjectConfigurationWithPlugin() throws Exception{
+	private boolean checkProjectConfigurationWithPlugin() throws Exception{
 		FreeStyleProject project = j.createFreeStyleProject("Deployment job");
 		project.getPublishersList().add(new DeployVersionMetaDataPublisher());
 		project.save();
@@ -44,11 +45,11 @@ public class DeployVersionMetaDataListenerTest {
 		if (null != paramDefProp){
 			for(ParameterDefinition pDef : paramDefProp.getParameterDefinitions()){
 				if (pDef.getName().equals(Constants.DEPLOY_META_DATA)){
-					return;
+					return true;
 				}
 			}
 		}
-		throw new Exception("Project configurution failure with Deployment Sphere plugin");	
+		return false;
 	}
 
 }

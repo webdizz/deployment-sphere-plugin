@@ -83,7 +83,7 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
 	private void repopulateEnvValues(final AbstractBuild<?, ?> build) {
         getDescriptor().load();
         final String appName = getDeployedAppName();
-        checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name", appName));
+        checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name %s", appName));
         build.addAction(new DynamicVariablesStorageAction(Constants.BUILD_APP_NAME, appName));
 	}
 

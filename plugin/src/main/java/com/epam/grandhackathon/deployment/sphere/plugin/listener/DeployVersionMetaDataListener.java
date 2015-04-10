@@ -14,9 +14,9 @@ import hudson.util.DescribableList;
 import java.io.IOException;
 import java.util.List;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.DeployMetaDataParameterDefinition;
 import com.epam.grandhackathon.deployment.sphere.plugin.DeployVersionMetaDataPublisher;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
+import com.epam.grandhackathon.deployment.sphere.plugin.parameter.DeployMetaDataParameterDefinition;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 
@@ -38,13 +38,8 @@ public class DeployVersionMetaDataListener extends ItemListener {
 			AbstractProject prj = (AbstractProject)item;
 			DescribableList<Publisher,Descriptor<Publisher>> publishers = prj.getPublishersList();
 			DeployVersionMetaDataPublisher dataPublisher = publishers.get(DeployVersionMetaDataPublisher.class);
-			if (dataPublisher != null){
-				ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
-				if (null != paramDefProp)
-					for(ParameterDefinition pDef : paramDefProp.getParameterDefinitions()){
-						if (pDef.getName().equals(Constants.DEPLOY_META_DATA))
-							return;
-					}
+			ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
+			if (dataPublisher != null && !isExistDeployVersionParameter(paramDefProp)){
 				addPublisherProperty(prj, paramDefProp, dataPublisher.getDeployedAppName());	
 			}
 		}	
@@ -54,8 +49,18 @@ public class DeployVersionMetaDataListener extends ItemListener {
 		return item instanceof AbstractProject;
 	}
 	
+	private boolean isExistDeployVersionParameter(ParametersDefinitionProperty paramDefProp){
+		if (null != paramDefProp){
+			for(ParameterDefinition pDef : paramDefProp.getParameterDefinitions()){
+				if (pDef.getName().equals(Constants.DEPLOY_META_DATA))
+					return true;
+			}
+		}
+		return false;
+	}
+	
 	private void addPublisherProperty(AbstractProject prj, ParametersDefinitionProperty paramDefProp, String applicationName){
-		DeployMetaDataParameterDefinition deployMetaData = new DeployMetaDataParameterDefinition(Constants.DEPLOY_META_DATA, Constants.DEPLOY_META_DATA, "", "", applicationName);
+		DeployMetaDataParameterDefinition deployMetaData = new DeployMetaDataParameterDefinition(Constants.DEPLOY_META_DATA, Constants.DEPLOY_META_DATA, applicationName);
 		try {
 			List<ParameterDefinition> definitions = Lists.newArrayList();;
 			if (null != paramDefProp){

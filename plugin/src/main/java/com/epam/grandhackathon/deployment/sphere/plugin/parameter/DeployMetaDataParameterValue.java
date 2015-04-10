@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin;
+package com.epam.grandhackathon.deployment.sphere.plugin.parameter;
 
 import hudson.EnvVars;
 import hudson.model.ParameterValue;
@@ -54,16 +54,24 @@ public class DeployMetaDataParameterValue extends ParameterValue {
     env.put(Constants.BUILD_APP_NAME, applicationName);
   }
 
-  @Override
-  public VariableResolver<String> createVariableResolver(AbstractBuild<?, ?> build) {
-    return new VariableResolver<String>() {
-      public String resolve(String name) {
-        return Constants.ENV_NAME.equals(name) ? 
-        		environmentKey : (Constants.BUILD_VERSION.equals(name) ? 
-        				buildVersion : (Constants.BUILD_APP_NAME.equals(name) ? 
-        						applicationName : null));
-      }
-    };
-  }
+	@Override
+	public VariableResolver<String> createVariableResolver(
+			AbstractBuild<?, ?> build) {
+		return new VariableResolver<String>() {
+			public String resolve(String name) {
+				return resolveVariableValue(name);
+			}
+		};
+	}
+	
+	private String resolveVariableValue(String property){
+		if (Constants.ENV_NAME.equals(property))
+			return name;
+		if (Constants.BUILD_VERSION.equals(property))
+			return buildVersion;
+		if (Constants.BUILD_APP_NAME.equals(property))
+			return applicationName;
+		return null;
+	}
 
 }
