@@ -31,7 +31,7 @@ public class DeployVersionMetaDataListenerTest {
 	@Test
 	public void shouldCreateConfigParameterOnUpdate() throws Exception{
 		LOGGER.info("Update project with Deployment Sphere plugin");
-		checkProjectConfigurationWithPlugin();
+		assertTrue(checkProjectConfigurationWithPlugin());
 		LOGGER.info("Done.");	
 	}
 	
