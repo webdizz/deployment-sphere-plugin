@@ -22,3 +22,7 @@ To run Jenkins and test JPI:
 Build job-dsl.hpi to be installed in Jenkins:
 
     ./gradlew :pl:jpi
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/webdizz/deployment-sphere-plugin/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
