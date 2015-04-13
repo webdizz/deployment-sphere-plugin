@@ -1,22 +1,16 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.parameter;
 
-import static org.junit.Assert.assertNotNull;
-import lombok.extern.java.Log;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import hudson.EnvVars;
 import hudson.model.FreeStyleBuild;
 import hudson.model.FreeStyleProject;
 import hudson.slaves.EnvironmentVariablesNodeProperty;
-
+import lombok.extern.java.Log;
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.BuildVersionMetaDataPublisher;
-import com.epam.grandhackathon.deployment.sphere.plugin.listener.DeployVersionMetaDataListenerTest;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
-import com.epam.grandhackathon.deployment.sphere.plugin.parameter.DeployMetaDataParameterValue;
+import static org.junit.Assert.assertNotNull;
 
 @Log
 public class DeployMetaDataParameterValueTest {
