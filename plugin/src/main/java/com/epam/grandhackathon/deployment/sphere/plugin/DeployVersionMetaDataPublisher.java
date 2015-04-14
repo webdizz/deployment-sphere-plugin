@@ -8,12 +8,15 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
+
 import javax.inject.Inject;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
+
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
+import hudson.model.Build;
 import hudson.model.BuildListener;
 import hudson.model.ChoiceParameterDefinition;
 import hudson.model.ParameterDefinition;
@@ -68,64 +71,20 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
         checkArgument(null != build, "Current build is null, something was wrong.");
 
         listener.getLogger().append("[deployment-sphere] Collecting deploy metadata\n");
-
+		repopulateEnvValues(build);
         Collector<DeploymentMetaData> collector = new DeployVersionMetaDataCollector();
         DeploymentMetaData metaData = collector.collect(build, listener);
 
         log.log(Level.FINEST, format("New deploy metadata has been collected %s", metaData));
 
-        repopulateValues(build);
         return true;
     }
 
-    @Override
-    public boolean prebuild(final AbstractBuild<?, ?> build, final BuildListener listener) {
-        repopulateValues(build);
-        return true;
-    }
-
-    private void repopulateValues(final AbstractBuild<?, ?> build) {
+	private void repopulateEnvValues(final AbstractBuild<?, ?> build) {
         getDescriptor().load();
         final String appName = getDeployedAppName();
-        checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name", appName));
+        checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name %s", appName));
         build.addAction(new DynamicVariablesStorageAction(Constants.BUILD_APP_NAME, appName));
-
-        try {
-            if (null != build.getProject().getProperty(ParametersDefinitionProperty.class)) {
-                log.log(Level.FINE, "Is about to remove project property");
-                build.getProject().removeProperty(ParametersDefinitionProperty.class);
-                build.getProject().save();
-            }
-            ParameterDefinition buildVersions = getBuildVersionChoices(appName);
-            ParameterDefinition envs = getEnvChoices();
-            build.getProject().addProperty(new ParametersDefinitionProperty(envs, buildVersions));
-            build.getProject().save();
-
-        } catch (IOException e) {
-            Throwables.propagate(e);
-        }
-    }
-
-    private ParameterDefinition getBuildVersionChoices(final String appName) {
-        Collection<BuildMetaData> builds = buildMetaDataDao.findByAppName(appName);
-        List<String> versions = Lists.newArrayList();
-
-        for (BuildMetaData build : builds) {
-            versions.add(build.getBuildVersion());
-        }
-        return new ChoiceParameterDefinition(Constants.BUILD_VERSION,
-                versions.toArray(new String[versions.size()]), "");
-    }
-
-    private ParameterDefinition getEnvChoices() {
-        Collection<EnvironmentMetaData> envs = environmentDao.findAll();
-        List<String> names = Lists.newArrayList();
-        for (EnvironmentMetaData env : envs) {
-            names.add(env.getTitle());
-        }
-        ChoiceParameterDefinition choices = new ChoiceParameterDefinition(Constants.ENV_NAME,
-                names.toArray(new String[names.size()]), "");
-        return choices;
-    }
+	}
 
 }

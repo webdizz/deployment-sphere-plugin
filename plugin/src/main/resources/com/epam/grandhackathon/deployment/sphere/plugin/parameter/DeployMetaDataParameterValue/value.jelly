@@ -1,0 +1,14 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+	<f:entry title="Application">
+		<f:textbox name="applicationName" value="${it.applicationName}" readonly="true" />
+	</f:entry>
+	<f:entry title="Environment">
+		<f:textbox name="environmentKey" value="${it.environmentKey}" readonly="true" />
+	</f:entry>
+	<f:entry title="Build version">
+		<f:textbox name="buildVersion" value="${it.buildVersion}" readonly="true" />
+	</f:entry>
+</j:jelly>

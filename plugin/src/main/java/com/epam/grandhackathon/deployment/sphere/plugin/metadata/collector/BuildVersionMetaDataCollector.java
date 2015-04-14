@@ -60,6 +60,7 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
         checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
         buildMetaData.setApplicationName(appName);
+        buildMetaData.setBuildUrl(build.getUrl());
 
         metadataDao.save(buildMetaData);
         return buildMetaData;
