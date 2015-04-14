@@ -1,59 +1,44 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.isA;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
+import hudson.model.FreeStyleBuild;
+import hudson.tasks.BuildStepMonitor;
+import lombok.extern.java.Log;
+import org.junit.Test;
 
 import java.io.PrintStream;
 
-import hudson.model.Action;
-import hudson.model.BuildListener;
-import hudson.model.FreeStyleBuild;
-import hudson.model.AbstractBuild;
-import hudson.tasks.BuildStepMonitor;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.Test;
-import org.mockito.Mockito;
-
-import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
-
+@Log
 public class BuildVersionMetaDataPublisherTest {
 
 	@Test
 	public void shouldReturnMonitorServiceBuild() throws Exception {
 		BuildVersionMetaDataPublisher publisher = new BuildVersionMetaDataPublisher();
-		assertEquals("Illegal required monitor service ", publisher.getRequiredMonitorService(), BuildStepMonitor.BUILD);
+		assertEquals("Illegal build monitor step value ", publisher.getRequiredMonitorService(), BuildStepMonitor.BUILD);
 	}
 
-	@Test
-	public void shouldOnPerformRejectNullValues() throws Exception {
-		BuildVersionMetaDataPublisher publisher = new BuildVersionMetaDataPublisher();
-		boolean buildValueRejected = false;
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowAnExceptionInCasePassedBuildIsNull() throws Exception {
+        BuildVersionMetaDataPublisher publisher = new BuildVersionMetaDataPublisher();
 		BuildListener buildListener = mock(BuildListener.class);
-		try{
-			publisher.perform((AbstractBuild)null, null, buildListener);
-		}catch(IllegalArgumentException iaex){
-			buildValueRejected = true;
-		}finally{
-			assertTrue("Build is null", buildValueRejected);
-		}
-		
-		AbstractBuild build = mock(FreeStyleBuild.class);
-		boolean listenerValueRejected = false;
-		try{
-			publisher.perform(build, null, null);
-		}catch(IllegalArgumentException iaex){
-			listenerValueRejected = true;
-		}finally{
-			assertTrue("Listener is null", listenerValueRejected);
-		}
-		
+        publisher.perform((AbstractBuild) null, null, buildListener);
 	}
 
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldThrowAnExceptionInCasePassedBuildListenerIsNull() throws Exception {
+        BuildVersionMetaDataPublisher publisher = new BuildVersionMetaDataPublisher();
+        AbstractBuild build = mock(FreeStyleBuild.class);
+        publisher.perform(build, null, null);
+    }
+
 	@Test
-	public void shouldPrebuildPublisher() throws Exception {
+	public void shouldSuccessfulPreBuild() throws Exception {
 		BuildVersionMetaDataPublisher publisher = mock(BuildVersionMetaDataPublisher.class);
 		AbstractBuild build = mock(AbstractBuild.class);
 		BuildListener listener = mock(BuildListener.class);
@@ -64,11 +49,10 @@ public class BuildVersionMetaDataPublisherTest {
 		when(publisher.prebuild(build, listener)).thenCallRealMethod();
 		
 		assertTrue(publisher.prebuild(build, listener));
-		
 	}
 	
-	@Test
-	public void shouldThrowExceptionPrebuildPublisher() throws Exception {
+	@Test(expected = IllegalArgumentException.class)
+	public void shouldThrowAnExceptionInCaseVersionIsNullOnPreBuild() throws Exception {
 		BuildVersionMetaDataPublisher publisher = mock(BuildVersionMetaDataPublisher.class);
 		AbstractBuild build = mock(AbstractBuild.class);
 		BuildListener listener = mock(BuildListener.class);
@@ -78,16 +62,7 @@ public class BuildVersionMetaDataPublisherTest {
 		when(publisher.getVersionPattern()).thenReturn("");
 		when(publisher.prebuild(build, listener)).thenCallRealMethod();
 		
-		boolean exceptionOccured = false;
-		
-		try{
-			publisher.prebuild(build, listener);	
-		}catch(IllegalArgumentException iaex){
-			exceptionOccured = true;
-		}finally{
-			assertTrue("Build Pattern version value must be provided", exceptionOccured);
-		}
+		publisher.prebuild(build, listener);
 	}
-	
 
 }
