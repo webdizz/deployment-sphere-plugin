@@ -1,0 +1,43 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+  xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+  xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+
+  <f:entry title="Deployment meta data">
+    <br/>
+    <div name="parameter">
+      <input type="hidden" name="name" value="${it.name}"/>
+      <input type="hidden" name="applicationName" value="${it.applicationName}"/>
+      ${%Environment}
+      <j:choose>
+        <j:when test="${it.environmentKeys == null or it.environmentKeys.size() == 0}">
+          ${%No environments.}<br/>
+          ${%If you trigger the build, it will likely fail.}
+        </j:when>
+        <j:otherwise>
+          <select name="environmentKey">
+            <j:forEach var="environmentKey" items="${it.environmentKeys}">
+              <option value="${environmentKey}">${environmentKey}</option>
+            </j:forEach>
+          </select>
+        </j:otherwise>
+      </j:choose>
+      <br/>
+      <br/>
+      ${%Build Version}
+      <j:choose>
+        <j:when test="${it.buildVersions == null or it.buildVersions.size() == 0}">
+          ${%No builds.}<br/>
+          ${%If you trigger the build, it will likely fail.}
+        </j:when>
+        <j:otherwise>
+          <select name="buildVersion">
+            <j:forEach var="buildVersion" items="${it.buildVersions}">
+              <option value="${buildVersion}">${buildVersion}</option>
+            </j:forEach>
+          </select>
+        </j:otherwise>
+      </j:choose>
+    </div>
+  </f:entry>
+</j:jelly>
