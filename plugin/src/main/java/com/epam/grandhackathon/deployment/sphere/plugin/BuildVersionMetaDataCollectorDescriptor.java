@@ -1,21 +1,22 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import java.io.IOException;
-import java.util.logging.Level;
-
-import javax.servlet.ServletException;
-
-import org.kohsuke.stapler.QueryParameter;
-
-import com.google.common.base.Strings;
-
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
+
+import java.io.IOException;
+import java.util.logging.Level;
+
+import javax.servlet.ServletException;
+
 import jenkins.YesNoMaybe;
 import lombok.extern.java.Log;
+
+import org.kohsuke.stapler.QueryParameter;
+
+import com.google.common.base.Strings;
 
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
@@ -33,7 +34,7 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
     }
 
     public String getDisplayName() {
-        return "Collect Build Metadata";
+        return PluginConstants.BUILD_METADATA_COLLECTOR_NAME;
     }
 
     public FormValidation doCheckVersionPattern(@QueryParameter String versionPattern) throws IOException,

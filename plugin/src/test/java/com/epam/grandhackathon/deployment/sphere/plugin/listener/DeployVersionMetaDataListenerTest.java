@@ -1,11 +1,14 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.listener;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
 import com.epam.grandhackathon.deployment.sphere.plugin.DeployVersionMetaDataPublisher;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
+
 import hudson.model.FreeStyleProject;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParametersDefinitionProperty;
 import lombok.extern.java.Log;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.jvnet.hudson.test.JenkinsRule;
@@ -15,8 +18,10 @@ import static org.junit.Assert.assertTrue;
 @Log
 public class DeployVersionMetaDataListenerTest {
 	@Rule
-    public JenkinsRule j = new JenkinsRule();
+    public PluginJenkinsRule j = new PluginJenkinsRule();
 	
+	private boolean origDefaultUseCache = true;
+	 
 	@Test
 	public void shouldCreateConfigParameterOnCreate() throws Exception {
 		log.info("Create project with Deployment Sphere plugin");
@@ -52,5 +57,4 @@ public class DeployVersionMetaDataListenerTest {
 		}
 		return false;
 	}
-
 }
