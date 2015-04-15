@@ -1,24 +1,23 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import hudson.model.AbstractBuild;
-import hudson.model.BuildListener;
-import hudson.model.FreeStyleBuild;
-import hudson.tasks.BuildStepMonitor;
-import lombok.extern.java.Log;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import hudson.model.BuildListener;
+import hudson.model.FreeStyleBuild;
+import hudson.model.AbstractBuild;
+import hudson.tasks.BuildStepMonitor;
 
-@Log
+import org.junit.Test;
+
 public class DeployVersionMetaDataPublisherTest {
 
 	@Test
 	public void shouldReturnBuildStepMonitorEqualsBuild() throws Exception {
 		DeployVersionMetaDataPublisher publisher = mock(DeployVersionMetaDataPublisher.class);
 		when(publisher.getRequiredMonitorService()).thenCallRealMethod();
-		assertEquals("Illegal required monitor service ", publisher.getRequiredMonitorService(), BuildStepMonitor.BUILD);
+		assertThat("Illegal required monitor service ", publisher.getRequiredMonitorService(), is(BuildStepMonitor.BUILD));
 	}
 
 	@Test(expected = IllegalArgumentException.class)

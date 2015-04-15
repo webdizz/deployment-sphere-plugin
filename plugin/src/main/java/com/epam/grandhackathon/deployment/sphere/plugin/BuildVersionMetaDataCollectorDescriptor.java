@@ -25,6 +25,7 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
     public BuildVersionMetaDataCollectorDescriptor() {
         super(BuildVersionMetaDataPublisher.class);
         load();
+        
     }
 
     @Override

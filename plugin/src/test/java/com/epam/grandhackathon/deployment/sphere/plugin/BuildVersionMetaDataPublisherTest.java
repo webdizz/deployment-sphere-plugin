@@ -1,26 +1,24 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import hudson.model.AbstractBuild;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.model.BuildListener;
 import hudson.model.FreeStyleBuild;
+import hudson.model.AbstractBuild;
 import hudson.tasks.BuildStepMonitor;
-import lombok.extern.java.Log;
-import org.junit.Test;
 
 import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Test;
 
-@Log
 public class BuildVersionMetaDataPublisherTest {
 
 	@Test
-	public void shouldReturnMonitorServiceBuild() throws Exception {
+	public void shouldReturnMonitorServiceEqualsBuild() throws Exception {
 		BuildVersionMetaDataPublisher publisher = new BuildVersionMetaDataPublisher();
-		assertEquals("Illegal build monitor step value ", publisher.getRequiredMonitorService(), BuildStepMonitor.BUILD);
+		assertThat("Illegal build monitor step value", publisher.getRequiredMonitorService(), is(BuildStepMonitor.BUILD));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -48,7 +46,7 @@ public class BuildVersionMetaDataPublisherTest {
 		when(publisher.getVersionPattern()).thenReturn("x.x.{v}");
 		when(publisher.prebuild(build, listener)).thenCallRealMethod();
 		
-		assertTrue(publisher.prebuild(build, listener));
+		assertThat(publisher.prebuild(build, listener), is(true));
 	}
 	
 	@Test(expected = IllegalArgumentException.class)

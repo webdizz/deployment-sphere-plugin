@@ -1,46 +1,49 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import hudson.matrix.MatrixProject;
 import hudson.model.FreeStyleProject;
-import hudson.model.Project;
-import hudson.util.FormValidation;
+import hudson.util.FormValidation.Kind;
 
-import org.junit.Test;
+import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
+import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 
+
+@RunWith(Theories.class)
 public class BuildVersionMetaDataCollectorDescriptorTest {
 
-	@Test
-	public void shouldAlwaysApplicable() throws Exception {
+	@DataPoints
+	public static TestValidationInput[] validationTestInput = new TestValidationInput[] {
+			new TestValidationInput("", Kind.ERROR), 
+			new TestValidationInput(null, Kind.ERROR),
+			new TestValidationInput("notEmpy", Kind.OK) 
+	};
+	
+	@DataPoints
+	public static TestApplicableInput[] applicableTestInput = new TestApplicableInput[] {
+			new TestApplicableInput(FreeStyleProject.class, true), 
+			new TestApplicableInput(MatrixProject.class, true)
+	};
+	
+	@Theory
+	public void shouldAlwaysRerturnIsApplicableEqualsTrue(TestApplicableInput input) throws Exception {
 		BuildVersionMetaDataCollectorDescriptor buildCollectorDescriptorMock = mock(BuildVersionMetaDataCollectorDescriptor.class);
-		when(buildCollectorDescriptorMock.isApplicable(FreeStyleProject.class)).thenCallRealMethod();
-		assertTrue(buildCollectorDescriptorMock.isApplicable(FreeStyleProject.class));
-		when(buildCollectorDescriptorMock.isApplicable(Project.class)).thenCallRealMethod();
-		assertTrue(buildCollectorDescriptorMock.isApplicable(Project.class));
+		when(buildCollectorDescriptorMock.isApplicable(input.getInput())).thenCallRealMethod();
+		assertThat(buildCollectorDescriptorMock.isApplicable(input.getInput()), is(input.getResult()));
 	}
 
-	@Test
-	public void shouldCheckVersionPattern() throws Exception{
-		String version = "0.1.10";
+	
+	@Theory
+	public void shouldCorrectValidatePassedVersionPattern(TestValidationInput input) throws Exception{
 		BuildVersionMetaDataCollectorDescriptor buildCollectorDescriptor = mock(BuildVersionMetaDataCollectorDescriptor.class);
 		when(buildCollectorDescriptor.doCheckVersionPattern(anyString())).thenCallRealMethod();
-		assertEquals(buildCollectorDescriptor.doCheckVersionPattern(null).kind, FormValidation.Kind.ERROR);
-		assertEquals(buildCollectorDescriptor.doCheckVersionPattern("").kind, FormValidation.Kind.ERROR);
-		assertEquals(buildCollectorDescriptor.doCheckVersionPattern(version).kind, FormValidation.Kind.OK);	
-	}
-		
-
-	@Test
-	public void shouldCheckAppName() throws Exception{
-		String appName = "app1";
-		BuildVersionMetaDataCollectorDescriptor buildCollectorDescriptor = mock(BuildVersionMetaDataCollectorDescriptor.class);
-		when(buildCollectorDescriptor.doCheckAppName(anyString())).thenCallRealMethod();
-		assertEquals(buildCollectorDescriptor.doCheckAppName(null).kind, FormValidation.Kind.ERROR);
-		assertEquals(buildCollectorDescriptor.doCheckAppName("").kind, FormValidation.Kind.ERROR);
-		assertEquals(buildCollectorDescriptor.doCheckAppName(appName).kind, FormValidation.Kind.OK);
+		assertThat(buildCollectorDescriptor.doCheckVersionPattern(input.getInput()).kind, is(input.getResult()));	
 	}
 
 }
