@@ -1,18 +1,10 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.parameter;
 
 import hudson.Extension;
-import hudson.model.ChoiceParameterDefinition;
 import hudson.model.ParameterValue;
-import hudson.model.Job;
 import hudson.model.ParameterDefinition;
-import hudson.model.ParametersDefinitionProperty;
-import hudson.util.ListBoxModel;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
@@ -21,19 +13,16 @@ import lombok.extern.java.Log;
 import net.sf.json.JSONObject;
 
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.PluginConstants;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 
 @Log
 public class DeployMetaDataParameterDefinition extends ParameterDefinition {
