@@ -46,25 +46,17 @@ public class EnvVarsResolverTest {
 	@Rule
     public JenkinsRule j = new JenkinsRule();
 	
-	private String environmentKey = "qa";
-	private String buildVersion = "0.8";
-	private String applicationName = "app1";
+	private static final String TEST_ENV_KEY = "qa";
+	private static final String TEST_BUILD_VERSION = "0.8";
+	private static final String TEST_APP_NAME = "app1";
 	
 	private EnvVarsResolver resolver;
-	
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
 
 	@Before
 	public void setUp() throws Exception {
 		FreeStyleProject project = j.createFreeStyleProject("Deployment test job");	
 		FreeStyleBuild build = project.scheduleBuild2(0).get();
-		DeployMetaDataParameterValue value = new DeployMetaDataParameterValue(Constants.DEPLOY_META_DATA, environmentKey, buildVersion, applicationName);
+		DeployMetaDataParameterValue value = new DeployMetaDataParameterValue(Constants.DEPLOY_META_DATA, TEST_ENV_KEY, TEST_BUILD_VERSION, TEST_APP_NAME);
 		EnvironmentVariablesNodeProperty prop = new EnvironmentVariablesNodeProperty();
 	    EnvVars envVars = prop.getEnvVars();
 		value.buildEnvVars(build, envVars);
@@ -75,17 +67,11 @@ public class EnvVarsResolverTest {
 		resolver = new EnvVarsResolver(build, listener);
 	}
 
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void testGetValue() throws Exception {
-		log.info("Test testGetValue");
-		assertTrue(buildVersion.equals(resolver.getValue(Constants.BUILD_VERSION)));
-		assertTrue(environmentKey.equals(resolver.getValue(Constants.ENV_NAME)));
-		assertTrue(applicationName.equals(resolver.getValue(Constants.BUILD_APP_NAME)));
-		log.info("Test testGetValue DONE");
+		assertTrue(TEST_BUILD_VERSION.equals(resolver.getValue(Constants.BUILD_VERSION)));
+		assertTrue(TEST_ENV_KEY.equals(resolver.getValue(Constants.ENV_NAME)));
+		assertTrue(TEST_APP_NAME.equals(resolver.getValue(Constants.BUILD_APP_NAME)));
 	}
 
 }
