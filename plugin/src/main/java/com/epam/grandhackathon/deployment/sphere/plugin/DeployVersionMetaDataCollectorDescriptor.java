@@ -11,22 +11,18 @@ import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 
-import net.sf.json.JSONObject;
-
-import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.StaplerRequest;
-
-import com.google.common.base.Strings;
-
 import jenkins.YesNoMaybe;
 import lombok.extern.java.Log;
+
+import org.kohsuke.stapler.QueryParameter;
+
+import com.google.common.base.Strings;
 
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
 public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
-    private static final String DISPLAY_NAME = "Collect Deploy Metadata";
 
-    public DeployVersionMetaDataCollectorDescriptor() {
+	public DeployVersionMetaDataCollectorDescriptor() {
         super(DeployVersionMetaDataPublisher.class);
         load();
     }
@@ -39,7 +35,7 @@ public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescripto
     }
 
     public String getDisplayName() {
-        return DISPLAY_NAME;
+        return PluginConstants.DEPLOY_METADATA_COLLECTOR_NAME;
     }
 
     public FormValidation doCheckDeployedAppName(@QueryParameter String deployedAppName) throws IOException,
