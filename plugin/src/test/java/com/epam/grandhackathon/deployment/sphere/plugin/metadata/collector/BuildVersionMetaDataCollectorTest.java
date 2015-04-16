@@ -6,6 +6,8 @@ import static org.mockito.Matchers.any;
 import hudson.EnvVars;
 import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
+import hudson.scm.ChangeLogSet;
+import hudson.scm.ChangeLogSet.Entry;
 
 import java.io.PrintStream;
 import java.util.Calendar;
@@ -38,7 +40,7 @@ public class BuildVersionMetaDataCollectorTest {
 		AbstractBuild<?, ?> build = Mockito.mock(AbstractBuild.class);
 		Mockito.when(build.getNumber()).thenReturn(Integer.parseInt(testData[0]));
 		Mockito.when(build.getId()).thenReturn(testData[1]);
-		Mockito.when(build.getChangeSet()).thenReturn(new EmptyChangeLogSet(build));
+		Mockito.doReturn(new EmptyChangeLogSet(build)).when(build).getChangeSet();
 		Mockito.when(build.getDisplayName()).thenReturn(testData[2]);
 		Mockito.when(build.due()).thenReturn(Calendar.getInstance());
 		TreeMap<String, String> treeMap = new TreeMap<String,String>();
