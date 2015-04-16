@@ -39,7 +39,7 @@ public interface DeploymentQuery {
     @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND environment_key = :environment_key ORDER BY deployed_at DESC")
     List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String environmentKey);
 
-    @SqlQuery("SELECT DISTINCT * FROM DEPLOYMENTS WHERE environment_key = :environment_key ORDER BY  deployed_at DESC")
+    @SqlQuery("SELECT * FROM DEPLOYMENTS AS DATA WHERE DEPLOYED_AT = (SELECT MAX(DEPLOYED_AT) FROM DEPLOYMENTS WHERE APPLICATION_NAME = DATA.APPLICATION_NAME AND ENVIRONMENT_KEY = DATA.ENVIRONMENT_KEY) AND ENVIRONMENT_KEY = :environment_key ORDER BY DEPLOYED_AT DESC")
     List<Deployment> find( @Bind("environment_key") String environmentKey);
 
     @BindingAnnotation(BindDeployment.BinderFactory.class)
