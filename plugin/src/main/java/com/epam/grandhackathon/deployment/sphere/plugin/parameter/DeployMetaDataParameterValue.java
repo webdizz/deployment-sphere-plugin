@@ -66,7 +66,7 @@ public class DeployMetaDataParameterValue extends ParameterValue {
 	
 	private String resolveVariableValue(String property){
 		if (Constants.ENV_NAME.equals(property))
-			return name;
+			return environmentKey;
 		if (Constants.BUILD_VERSION.equals(property))
 			return buildVersion;
 		if (Constants.BUILD_APP_NAME.equals(property))

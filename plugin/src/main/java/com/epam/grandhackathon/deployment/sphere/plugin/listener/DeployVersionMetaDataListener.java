@@ -62,7 +62,7 @@ public class DeployVersionMetaDataListener extends ItemListener {
 	private void addPublisherProperty(AbstractProject prj, ParametersDefinitionProperty paramDefProp, String applicationName){
 		DeployMetaDataParameterDefinition deployMetaData = new DeployMetaDataParameterDefinition(Constants.DEPLOY_META_DATA, Constants.DEPLOY_META_DATA, applicationName);
 		try {
-			List<ParameterDefinition> definitions = Lists.newArrayList();;
+			List<ParameterDefinition> definitions = Lists.newArrayList();
 			if (null != paramDefProp){
 				definitions = paramDefProp.getParameterDefinitions();
 			}
