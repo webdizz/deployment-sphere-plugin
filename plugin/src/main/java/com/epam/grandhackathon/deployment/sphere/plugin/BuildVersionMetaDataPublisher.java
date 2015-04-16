@@ -23,7 +23,6 @@ import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesS
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetaDataCollector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.google.common.base.Strings;
 
 @Log
