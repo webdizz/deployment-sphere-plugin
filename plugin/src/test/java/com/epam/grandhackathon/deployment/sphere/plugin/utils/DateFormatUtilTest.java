@@ -1,15 +1,10 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.utils;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
 import org.joda.time.DateTime;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class DateFormatUtilTest {
 	private static final String SAMPLE_DATE = "10:20:30 December 03, 1999";
@@ -17,14 +12,14 @@ public class DateFormatUtilTest {
 	private static final DateTime SAMPLE_DATE_TIME = new DateTime (1999, 12, 3, 10, 20, 30);
 
 	@Test
-	public void testFormatDate() throws Exception {
-		assertTrue(DateFormatUtil.formatDate(SAMPLE_DATE_TIME).equals(SAMPLE_DATE));
-		assertFalse(DateFormatUtil.formatDate(SAMPLE_DATE_TIME).equals(WRONG_DATE));
+	public void shouldTestFormatDate() throws Exception {
+		assertThat(DateFormatUtil.formatDate(SAMPLE_DATE_TIME).equals(SAMPLE_DATE), is(true));
+		assertThat(DateFormatUtil.formatDate(SAMPLE_DATE_TIME).equals(WRONG_DATE), is(false));
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testToDate() throws Exception {
-		assertTrue(DateFormatUtil.toDate(SAMPLE_DATE).equals(SAMPLE_DATE_TIME));
+	public void shouldCheckTwoVariantsOfToDateConversionWithFormat() throws Exception {
+		assertThat(DateFormatUtil.toDate(SAMPLE_DATE).equals(SAMPLE_DATE_TIME), is(true));
 		DateFormatUtil.toDate(WRONG_DATE).toString();
 	}
 

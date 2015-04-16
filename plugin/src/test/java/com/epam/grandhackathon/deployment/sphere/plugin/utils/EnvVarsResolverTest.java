@@ -11,13 +11,10 @@ import hudson.model.FreeStyleProject;
 import hudson.model.TaskListener;
 import hudson.slaves.EnvironmentVariablesNodeProperty;
 import hudson.util.LogTaskListener;
-
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +22,9 @@ import org.jvnet.hudson.test.JenkinsRule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+
+
 
 
 import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
@@ -68,10 +68,10 @@ public class EnvVarsResolverTest {
 	}
 
 	@Test
-	public void testGetValue() throws Exception {
-		assertTrue(TEST_BUILD_VERSION.equals(resolver.getValue(Constants.BUILD_VERSION)));
-		assertTrue(TEST_ENV_KEY.equals(resolver.getValue(Constants.ENV_NAME)));
-		assertTrue(TEST_APP_NAME.equals(resolver.getValue(Constants.BUILD_APP_NAME)));
+	public void shouldCheckValuesFromResolverGetter() throws Exception {
+		assertThat(TEST_BUILD_VERSION.equals(resolver.getValue(Constants.BUILD_VERSION)), is(true));
+		assertThat(TEST_ENV_KEY.equals(resolver.getValue(Constants.ENV_NAME)), is(true));
+		assertThat(TEST_APP_NAME.equals(resolver.getValue(Constants.BUILD_APP_NAME)), is(true));
 	}
 
 }
