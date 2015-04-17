@@ -37,9 +37,9 @@ public interface DeploymentQuery {
     List<Deployment> all();
 
     @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND environment_key = :environment_key ORDER BY deployed_at DESC")
-    List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String environmentKey);
+    List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String envirdeployed_atonmentKey);
 
-    @SqlQuery("SELECT * FROM DEPLOYMENTS AS DATA WHERE DEPLOYED_AT = (SELECT MAX(DEPLOYED_AT) FROM DEPLOYMENTS WHERE APPLICATION_NAME = DATA.APPLICATION_NAME AND ENVIRONMENT_KEY = DATA.ENVIRONMENT_KEY) AND ENVIRONMENT_KEY = :environment_key ORDER BY DEPLOYED_AT DESC")
+    @SqlQuery("SELECT * FROM DEPLOYMENTS AS data WHERE deployed_at = (SELECT MAX(deployed_at) FROM DEPLOYMENTS WHERE application_name = data.application_name AND environment_key = data.environment_key) AND environment_key = :environment_key ORDER BY deployed_at DESC")
     List<Deployment> find( @Bind("environment_key") String environmentKey);
 
     @BindingAnnotation(BindDeployment.BinderFactory.class)

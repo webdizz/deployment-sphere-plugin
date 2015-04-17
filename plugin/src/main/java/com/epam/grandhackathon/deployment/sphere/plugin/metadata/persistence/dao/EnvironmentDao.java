@@ -7,6 +7,7 @@ import java.util.List;
 
 import lombok.extern.java.Log;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.skife.jdbi.v2.Handle;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -57,27 +58,31 @@ public class EnvironmentDao extends GenericDao {
                                 final EnvironmentMetaData environmentMetaData) {
         final DeploymentQuery deploymentQuery = handle.attach(DeploymentQuery.class);
         List<Deployment> deploymentList = deploymentQuery.find(environment.getKey());
-        if (null != deploymentList) {
+        if (CollectionUtils.isNotEmpty(deploymentList)) {
         	for (Deployment deployment : deploymentList){
 	            final DeploymentMetaData prodDeploy = new DeploymentMetaData();
 	            prodDeploy.setBuildVersion(deployment.getBuild().getBuildVersion());
 	            prodDeploy.setDeployedAt(DateFormatUtil.formatDate(deployment.getDeployedAt()));
 	            prodDeploy.setApplicationName(deployment.getBuild().getApplicationName());
-	
-	            final BuildQuery query = handle.attach(BuildQuery.class);
-	            Build foundBuild = query.find(deployment.getBuild().getApplicationName(), deployment.getBuild().getBuildVersion());
-	            if (null != foundBuild) {
-	                final BuildMetaData cqBuild = new BuildMetaData();
-	                cqBuild.setApplicationName(foundBuild.getApplicationName());
-	                cqBuild.setNumber(foundBuild.getBuildNumber());
-	                cqBuild.setBuildVersion(foundBuild.getBuildVersion());
-	                cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
-	                cqBuild.setJobName(foundBuild.getApplicationName());
-	                cqBuild.setBuildUrl(foundBuild.getBuildUrl());
-	                prodDeploy.setBuild(cqBuild);
-	            }
+	            prodDeploy.setBuild(loadBuildInfo(handle, deployment));
 	            environmentMetaData.getDeployments().add(prodDeploy);
         	}
         }
+    }
+    
+    private BuildMetaData loadBuildInfo(final Handle handle, final Deployment deployment){
+    	 final BuildQuery query = handle.attach(BuildQuery.class);
+         Build foundBuild = query.find(deployment.getBuild().getApplicationName(), deployment.getBuild().getBuildVersion());
+         BuildMetaData cqBuild = null;
+         if (null != foundBuild){ 
+        	 cqBuild = new BuildMetaData();
+	         cqBuild.setApplicationName(foundBuild.getApplicationName());
+	         cqBuild.setNumber(foundBuild.getBuildNumber());
+	         cqBuild.setBuildVersion(foundBuild.getBuildVersion());
+	         cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
+	         cqBuild.setJobName(foundBuild.getApplicationName());
+	         cqBuild.setBuildUrl(foundBuild.getBuildUrl());
+         }
+         return cqBuild;
     }
 }
