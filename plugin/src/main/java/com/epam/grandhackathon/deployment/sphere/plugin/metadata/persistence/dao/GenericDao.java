@@ -1,12 +1,13 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao;
 
-import jenkins.model.Jenkins;
+import javax.inject.Inject;
+
 import org.joda.time.DateTime;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.ModelMapper;
 import org.skife.jdbi.v2.DBI;
 
-import javax.inject.Inject;
+import com.epam.grandhackathon.deployment.sphere.plugin.PluginInjector;
 
 public class GenericDao {
 
@@ -16,7 +17,7 @@ public class GenericDao {
     private DatabaseProvider databaseProvider;
 
     public GenericDao () {
-        Jenkins.getInstance().getInjector().injectMembers(this);
+    	PluginInjector.injectMembers(this);
     }
 
     public DBI database () {
