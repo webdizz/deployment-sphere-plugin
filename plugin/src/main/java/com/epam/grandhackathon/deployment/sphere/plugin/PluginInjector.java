@@ -9,10 +9,10 @@ import lombok.extern.java.Log;
 public class PluginInjector {
 	public static void injectMembers(Object target) {
 		Jenkins instance = Jenkins.getInstance();
-		if(instance != null){
-			instance.getInjector().injectMembers(target);
+		if(instance == null){
+			log.log(Level.SEVERE, "Jenkins Instance cannot be loaded");
 		} else {
-			log.log(Level.SEVERE, "Jencins Instance cant be loaded");
+			instance.getInjector().injectMembers(target);
 		}
 	}
 }

@@ -3,21 +3,20 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import hudson.EnvVars;
 import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
-import hudson.scm.ChangeLogSet;
-import hudson.scm.ChangeLogSet.Entry;
 
 import java.io.PrintStream;
 import java.util.Calendar;
 import java.util.TreeMap;
 
-import org.junit.experimental.theories.DataPoints;
-import org.junit.experimental.theories.Theories;
-import org.junit.experimental.theories.Theory;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
+import lombok.extern.java.Log;
+
+import org.junit.Test;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -28,28 +27,25 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-@RunWith(Theories.class)
+@Log
 public class BuildVersionMetaDataCollectorTest {
 
-	@DataPoints
-    public static final String[][] testData = new String [][]{
-		{"1", "buildId",  "jobName", "1.2", "app-name", "http://test.com/test"}
-    };
+	private static final String JOB_URL = "http://test.com/test";
 
-	private AbstractBuild<?, ?> initBuild(String[] testData){
-		AbstractBuild<?, ?> build = Mockito.mock(AbstractBuild.class);
-		Mockito.when(build.getNumber()).thenReturn(Integer.parseInt(testData[0]));
-		Mockito.when(build.getId()).thenReturn(testData[1]);
-		Mockito.doReturn(new EmptyChangeLogSet(build)).when(build).getChangeSet();
-		Mockito.when(build.getDisplayName()).thenReturn(testData[2]);
-		Mockito.when(build.due()).thenReturn(Calendar.getInstance());
+	private AbstractBuild<?, ?> initBuild(){
+		AbstractBuild<?, ?> build = mock(AbstractBuild.class);
+		when(build.getNumber()).thenReturn(Integer.parseInt("1"));
+		when(build.getId()).thenReturn("buildId");
+		doReturn(new EmptyChangeLogSet(build)).when(build).getChangeSet();
+		when(build.getDisplayName()).thenReturn("jobName");
+		when(build.due()).thenReturn(Calendar.getInstance());
 		TreeMap<String, String> treeMap = new TreeMap<String,String>();
-		treeMap.put(Constants.BUILD_VERSION, testData[3]);
-		treeMap.put(Constants.BUILD_APP_NAME, testData[4]);
+		treeMap.put(Constants.BUILD_VERSION, "1.2");
+		treeMap.put(Constants.BUILD_APP_NAME, "app-name");
 		try {
-			Mockito.when(build.getEnvironment(any(TaskListener.class))).thenReturn(new EnvVars(treeMap));
+			when(build.getEnvironment(any(TaskListener.class))).thenReturn(new EnvVars(treeMap));
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.info("Get environment was failed:" + e.getMessage());
 		}
 		return build;
 	}
@@ -64,18 +60,18 @@ public class BuildVersionMetaDataCollectorTest {
 		return metaDataCollector;
 	}
 	
-	@Theory
-	public void shouldGetUrlFromBuildAntPutInBuildMetaDataUrl(String[] testData) {
+	@Test
+	public void shouldGetUrlFromBuildAntPutInBuildMetaDataUrl() {
 		BuildVersionMetaDataCollector metaDataCollector = getMetaDataCollectorWithMocks();
-		AbstractBuild<?, ?> build = initBuild(testData);
+		AbstractBuild<?, ?> build = initBuild();
 		
-		Mockito.when(build.getUrl()).thenReturn(testData[5]);
+		when(build.getUrl()).thenReturn(JOB_URL);
 		
-		TaskListener listener = Mockito.mock(TaskListener.class);
-		Mockito.when(listener.getLogger()).thenReturn(new PrintStream(System.out));
+		TaskListener listener = mock(TaskListener.class);
+		when(listener.getLogger()).thenReturn(new PrintStream(System.out));
 		
 		BuildMetaData result = metaDataCollector.collect(build, listener);
-		assertThat(result.getBuildUrl(),is(testData[5]));
+		assertThat(result.getBuildUrl(),is(JOB_URL));
 	}
 	
 }
