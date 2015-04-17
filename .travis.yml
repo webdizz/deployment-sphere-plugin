@@ -2,3 +2,12 @@ language: java
 jdk:
   - oraclejdk7
 script: ./gradlew :plugin:jpi
+
+after_success:
+  - ./gradlew :boot:bintrayUpload -PbinTrayKey=$BINTRAY_KEY -Pversion="0.1.$TRAVIS_BUILD_NUMBER" -x publishMavenJavaPublicationToMavenLocal
+
+env:
+  global:
+    # ENV variable with Bintray API Key
+    - secure: "PnbLPd2lg3eLqpBzZOT1LZYeszPIm0wcCd6pVb/tp/E1wI9vD544CCtmMo1pfE+gnybqb4mNzC+1VUFhUOTdUtqiuPO+4lebg+x/Bc8aPc8J/B7Gx5+qK/HCJrKzj9NjtArAGeXh65z4Miyg1p+OuXD9Zi/MvBi6ExGCz6c9cFA="
+	
