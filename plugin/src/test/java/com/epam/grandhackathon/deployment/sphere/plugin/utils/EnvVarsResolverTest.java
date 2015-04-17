@@ -33,7 +33,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.parameter.DeployMetaData
 
 @RunWith(MockitoJUnitRunner.class)
 @Log
-public class EnvVarsResolverTest {
+public class EnvVarsResolverTest { 
 	
 	@Mock
 	private AbstractBuild<?, ?> build;
