@@ -25,6 +25,16 @@ import com.google.common.collect.Lists;
 @Log
 public class EnvironmentDao extends GenericDao {
 
+	public void save(final EnvironmentMetaData environmentMetaData) {
+        Environment environment = getModelMapper().map(environmentMetaData, Environment.class);
+
+        try (Handle handle = database().open()) {
+            EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
+            query.save(environment);
+            log.fine(format("Environment '%s' was saved", environment));
+        }
+    }
+	
     public Environment find(final String evnKey) {
         try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);

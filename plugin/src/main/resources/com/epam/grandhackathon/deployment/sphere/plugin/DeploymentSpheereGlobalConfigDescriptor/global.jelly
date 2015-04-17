@@ -1,0 +1,11 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler"
+ xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson"  xmlns:f="/lib/form">
+
+<f:section title="Deployment Spheere Configuration">
+
+  <f:entry field="enviroments" title="Enviroments(comma separated)">
+    <f:textbox default="ci,qa,st,pre-prod,prod" />
+  </f:entry>
+</f:section> 
+</j:jelly>
