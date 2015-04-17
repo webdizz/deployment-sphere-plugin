@@ -1,32 +1,35 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 
+import static com.google.common.base.Preconditions.checkState;
+import static java.lang.String.format;
+import hudson.model.TaskListener;
+import hudson.model.AbstractBuild;
+import hudson.scm.ChangeLogSet;
+
+import java.io.PrintStream;
+
+import javax.inject.Inject;
+
+import lombok.extern.java.Log;
+
+import org.joda.time.DateTime;
+
+import com.epam.grandhackathon.deployment.sphere.plugin.PluginInjector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.google.common.base.Strings;
-import hudson.model.AbstractBuild;
-import hudson.model.TaskListener;
-import hudson.scm.ChangeLogSet;
-import jenkins.model.Jenkins;
-import lombok.extern.java.Log;
-import org.joda.time.DateTime;
-
-import javax.inject.Inject;
-import java.io.PrintStream;
-
-import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
 
 @Log
 public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
-
+	
     @Inject
     private BuildMetaDataDao metadataDao;
 
     public BuildVersionMetaDataCollector() {
-        Jenkins.getInstance().getInjector().injectMembers(this);
+        PluginInjector.injectMembers(this);
     }
 
     @Override
