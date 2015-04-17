@@ -79,6 +79,7 @@ public interface DeploymentQuery {
             environment.setKey(resultSet.getString("environment_key"));
             deployment.setEnvironment(environment);
 
+            deployment.setKey(resultSet.getString("key"));
             deployment.setDeployedAt(new DateTime(resultSet.getLong("deployed_at")));
             return deployment;
         }
