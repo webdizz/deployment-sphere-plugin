@@ -1,32 +1,29 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.utils;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import hudson.EnvVars;
+import hudson.model.FreeStyleBuild;
+import hudson.model.TaskListener;
+import hudson.model.AbstractBuild;
+import hudson.model.FreeStyleProject;
+import hudson.slaves.EnvironmentVariablesNodeProperty;
+import hudson.util.LogTaskListener;
+
 import java.util.logging.Level;
 
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
-import hudson.EnvVars;
-import hudson.model.AbstractBuild;
-import hudson.model.FreeStyleBuild;
-import hudson.model.FreeStyleProject;
-import hudson.model.TaskListener;
-import hudson.slaves.EnvironmentVariablesNodeProperty;
-import hudson.util.LogTaskListener;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.jvnet.hudson.test.JenkinsRule;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-
-
-
-
+import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
 import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.parameter.DeployMetaDataParameterValue;
@@ -44,7 +41,7 @@ public class EnvVarsResolverTest {
 	private EnvVarsResolver envVarsResolver;
 
 	@Rule
-    public JenkinsRule j = new JenkinsRule();
+    public PluginJenkinsRule j = new PluginJenkinsRule();
 	
 	private static final String TEST_ENV_KEY = "qa";
 	private static final String TEST_BUILD_VERSION = "0.8";
