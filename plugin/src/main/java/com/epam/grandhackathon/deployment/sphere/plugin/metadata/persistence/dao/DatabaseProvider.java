@@ -17,7 +17,7 @@ import com.epam.grandhackathon.deployment.sphere.plugin.PluginConstants;
 public class DatabaseProvider {
 
     private static final DataSource DATA_SOURCE = JdbcConnectionPool
-            .create("jdbc:h2:" + Jenkins.getInstance().getPluginManager().rootDir.getAbsolutePath() + "/"+ PluginConstants.PLUGIN_CONTEXT + "/.data-deployment-sphere",
+            .create("jdbc:h2:" + Jenkins.getInstance().getPluginManager().rootDir.getAbsolutePath() + "/../data-deployment-sphere",
                     "username",
                     "password");
     private static final DBI DBI = new DBI(DATA_SOURCE);
