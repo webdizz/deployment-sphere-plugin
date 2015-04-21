@@ -39,7 +39,7 @@ public interface DeploymentQuery {
     @SqlQuery("SELECT * FROM DEPLOYMENTS WHERE application_name = :application_name AND environment_key = :environment_key ORDER BY deployed_at DESC")
     List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String environmentKey);
 
-    @SqlQuery("SELECT DISTINCT * FROM DEPLOYMENTS WHERE environment_key = :environment_key ORDER BY  deployed_at DESC")
+    @SqlQuery("SELECT * FROM DEPLOYMENTS AS data WHERE deployed_at = (SELECT MAX(deployed_at) FROM DEPLOYMENTS WHERE application_name = data.application_name AND environment_key = data.environment_key) AND environment_key = :environment_key ORDER BY deployed_at DESC")
     List<Deployment> find( @Bind("environment_key") String environmentKey);
 
     @BindingAnnotation(BindDeployment.BinderFactory.class)
@@ -79,6 +79,7 @@ public interface DeploymentQuery {
             environment.setKey(resultSet.getString("environment_key"));
             deployment.setEnvironment(environment);
 
+            deployment.setKey(resultSet.getString("key"));
             deployment.setDeployedAt(new DateTime(resultSet.getLong("deployed_at")));
             return deployment;
         }
