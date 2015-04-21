@@ -13,7 +13,7 @@ Dev Environment Requirements:
 ------
 
 1. [Java 1.7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
-2. [Eclipce](https://eclipse.org/downloads/)
+2. [Eclipse](https://eclipse.org/downloads/)
 3. [Git](http://git-scm.com/downloads)
 4. [Maven](https://maven.apache.org/download.cgi)
 5. [Lombok](http://projectlombok.org/download.html)
@@ -21,23 +21,29 @@ Dev Environment Requirements:
 Development cycle:
 ------
 
-1. Сlone repozitory on your Computer, go there and run ```bash ./gradlew :pl:build```
+1. Сlone repository on your Computer, go there and run ```bash ./gradlew :pl:build```
 2. Then run ```bash ./gradlew :pl:server```. By default Jetty will run on [http://localhost:8080/](http://localhost:8080/).
 
-Add deployment-sphere-plugin to eclipce:
+Add deployment-sphere-plugin to eclipse:
 ------
 
 1. Install in IDE [lombok](http://projectlombok.org/download.html).
-2. From Eclipce Marketplace lnstall Gradle IDE.
+2. From Eclipse Marketplace install Gradle IDE.
 3. Before adding project into IDE go to deployment-sphere-plugin and run ```bash ./gradlew :pl:build```.
 4. In IDE go to Import -> Gradle-> Gradle Project select directory with project and click Build Model. After that just add it into IDE.
+
+Install plugin on Jenkins:
+------
+1. Go to Jenkins dashboard. On the menu to the left, pick up ```Manage Jenkins``` option.
+2. Select ```Manage plugins```.
+3. Goto ```Advanced``` tab and use ```Upload plugin``` feature.
 
 Jenkins configuration initial jobs:
 ------
 
-1. Create New Item "Build".
-  * Tick "This build is parameterized" with any name. As an example "**APP_PARAMETER**".
-  * Add post-build Action "Collect Build Metadata" and "Application Name" put "**app-name**" in "Build version Pattern" put "**$APP_PARAMETER.{v}**"
+1. On Jenkins dashboard create New Item "Build".
+  * Tick "This build is parameterized" with any name. As an example use "**APP_PARAMETER**".
+  * Add post-build Action "Collect Build Metadata" and "Application Name" put "**app-name**" in "Build version Pattern" put "**$APP_PARAMETER.{v}**" (part of pattern should match name, chosen on previous step)
 2. Create New Item "Deploy".
   * Add post-build Action "Collect Deploy Metadata" in "Application name to deploy" put "**app-name**"
 
