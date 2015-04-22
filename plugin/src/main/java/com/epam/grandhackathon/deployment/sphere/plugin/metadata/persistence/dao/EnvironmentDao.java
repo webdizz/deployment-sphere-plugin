@@ -25,6 +25,13 @@ import com.google.common.collect.Lists;
 @Log
 public class EnvironmentDao extends GenericDao {
 
+	public void deleteAll(){
+		try (Handle handle = database().open()) {
+            EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
+            query.truncate();
+        }
+	}
+	
 	public void save(final EnvironmentMetaData environmentMetaData) {
         Environment environment = getModelMapper().map(environmentMetaData, Environment.class);
 
@@ -51,9 +58,9 @@ public class EnvironmentDao extends GenericDao {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
             List<Environment> environments = query.all();
             for (Environment environment : environments) {
-                EnvironmentMetaData environmentMetaData = new EnvironmentMetaData(environment.getTitle());
+                EnvironmentMetaData environmentMetaData = new EnvironmentMetaData();
                 loadDeployInfo(handle, environment, environmentMetaData);
-
+                environmentMetaData.setTitle(environment.getTitle());
                 environmentMetaData.setIdentity(environment.getKey());
                 environmentMetaDataList.add(environmentMetaData);
             }

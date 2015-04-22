@@ -23,14 +23,17 @@ import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dom
 
 @RegisterMapper(EnvironmentQuery.Mapper.class)
 public interface EnvironmentQuery {
-
+	
+	@SqlUpdate("TRUNCATE TABLE ENVIRONMENTS")
+	void truncate();
+	
     @SqlQuery("SELECT * FROM ENVIRONMENTS WHERE key = :key AND title = :title")
     Environment find(@Bind("key") String applicationName, @Bind("title") String title);
 
     @SqlQuery("SELECT * FROM ENVIRONMENTS WHERE title = :title")
     Environment find(@Bind("title") String title);
 
-    @SqlUpdate("INSERT INTO ENVIRONMENTS (key, title) values (:key, :title)")
+    @SqlUpdate("INSERT INTO ENVIRONMENTS (title) values (:title)")
     int save(@BindEnvironment Environment build);
 
     @SqlQuery("SELECT * FROM ENVIRONMENTS")
