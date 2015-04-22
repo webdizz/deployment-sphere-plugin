@@ -10,9 +10,12 @@ buildscript {
     }
 }
 
+apply plugin: 'nebula-bintray'
 apply plugin: 'org.jenkins-ci.jpi'
 
-description = 'Jenkins plugin to provide insides for your deployments.'
+description = "Jenkins plugin to provide bird's eye view for your deployments."
+
+project.status = 'release'
 
 jenkinsPlugin {
     coreVersion = '1.609'
@@ -53,4 +56,24 @@ dependencies {
     jenkinsTest 'org.jenkins-ci.plugins:matrix-project:1.4.1@jar'
     compile 'org.modelmapper:modelmapper:0.7.3'
     compile 'org.jdbi:jdbi:2.59', 'com.h2database:h2:1.3.173'
+}
+
+bintray {
+    user = binTrayUser
+    key = binTrayKey
+    dryRun = false
+    publish = true
+    publications = ['mavenJpi']
+    pkg {
+        userOrg = 'webdizz'
+        repo = 'jenkins-plugins'
+        name = 'deployment-sphere'
+        desc = 'Jenkins plugin to provide bird\'s eye view for your deployments.'
+        issueTrackerUrl = binTrayIssueTrackerUrl
+        websiteUrl = binTrayWebsiteUrl
+        vcsUrl = binTrayVcsUrl
+        licenses = binTrayLicenses.tokenize(',')
+        labels = binTrayLabels.tokenize(',')
+        publicDownloadNumbers = true
+    }
 }

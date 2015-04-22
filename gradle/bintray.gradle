@@ -4,7 +4,7 @@ ext.binTrayRepo = 'maven'
 
 subprojects {
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
+//    apply plugin: 'com.jfrog.bintray'
 
     ext.binTrayName = project.name
     ext.binTrayDesc = project.description
