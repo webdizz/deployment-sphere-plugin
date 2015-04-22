@@ -4,5 +4,5 @@ jdk:
 script: "./gradlew :plugin:jpi :pl:bintrayUpload -PbinTrayKey=$BINTRAY_KEY -Pversion=0.1.$TRAVIS_BUILD_NUMBER
   -x jar -x javadoc -x sourcesJar -x publishMavenJpiPublicationToMavenLocal"
 env:
-  bintray:
-    secure: YJ4sIxgjLGYF7RFy8KuV2rAIh01xDw2VjrBMMve54cVonlvUSGZ0+V6URmOA4ISAsMwo8hbAuClhki1t2NxnvDJXY3Vxbn4p7s9fIxhLHrfFJR8N5H/iojjYq7cfHA5BayJbhCyES9G/Jggzx3frJ3eGzw5EqbQTPV4seEUvuEg=
+  global:
+    secure: blEUjsU8dIot/C43rEeXdun9rQns+lR0qxzMG5cvWr7m3G95LFGOyhFzw9QBaTBFlGplteZAvV6OPo56uHx38J5uGv2DrOGqbX0UoxYY/fh8JytmpESmvGvL5EmPLtgx0V7Hu4+Ts0X1PzYLV69mD5dG7bg//P5fiLzHSSqfBCs=
