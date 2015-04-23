@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/bootstrap.min.js"></script>
 
-	<l:layout title="Deployment Sphere">
+	<l:layout title="${%Deployment Sphere}">
 		<st:include page="sidepanel.jelly"/>
 		<l:main-panel>
 			<div class="col-xs-12 col-md-22 main-panel-content">
@@ -18,7 +18,8 @@
 					<j:forEach indexVar="index" var="env" items="${it.environments}">
 						<div class="panel panel-default ${index > 0 ? 'env-panel-header-second' : ''}">
 							<div class="env-panel-header collapse-pointer ${env.deployments.size() == 0 ? 'env-panel-empty' : '' }" role="tab" id="heading${index}" data-toggle="collapse" data-target="#collapse${index}" aria-expanded="true" aria-controls="collapse${index}">
-								<span class="env-panel-title">${env.title}</span><span class="env-panel-details">${env.deployments.size() > 0 ? env.deployments.size() + ' deployments' : 'No deployments'}</span>
+								<span class="env-panel-title">${env.title}</span>
+								<span class="env-panel-details">${env.deployments.size() > 0 ? env.deployments.size() + ' deployments' : 'No deployments'}</span>
 							</div>
 							<j:choose>
 								<j:when test="${env.deployments.size() > 0}">
@@ -37,19 +38,19 @@
 												<j:forEach indexVar="deploymentIndex" var="deployment" items="${env.deployments}">
 													<tr class="collapse-pointer collapse-pointer-hover">
 														<td>
-																${deployment.buildVersion}
+															${deployment.buildVersion}
 														</td>
 														<td>
-																${deployment.applicationName}
+															${deployment.applicationName}
 														</td>
 														<td>
-																${deployment.deployedAt}
+															${deployment.deployedAt}
 														</td>
 														<td>
 															<a style='color: rgb(40, 134, 146)' href="/${deployment.build.buildUrl}">${deployment.build.jobName} #${deployment.build.number}</a>
 														</td>
 														<td>
-																${deployment.build.builtAt}
+															${deployment.build.builtAt}
 														</td>
 													</tr>
 												</j:forEach>
