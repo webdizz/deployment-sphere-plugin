@@ -40,7 +40,7 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
 
     @Override
     public String getUrlName() {
-        return "/deployment-sphere";
+        return "/"+ PluginConstants.PLUGIN_CONTEXT;
     }
 
     @Exported

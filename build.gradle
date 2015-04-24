@@ -1,18 +1,22 @@
-// Establish version and status
-ext.githubProjectName = rootProject.name // Change if github project name is not the same as the root project's name
-
-apply from: file('dependencies.gradle')
-
 buildscript {
     repositories {
         mavenLocal()
         jcenter()
         mavenCentral()
     }
-    apply from: file('gradle/buildscript.gradle'), to: buildscript
+//    apply from: file('gradle/buildscript.gradle'), to: buildscript
 }
 
-allprojects {
+plugins {
+    id 'nebula.netflixoss' version '2.2.9'
+}
+
+// Establish version and status
+ext.githubProjectName = rootProject.name
+
+apply from: file('dependencies.gradle')
+
+allprojects { project ->
     repositories {
         mavenLocal()
         mavenCentral()
@@ -21,7 +25,9 @@ allprojects {
             url('https://oss.sonatype.org/content/repositories/releases/')
         }
     }
+
 }
+
 
 subprojects {
     group = "com.epam.grand-hackathon.${githubProjectName}"
