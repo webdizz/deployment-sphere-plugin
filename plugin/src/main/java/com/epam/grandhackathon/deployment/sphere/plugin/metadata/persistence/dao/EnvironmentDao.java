@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.skife.jdbi.v2.Handle;
+
 import lombok.extern.java.Log;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -42,6 +43,12 @@ public class EnvironmentDao extends GenericDao {
         }
     }
 	
+	public void saveAll(Iterable<EnvironmentMetaData> convertAll) {
+		for (EnvironmentMetaData environmentMetaData : convertAll) {
+			save(environmentMetaData);
+		}	
+	}
+	
     public Environment find(final String evnKey) {
         try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
@@ -61,7 +68,7 @@ public class EnvironmentDao extends GenericDao {
                 EnvironmentMetaData environmentMetaData = new EnvironmentMetaData();
                 loadDeployInfo(handle, environment, environmentMetaData);
                 environmentMetaData.setTitle(environment.getTitle());
-                environmentMetaData.setIdentity(environment.getKey());
+                environmentMetaData.setKey(environment.getKey());
                 environmentMetaDataList.add(environmentMetaData);
             }
             log.fine(format("There are environments in database '%s'", environments.size()));
@@ -98,6 +105,4 @@ public class EnvironmentDao extends GenericDao {
             environmentMetaData.getDeployments().add(prodDeploy);
         }
     }
-
-
 }

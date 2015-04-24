@@ -5,10 +5,13 @@ import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
+import hudson.util.ListBoxModel;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 
 import jenkins.YesNoMaybe;
@@ -16,16 +19,21 @@ import lombok.extern.java.Log;
 
 import org.kohsuke.stapler.QueryParameter;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
 import com.google.common.base.Strings;
 
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
 public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
 
+	@Inject
+	private ApplicationDao applicationDao;
+	
     public BuildVersionMetaDataCollectorDescriptor() {
         super(BuildVersionMetaDataPublisher.class);
         load();
-        
+        PluginInjector.injectMembers(this);
     }
 
     @Override
@@ -41,8 +49,7 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
     public FormValidation doCheckVersionPattern(@QueryParameter String versionPattern) throws IOException,
             ServletException {
         if (Strings.isNullOrEmpty(versionPattern)) {
-            return FormValidation
-                    .error("Please set the version pattern in the following format. x.x.{v}, where x - is any string value");
+            return FormValidation.error("Please set the version pattern in the following format. x.x.{v}, where x - is any string value");
         }
         return FormValidation.ok();
     }
@@ -53,5 +60,14 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
         }
         return FormValidation.ok();
     }
+
+	public ListBoxModel doFillAppNameItems() {
+		Collection<ApplicationMetaData> applications = applicationDao.findAll();
+		ListBoxModel items = new ListBoxModel();
+		for (ApplicationMetaData option : applications) {			
+			items.add(option.getApplicationName());
+		}
+		return items;
+	}
 
 }

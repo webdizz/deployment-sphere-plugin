@@ -33,10 +33,10 @@ public interface EnvironmentQuery {
     @SqlQuery("SELECT * FROM ENVIRONMENTS WHERE title = :title")
     Environment find(@Bind("title") String title);
 
-    @SqlUpdate("INSERT INTO ENVIRONMENTS (title) values (:title)")
+    @SqlUpdate("MERGE INTO ENVIRONMENTS (key, title) values (:key, :title)")
     int save(@BindEnvironment Environment build);
 
-    @SqlQuery("SELECT * FROM ENVIRONMENTS")
+    @SqlQuery("SELECT * FROM ENVIRONMENTS ORDER BY key")
     List<Environment> all();
 
     @BindingAnnotation(BindEnvironment.BinderFactory.class)

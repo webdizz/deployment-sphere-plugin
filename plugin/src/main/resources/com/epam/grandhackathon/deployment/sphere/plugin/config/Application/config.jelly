@@ -2,5 +2,4 @@
 	<f:entry title="${%Name}" field="applicationName" >
 		<f:textbox clazz="required" />
 	</f:entry>
-	
 </j:jelly>

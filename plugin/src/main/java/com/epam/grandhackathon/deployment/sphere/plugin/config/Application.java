@@ -1,4 +1,4 @@
-package com.epam.grandhackathon.deployment.sphere.plugin;
+package com.epam.grandhackathon.deployment.sphere.plugin.config;
 
 import hudson.Extension;
 import hudson.model.Describable;
@@ -6,23 +6,23 @@ import hudson.model.Descriptor;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
-public class ApplicationName implements Describable<ApplicationName> {
+public class Application implements Describable<Application> {
 
 	@Extension
 	public final static DescriptorImpl DESCRIPOR = new DescriptorImpl();
 	private String applicationName;
 
-	public static class DescriptorImpl extends Descriptor<ApplicationName> {
+	public static class DescriptorImpl extends Descriptor<Application> {
 
 		@Override
 		public String getDisplayName() {
-			return "ApplicationName";
+			return "Application";
 		}
 	};
 
 
 	@DataBoundConstructor
-	public ApplicationName(String applicationName) {
+	public Application(String applicationName) {
 		this.applicationName = applicationName;
 	}
 
@@ -31,7 +31,7 @@ public class ApplicationName implements Describable<ApplicationName> {
 	}
 
 	@Override
-	public Descriptor<ApplicationName> getDescriptor() {
+	public Descriptor<Application> getDescriptor() {
 		return DESCRIPOR;
 	}
 }

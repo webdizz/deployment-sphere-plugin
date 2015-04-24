@@ -20,7 +20,9 @@ public class DatabaseProvider {
 
         handle.execute("CREATE TABLE IF NOT EXISTS DEPLOYMENTS (application_name varchar(255) NOT NULL, build_version varchar(255) NOT NULL, environment_key varchar(255) NOT NULL, deployed_at long, PRIMARY KEY(application_name, build_version, environment_key))");
 
-        handle.execute("CREATE TABLE IF NOT EXISTS ENVIRONMENTS (key bigint primary key auto_increment, title varchar(255))");
+        handle.execute("CREATE TABLE IF NOT EXISTS ENVIRONMENTS (key varchar(255) NOT NULL primary key, title varchar(255))");
+        
+        handle.execute("CREATE TABLE IF NOT EXISTS APPLICATIONS (applicationName varchar(255) NOT NULL primary key)");
 
         handle.close();
     }

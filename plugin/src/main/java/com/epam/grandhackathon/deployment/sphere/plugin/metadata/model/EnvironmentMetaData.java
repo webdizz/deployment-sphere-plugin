@@ -15,18 +15,23 @@ import java.util.List;
 public class EnvironmentMetaData {
 
     @Exported
-    private String identity = null;
+    private String key = null;
     @Exported
     private String title = null;
     @Exported
     private List<DeploymentMetaData> deployments = Lists.newArrayList();
     
     public EnvironmentMetaData() {
+    	
+    }
+    public EnvironmentMetaData(String key, String title) {
+    	this.key = key;
+    	this.title = title;
 	}
     
     @DataBoundConstructor
-	public EnvironmentMetaData(String identity, String title, List<DeploymentMetaData> deployments) {
-		this.identity = identity;
+	public EnvironmentMetaData(String key, String title, List<DeploymentMetaData> deployments) {
+		this.key = key;
 		this.title = title;
 		this.deployments = deployments;
 	}

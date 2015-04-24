@@ -5,10 +5,13 @@ import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
+import hudson.util.ListBoxModel;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 
 import jenkins.YesNoMaybe;
@@ -16,15 +19,21 @@ import lombok.extern.java.Log;
 
 import org.kohsuke.stapler.QueryParameter;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
 import com.google.common.base.Strings;
 
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
 public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
 
+	@Inject
+	private ApplicationDao applicationDao;
+	
 	public DeployVersionMetaDataCollectorDescriptor() {
         super(DeployVersionMetaDataPublisher.class);
         load();
+        PluginInjector.injectMembers(this);
     }
 
     @SuppressWarnings("rawtypes")
@@ -45,4 +54,13 @@ public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescripto
         }
         return FormValidation.ok();
     }
+    
+    public ListBoxModel doFillDeployedAppNameItems() {
+		Collection<ApplicationMetaData> applications = applicationDao.findAll();
+		ListBoxModel items = new ListBoxModel();
+		for (ApplicationMetaData option : applications) {			
+			items.add(option.getApplicationName());
+		}
+		return items;
+	}
 }
