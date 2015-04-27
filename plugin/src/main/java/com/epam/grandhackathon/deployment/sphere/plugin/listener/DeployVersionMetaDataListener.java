@@ -3,7 +3,6 @@ package com.epam.grandhackathon.deployment.sphere.plugin.listener;
 import hudson.Extension;
 import hudson.model.Item;
 import hudson.model.AbstractProject;
-import hudson.model.ChoiceParameterDefinition;
 import hudson.model.Descriptor;
 import hudson.model.ParameterDefinition;
 import hudson.model.ParametersDefinitionProperty;
@@ -40,7 +39,11 @@ public class DeployVersionMetaDataListener extends ItemListener {
 			DeployVersionMetaDataPublisher dataPublisher = publishers.get(DeployVersionMetaDataPublisher.class);
 			ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
 			if (dataPublisher != null && !isExistDeployVersionParameter(paramDefProp)){
-				addPublisherProperty(prj, paramDefProp, dataPublisher.getDeployedAppName());	
+				addPublisherProperty(prj, dataPublisher.getDeployedAppName(), false);	
+			}else{
+				if (!isEqualApplicationName(paramDefProp, dataPublisher)){
+					addPublisherProperty(prj, dataPublisher.getDeployedAppName(), true);	
+				}
 			}
 		}	
 	}
@@ -49,22 +52,45 @@ public class DeployVersionMetaDataListener extends ItemListener {
 		return item instanceof AbstractProject;
 	}
 	
-	private boolean isExistDeployVersionParameter(ParametersDefinitionProperty paramDefProp){
-		if (null != paramDefProp){
-			for(ParameterDefinition pDef : paramDefProp.getParameterDefinitions()){
-				if (pDef.getName().equals(Constants.DEPLOY_META_DATA))
-					return true;
-			}
+	private boolean isExistDeployVersionParameter(ParametersDefinitionProperty paramsDefinitionProperty){
+		return (findDeployMetaDataParameter(paramsDefinitionProperty) != null);
+	}
+	
+	private boolean isEqualApplicationName(ParametersDefinitionProperty paramsDefinitionProperty, DeployVersionMetaDataPublisher dataPublisher){
+		DeployMetaDataParameterDefinition parameterDefinition = findDeployMetaDataParameter(paramsDefinitionProperty);
+		if (null != parameterDefinition){
+			return dataPublisher.getDeployedAppName().equals(parameterDefinition.getApplicationName());
 		}
 		return false;
 	}
 	
-	private void addPublisherProperty(AbstractProject prj, ParametersDefinitionProperty paramDefProp, String applicationName){
+	private DeployMetaDataParameterDefinition findDeployMetaDataParameter(ParametersDefinitionProperty paramsDefinitionProperty){
+		if (null != paramsDefinitionProperty){
+			for(ParameterDefinition parameterDefinition : paramsDefinitionProperty.getParameterDefinitions()){
+				if (parameterDefinition instanceof DeployMetaDataParameterDefinition)
+					return (DeployMetaDataParameterDefinition)parameterDefinition;
+			}
+		}
+		return null;	
+	}
+	
+	private void addPublisherProperty(AbstractProject prj, String applicationName, boolean updateParameter){
 		DeployMetaDataParameterDefinition deployMetaData = new DeployMetaDataParameterDefinition(Constants.DEPLOY_META_DATA, Constants.DEPLOY_META_DATA, applicationName);
 		try {
+			ParametersDefinitionProperty parametersDefinitionProperty = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
 			List<ParameterDefinition> definitions = Lists.newArrayList();
-			if (null != paramDefProp){
-				definitions = paramDefProp.getParameterDefinitions();
+			if (null != parametersDefinitionProperty){
+				if (updateParameter){
+					for (ParameterDefinition parameterDefinition : parametersDefinitionProperty.getParameterDefinitions()){
+						if (!(parameterDefinition instanceof DeployMetaDataParameterDefinition)){
+							definitions.add(parameterDefinition);	
+						}
+					}
+					prj.removeProperty(ParametersDefinitionProperty.class);
+					prj.save();
+				}else{
+					definitions = parametersDefinitionProperty.getParameterDefinitions();
+				}
 			}
 			definitions.add(deployMetaData);
 			prj.addProperty(new ParametersDefinitionProperty(definitions));
