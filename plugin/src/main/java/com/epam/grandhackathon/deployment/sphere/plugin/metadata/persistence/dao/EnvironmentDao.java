@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.extern.java.Log;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.skife.jdbi.v2.Handle;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -26,6 +27,31 @@ import com.google.common.collect.Lists;
 @Log
 public class EnvironmentDao extends GenericDao {
 
+	public void deleteAll(){
+		try (Handle handle = database().open()) {
+            EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
+            query.truncate();
+        }
+	}
+	
+	public void save(final EnvironmentMetaData environmentMetaData) {
+        Environment environment = getModelMapper().map(environmentMetaData, Environment.class);
+
+        try (Handle handle = database().open()) {
+            EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
+            query.save(environment);
+            log.fine(format("Environment '%s' was saved", environment));
+        }
+    }
+	
+	public void saveAll(Iterable<EnvironmentMetaData> convertAll) {
+		for (EnvironmentMetaData environmentMetaData : convertAll) {
+			if(StringUtils.isNotEmpty(environmentMetaData.getKey()) && StringUtils.isNotEmpty(environmentMetaData.getTitle())){
+				save(environmentMetaData);
+			}
+		}	
+	}
+	
     public Environment find(final String evnKey) {
         try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
@@ -42,10 +68,8 @@ public class EnvironmentDao extends GenericDao {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
             List<Environment> environments = query.all();
             for (Environment environment : environments) {
-                EnvironmentMetaData environmentMetaData = new EnvironmentMetaData(environment.getTitle());
+                EnvironmentMetaData environmentMetaData = new EnvironmentMetaData(environment.getKey(), environment.getTitle());
                 loadDeployInfo(handle, environment, environmentMetaData);
-
-                environmentMetaData.setIdentity(environment.getKey());
                 environmentMetaDataList.add(environmentMetaData);
             }
             log.fine(format("There are environments in database '%s'", environments.size()));

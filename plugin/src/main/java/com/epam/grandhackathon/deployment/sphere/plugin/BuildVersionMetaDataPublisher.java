@@ -19,7 +19,7 @@ import lombok.extern.java.Log;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
+import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStoringAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetaDataCollector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -86,7 +86,7 @@ public class BuildVersionMetaDataPublisher extends Notifier {
         envVars.put(Constants.BUILD_VERSION, buildVersion);
         envVars.put(Constants.BUILD_APP_NAME, this.appName);
 
-        build.addAction(new DynamicVariablesStorageAction(envVars));
+        build.addAction(new DynamicVariablesStoringAction(envVars));
 
         return true;
     }
