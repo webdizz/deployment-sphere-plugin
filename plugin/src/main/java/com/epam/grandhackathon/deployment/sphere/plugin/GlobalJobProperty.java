@@ -28,6 +28,8 @@ public class GlobalJobProperty extends JobProperty<AbstractProject<?, ?>> {
 	@Extension
 	public static final class CustomViewsTabBarDescriptor extends JobPropertyDescriptor {
 
+		private static final String DESCRIPTOR_DISPLAY_NAME = "Deploy Sphere";
+
 		@Inject
 		private EnvironmentDao environmentDao;
 		
@@ -79,7 +81,7 @@ public class GlobalJobProperty extends JobProperty<AbstractProject<?, ?>> {
 
 		@Override
 		public String getDisplayName() {
-			return "Deploy Sphere";
+			return DESCRIPTOR_DISPLAY_NAME;
 		}
 
 		@Override
