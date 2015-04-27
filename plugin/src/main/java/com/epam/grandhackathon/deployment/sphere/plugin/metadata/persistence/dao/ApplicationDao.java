@@ -7,6 +7,7 @@ import java.util.List;
 
 import lombok.extern.java.Log;
 
+import org.apache.commons.lang.StringUtils;
 import org.skife.jdbi.v2.Handle;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
@@ -26,7 +27,9 @@ public class ApplicationDao extends GenericDao {
 	
 	public void saveAll(Iterable<ApplicationMetaData> applications) {
 		for (ApplicationMetaData applicationMetaData : applications) {
-			save(applicationMetaData);
+			if(StringUtils.isNotEmpty(applicationMetaData.getApplicationName())){
+				save(applicationMetaData);
+			}
 		}
 	}
 	

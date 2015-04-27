@@ -25,7 +25,7 @@ import hudson.tasks.BuildStepMonitor;
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
+import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStoringAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.Collector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.DeployVersionMetaDataCollector;
@@ -84,7 +84,7 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
         getDescriptor().load();
         final String appName = getDeployedAppName();
         checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name %s", appName));
-        build.addAction(new DynamicVariablesStorageAction(Constants.BUILD_APP_NAME, appName));
+        build.addAction(new DynamicVariablesStoringAction(Constants.BUILD_APP_NAME, appName));
 	}
 
 }

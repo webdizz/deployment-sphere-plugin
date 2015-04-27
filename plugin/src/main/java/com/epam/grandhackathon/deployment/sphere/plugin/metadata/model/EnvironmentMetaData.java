@@ -15,15 +15,12 @@ import java.util.List;
 public class EnvironmentMetaData {
 
     @Exported
-    private String key = null;
+    private String key;
     @Exported
-    private String title = null;
+    private String title;
     @Exported
     private List<DeploymentMetaData> deployments = Lists.newArrayList();
     
-    public EnvironmentMetaData() {
-    	
-    }
     public EnvironmentMetaData(String key, String title) {
     	this.key = key;
     	this.title = title;

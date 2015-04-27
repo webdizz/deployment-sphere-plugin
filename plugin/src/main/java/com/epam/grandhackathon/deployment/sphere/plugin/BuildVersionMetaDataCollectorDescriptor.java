@@ -8,7 +8,6 @@ import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.logging.Level;
 
 import javax.inject.Inject;
@@ -19,8 +18,7 @@ import lombok.extern.java.Log;
 
 import org.kohsuke.stapler.QueryParameter;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.config.GlobalConfigHelper;
 import com.google.common.base.Strings;
 
 @Log
@@ -28,7 +26,7 @@ import com.google.common.base.Strings;
 public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
 
 	@Inject
-	private ApplicationDao applicationDao;
+	private GlobalConfigHelper configHelper;
 	
     public BuildVersionMetaDataCollectorDescriptor() {
         super(BuildVersionMetaDataPublisher.class);
@@ -62,12 +60,6 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
     }
 
 	public ListBoxModel doFillAppNameItems() {
-		Collection<ApplicationMetaData> applications = applicationDao.findAll();
-		ListBoxModel items = new ListBoxModel();
-		for (ApplicationMetaData option : applications) {			
-			items.add(option.getApplicationName());
-		}
-		return items;
+		return configHelper.getApplications();
 	}
-
 }

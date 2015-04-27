@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.extern.java.Log;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.skife.jdbi.v2.Handle;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
@@ -45,7 +46,9 @@ public class EnvironmentDao extends GenericDao {
 	
 	public void saveAll(Iterable<EnvironmentMetaData> convertAll) {
 		for (EnvironmentMetaData environmentMetaData : convertAll) {
-			save(environmentMetaData);
+			if(StringUtils.isNotEmpty(environmentMetaData.getKey()) && StringUtils.isNotEmpty(environmentMetaData.getTitle())){
+				save(environmentMetaData);
+			}
 		}	
 	}
 	
@@ -65,10 +68,8 @@ public class EnvironmentDao extends GenericDao {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
             List<Environment> environments = query.all();
             for (Environment environment : environments) {
-                EnvironmentMetaData environmentMetaData = new EnvironmentMetaData();
+                EnvironmentMetaData environmentMetaData = new EnvironmentMetaData(environment.getKey(), environment.getTitle());
                 loadDeployInfo(handle, environment, environmentMetaData);
-                environmentMetaData.setTitle(environment.getTitle());
-                environmentMetaData.setKey(environment.getKey());
                 environmentMetaDataList.add(environmentMetaData);
             }
             log.fine(format("There are environments in database '%s'", environments.size()));
