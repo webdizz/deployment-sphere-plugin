@@ -24,7 +24,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
-import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStorageAction;
+import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStoringAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.parameter.DeployMetaDataParameterValue;
 
@@ -58,7 +58,7 @@ public class EnvVarsResolverTest {
 	    EnvVars envVars = prop.getEnvVars();
 		value.buildEnvVars(build, envVars);
 		
-		build.addAction(new DynamicVariablesStorageAction(envVars));
+		build.addAction(new DynamicVariablesStoringAction(envVars));
 		
 		LogTaskListener listener = new LogTaskListener(log.getLogger(Jenkins.class.getName()), Level.INFO);
 		resolver = new EnvVarsResolver(build, listener);
