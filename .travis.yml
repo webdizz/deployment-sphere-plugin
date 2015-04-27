@@ -1,7 +1,7 @@
 language: java
 jdk:
 - oraclejdk7
-script: "./gradlew :plugin:jpi 
+script: ./gradlew :plugin:jpi
 after_success:  if [ $TRAVIS_SECURE_ENV_VARS -eq true ]; then ./gradlew :pl:bintrayUpload -PbinTrayKey=$BINTRAY_KEY -Pversion=0.1.$TRAVIS_BUILD_NUMBER
   -x jar -x javadoc -x sourcesJar -x publishMavenJpiPublicationToMavenLocal"; fi 
 env:
