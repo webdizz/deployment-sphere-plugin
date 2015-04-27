@@ -28,8 +28,7 @@ public class EnvironmentMetaData {
     
     @DataBoundConstructor
 	public EnvironmentMetaData(String key, String title, List<DeploymentMetaData> deployments) {
-		this.key = key;
-		this.title = title;
+		this(key, title);
 		this.deployments = deployments;
 	}
     
