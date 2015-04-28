@@ -34,15 +34,16 @@ public class DeployVersionMetaDataListener extends ItemListener {
 	
 	private void configureJobWithDeployVersionPublisher(Item item){
 		if (isAbstractProject(item)){
-			AbstractProject prj = (AbstractProject)item;
-			DescribableList<Publisher,Descriptor<Publisher>> publishers = prj.getPublishersList();
+			AbstractProject project = (AbstractProject)item;
+			DescribableList<Publisher,Descriptor<Publisher>> publishers = project.getPublishersList();
 			DeployVersionMetaDataPublisher dataPublisher = publishers.get(DeployVersionMetaDataPublisher.class);
-			ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
-			if (dataPublisher != null && !isExistDeployVersionParameter(paramDefProp)){
-				addPublisherProperty(prj, dataPublisher.getDeployedAppName(), false);	
+			ParametersDefinitionProperty paramDefProp = (ParametersDefinitionProperty)project.getProperty(ParametersDefinitionProperty.class);
+			if (null != dataPublisher && isNotExistDeployVersionParameter(paramDefProp)){
+				addPublisherProperty(project, dataPublisher.getDeployedAppName());	
 			}else{
-				if (!isEqualApplicationName(paramDefProp, dataPublisher)){
-					addPublisherProperty(prj, dataPublisher.getDeployedAppName(), true);	
+				if (isNotEqualApplicationName(paramDefProp, dataPublisher)){
+					removePublisherProperty(project);
+					addPublisherProperty(project, dataPublisher.getDeployedAppName());	
 				}
 			}
 		}	
@@ -52,16 +53,16 @@ public class DeployVersionMetaDataListener extends ItemListener {
 		return item instanceof AbstractProject;
 	}
 	
-	private boolean isExistDeployVersionParameter(ParametersDefinitionProperty paramsDefinitionProperty){
-		return (findDeployMetaDataParameter(paramsDefinitionProperty) != null);
+	private boolean isNotExistDeployVersionParameter(ParametersDefinitionProperty paramsDefinitionProperty){
+		return (findDeployMetaDataParameter(paramsDefinitionProperty) == null);
 	}
 	
-	private boolean isEqualApplicationName(ParametersDefinitionProperty paramsDefinitionProperty, DeployVersionMetaDataPublisher dataPublisher){
+	private boolean isNotEqualApplicationName(ParametersDefinitionProperty paramsDefinitionProperty, DeployVersionMetaDataPublisher dataPublisher){
 		DeployMetaDataParameterDefinition parameterDefinition = findDeployMetaDataParameter(paramsDefinitionProperty);
 		if (null != parameterDefinition){
-			return dataPublisher.getDeployedAppName().equals(parameterDefinition.getApplicationName());
+			return !(dataPublisher.getDeployedAppName().equals(parameterDefinition.getApplicationName()));
 		}
-		return false;
+		return true;
 	}
 	
 	private DeployMetaDataParameterDefinition findDeployMetaDataParameter(ParametersDefinitionProperty paramsDefinitionProperty){
@@ -74,27 +75,40 @@ public class DeployVersionMetaDataListener extends ItemListener {
 		return null;	
 	}
 	
-	private void addPublisherProperty(AbstractProject prj, String applicationName, boolean updateParameter){
+	
+	@SuppressWarnings("unchecked")
+	private void addPublisherProperty(AbstractProject prj, String applicationName) {
 		DeployMetaDataParameterDefinition deployMetaData = new DeployMetaDataParameterDefinition(Constants.DEPLOY_META_DATA, Constants.DEPLOY_META_DATA, applicationName);
 		try {
 			ParametersDefinitionProperty parametersDefinitionProperty = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
 			List<ParameterDefinition> definitions = Lists.newArrayList();
 			if (null != parametersDefinitionProperty){
-				if (updateParameter){
-					for (ParameterDefinition parameterDefinition : parametersDefinitionProperty.getParameterDefinitions()){
-						if (!(parameterDefinition instanceof DeployMetaDataParameterDefinition)){
-							definitions.add(parameterDefinition);	
-						}
-					}
-					prj.removeProperty(ParametersDefinitionProperty.class);
-					prj.save();
-				}else{
-					definitions = parametersDefinitionProperty.getParameterDefinitions();
-				}
+				definitions = parametersDefinitionProperty.getParameterDefinitions();
 			}
 			definitions.add(deployMetaData);
 			prj.addProperty(new ParametersDefinitionProperty(definitions));
 			prj.save();
+        } catch (IOException e) {
+            Throwables.propagate(e);
+        }		
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void removePublisherProperty(AbstractProject prj) {
+		try {
+			ParametersDefinitionProperty parametersDefinitionProperty = (ParametersDefinitionProperty)prj.getProperty(ParametersDefinitionProperty.class);
+			List<ParameterDefinition> definitions = Lists.newArrayList();
+			if (null != parametersDefinitionProperty){
+				for (ParameterDefinition parameterDefinition : parametersDefinitionProperty.getParameterDefinitions()){
+					if (!(parameterDefinition instanceof DeployMetaDataParameterDefinition)){
+						definitions.add(parameterDefinition);	
+					}
+				}
+				prj.removeProperty(ParametersDefinitionProperty.class);
+				prj.save();
+				prj.addProperty(new ParametersDefinitionProperty(definitions));
+				prj.save();
+			}
         } catch (IOException e) {
             Throwables.propagate(e);
         }		
