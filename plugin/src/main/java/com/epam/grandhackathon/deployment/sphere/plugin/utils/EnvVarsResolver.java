@@ -26,7 +26,7 @@ public final class EnvVarsResolver {
         return env.get(key);
     }
 
-    private static EnvVars getEnvVars(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
+    private EnvVars getEnvVars(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         try {
             return build.getEnvironment(taskListener);
         } catch (final IOException | InterruptedException exc) {

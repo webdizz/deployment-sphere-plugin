@@ -27,7 +27,7 @@ public class DynamicVariablesStorageActionTest {
     public void shouldRepopulateEnvVarsInCaseUsingMapConstructor(String [] testData) throws Exception {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(testData[0], testData[1]);
-		DynamicVariablesStorageAction dynamicStorage = new DynamicVariablesStorageAction(map);
+		DynamicVariablesStoringAction dynamicStorage = new DynamicVariablesStoringAction(map);
 		FreeStyleBuild build = Mockito.mock(FreeStyleBuild.class);
 		EnvVars env = new EnvVars();
 		dynamicStorage.buildEnvVars(build, env);
@@ -38,7 +38,7 @@ public class DynamicVariablesStorageActionTest {
 
     @Theory
     public void shouldRepopulateEnvVarsInCaseUsingStringConstructor(String [] testData) throws Exception {
-		DynamicVariablesStorageAction dynamicStorage = new DynamicVariablesStorageAction(testData[0], testData[1]);
+		DynamicVariablesStoringAction dynamicStorage = new DynamicVariablesStoringAction(testData[0], testData[1]);
 		FreeStyleBuild build = Mockito.mock(FreeStyleBuild.class);
 		EnvVars env = new EnvVars();
 		dynamicStorage.buildEnvVars(build, env);

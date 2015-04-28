@@ -1,5 +1,5 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
-  <f:entry field="deployedAppName" title="Application name to deploy">
-    <f:select clazz="required"/>
-  </f:entry>
+	<f:entry title="${%Name}" field="title" >
+		<f:textbox clazz="required" />
+	</f:entry>
 </j:jelly>

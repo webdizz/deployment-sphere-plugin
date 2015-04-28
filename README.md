@@ -15,7 +15,7 @@ Dev Environment Requirements:
 1. [Java 1.7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
 2. [Eclipse](https://eclipse.org/downloads/)
 3. [Git](http://git-scm.com/downloads)
-4. [Maven](https://maven.apache.org/download.cgi)
+4. [Gradle](https://gradle.org/downloads/)
 5. [Lombok](http://projectlombok.org/download.html)
 
 Development cycle:
