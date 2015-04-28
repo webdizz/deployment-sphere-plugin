@@ -1,42 +1,32 @@
 package com.epam.grandhackathon.deployment.sphere.plugin;
 
-import static java.lang.String.format;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
+import static java.lang.String.format;
+import hudson.Launcher;
+import hudson.model.BuildListener;
+import hudson.model.AbstractBuild;
+import hudson.tasks.BuildStepMonitor;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 import java.util.logging.Level;
 
 import javax.inject.Inject;
 
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.DataBoundSetter;
-
-import hudson.Launcher;
-import hudson.model.AbstractBuild;
-import hudson.model.Build;
-import hudson.model.BuildListener;
-import hudson.model.ChoiceParameterDefinition;
-import hudson.model.ParameterDefinition;
-import hudson.model.ParametersDefinitionProperty;
-import hudson.tasks.BuildStepMonitor;
 import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
+
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.action.DynamicVariablesStoringAction;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.Collector;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.DeployVersionMetaDataCollector;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import com.google.common.base.Strings;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 
 @Log
 public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
@@ -51,6 +41,10 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
     @DataBoundConstructor
     public DeployVersionMetaDataPublisher() {
         Jenkins.getInstance().getInjector().injectMembers(this);
+    }
+    
+    public DeployVersionMetaDataPublisher(String deployedAppName){
+    	this.deployedAppName = deployedAppName;
     }
 
     @Override
