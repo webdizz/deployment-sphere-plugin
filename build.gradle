@@ -4,7 +4,6 @@ buildscript {
         jcenter()
         mavenCentral()
     }
-//    apply from: file('gradle/buildscript.gradle'), to: buildscript
 }
 
 plugins {
