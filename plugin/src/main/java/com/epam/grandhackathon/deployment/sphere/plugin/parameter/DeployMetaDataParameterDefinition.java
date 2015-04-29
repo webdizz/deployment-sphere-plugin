@@ -28,10 +28,14 @@ import com.google.common.collect.Collections2;
 public class DeployMetaDataParameterDefinition extends ParameterDefinition {
     @Inject
     private BuildMetaDataDao buildMetaDataDao;
-    @Inject
+    
+
+	@Inject
     private EnvironmentDao environmentDao;
 	
-    private String environmentKey;
+
+
+	private String environmentKey;
     private String buildVersion;
     private String applicationName;
 
@@ -47,6 +51,14 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
 		this.applicationName = applicationName;
 	}
 	
+    public BuildMetaDataDao getBuildMetaDataDao() {
+    	return buildMetaDataDao;
+    }
+    
+    public EnvironmentDao getEnvironmentDao() {
+		return environmentDao;
+	}
+    
 	@Exported
 	public String getApplicationName(){
 		return applicationName;
@@ -65,7 +77,7 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
 	
 	public Collection<String> getBuildVersions() {
 		Jenkins.getInstance().getInjector().injectMembers(this);
-		Collection<BuildMetaData> builds = buildMetaDataDao.findByAppName(applicationName);
+		Collection<BuildMetaData> builds = getBuildMetaDataDao().findByAppName(getApplicationName());
 		Function<BuildMetaData, String> function = new Function<BuildMetaData, String>() {
 			@Override
 			public String apply(BuildMetaData data) {
@@ -77,7 +89,7 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
 
     public Collection<String> getEnvironmentKeys() {
     	Jenkins.getInstance().getInjector().injectMembers(this);
-    	Collection<EnvironmentMetaData> envs = environmentDao.findAll();
+    	Collection<EnvironmentMetaData> envs = getEnvironmentDao().findAll();
 		Function<EnvironmentMetaData, String> function = new Function<EnvironmentMetaData, String>() {
 			@Override
 			public String apply(EnvironmentMetaData data) {

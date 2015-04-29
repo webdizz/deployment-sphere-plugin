@@ -3,7 +3,6 @@ package com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import hudson.EnvVars;
@@ -12,43 +11,42 @@ import hudson.model.AbstractBuild;
 
 import java.io.PrintStream;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.TreeMap;
 
 import lombok.extern.java.Log;
 
+import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDaoMock;
-import com.epam.grandhackathon.deployment.sphere.plugin.mock.EmptyChangeLogSet;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDaoMock;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDaoMock;
+import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 @Log
-
-public class BuildVersionMetaDataCollectorTest {
+public class DeployVersionMetaDataCollectorTest {
 	
 	@Rule
 	public PluginJenkinsRule jenkinsRule = new PluginJenkinsRule();
-
-	private static final String JOB_URL = "http://test.com/test";
-
+	
+	private static final Calendar DEPLOYMENT_DATE = new GregorianCalendar();
+	
 	private AbstractBuild<?, ?> initBuild(){
 		AbstractBuild<?, ?> build = mock(AbstractBuild.class);
-		when(build.getNumber()).thenReturn(Integer.parseInt("1"));
-		when(build.getId()).thenReturn("buildId");
-		doReturn(new EmptyChangeLogSet(build)).when(build).getChangeSet();
-		when(build.getDisplayName()).thenReturn("jobName");
-		when(build.due()).thenReturn(Calendar.getInstance());
 		TreeMap<String, String> treeMap = new TreeMap<String,String>();
 		treeMap.put(Constants.BUILD_VERSION, "1.2");
 		treeMap.put(Constants.BUILD_APP_NAME, "app-name");
+		treeMap.put(Constants.ENV_NAME, "env-name");
 		try {
 			when(build.getEnvironment(any(TaskListener.class))).thenReturn(new EnvVars(treeMap));
 		} catch (Exception e) {
@@ -56,29 +54,30 @@ public class BuildVersionMetaDataCollectorTest {
 		}
 		return build;
 	}
-	private BuildVersionMetaDataCollector getMetaDataCollectorWithMocks() {
+	private DeployVersionMetaDataCollector getMetaDataCollectorWithMocks() {
 		Injector injector = Guice.createInjector(new AbstractModule() {
             @Override
             protected void configure() {
-            	bind(BuildMetaDataDao.class).to(BuildMetaDataDaoMock.class);
+            	bind(DeploymentMetaDataDao.class).to(DeploymentMetaDataDaoMock.class);
+            	bind(EnvironmentDao.class).to(EnvironmentDaoMock.class);
             }
         });
-		BuildVersionMetaDataCollector metaDataCollector = injector.getInstance(BuildVersionMetaDataCollector.class);
+		DeployVersionMetaDataCollector metaDataCollector = injector.getInstance(DeployVersionMetaDataCollector.class);
 		return metaDataCollector;
 	}
 	
 	@Test
-	public void shouldGetUrlFromBuildAntPutInBuildMetaDataUrl() {
-		BuildVersionMetaDataCollector metaDataCollector = getMetaDataCollectorWithMocks();
+	public void shouldGetDateFromBuildAntPutInDeploymentMetaData() {
+		DeployVersionMetaDataCollector metaDataCollector = getMetaDataCollectorWithMocks();
 		AbstractBuild<?, ?> build = initBuild();
 		
-		when(build.getUrl()).thenReturn(JOB_URL);
+		when(build.due()).thenReturn(DEPLOYMENT_DATE);
 		
 		TaskListener listener = mock(TaskListener.class);
 		when(listener.getLogger()).thenReturn(new PrintStream(System.out));
 		
-		BuildMetaData result = metaDataCollector.collect(build, listener);
-		assertThat(result.getBuildUrl(),is(JOB_URL));
+		DeploymentMetaData result = metaDataCollector.collect(build, listener);
+		assertThat(result.getDeployedAt(),is(DateFormatUtil.formatDate(new DateTime(DEPLOYMENT_DATE))));
 	}
 	
 }
