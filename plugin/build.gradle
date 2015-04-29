@@ -20,7 +20,8 @@ project.status = 'release'
 jenkinsPlugin {
     coreVersion = '1.609'
     displayName = 'Deployment Sphere'
-    gitHubUrl = 'https://github.com/webdizz/deployment-sphere'
+    gitHubUrl = 'https://github.com/jenkinsci/deployment-sphere-plugin'
+    url = 'https://wiki.jenkins-ci.org/display/JENKINS/Deployment+Sphere+Plugin'
     compatibleSinceVersion = '1.20'
     pluginFirstClassLoader = false
     shortName = 'deployment-sphere'
@@ -48,6 +49,11 @@ jenkinsPlugin {
             id 'rkovalenko'
             name 'Roman Kovalenko'
             email 'Roman_Kovalenko@epam.com'
+        }
+        developer {
+            id 'Oleksii_Zaitsev'
+            name 'Oleksii Zaitsev'
+            email 'Oleksii_Zaitsev@epam.com'
         }
     }
 }
