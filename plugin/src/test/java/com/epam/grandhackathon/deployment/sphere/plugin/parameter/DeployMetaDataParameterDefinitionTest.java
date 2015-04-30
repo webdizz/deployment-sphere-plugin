@@ -1,24 +1,17 @@
 package com.epam.grandhackathon.deployment.sphere.plugin.parameter;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.hamcrest.Matchers.contains;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.junit.Assert.assertTrue;
-import hudson.EnvVars;
-import hudson.model.AbstractBuild;
-import hudson.model.TaskListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.TreeMap;
 
 import lombok.extern.java.Log;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
@@ -26,20 +19,12 @@ import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 import org.mockito.Matchers;
 
-import com.epam.grandhackathon.deployment.sphere.plugin.BuildVersionMetaDataCollectorDescriptor;
 import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.collector.BuildVersionMetaDataCollector;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
+import com.epam.grandhackathon.deployment.sphere.plugin.TestInput;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDaoMock;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.mock.EmptyChangeLogSet;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 @Log
 @RunWith(Theories.class)
@@ -53,7 +38,10 @@ public class DeployMetaDataParameterDefinitionTest {
 	private static Collection<BuildMetaData> buildMetaDataList = new ArrayList<BuildMetaData>();
 	private static Collection<EnvironmentMetaData> environmentMetaDataList = new ArrayList<EnvironmentMetaData>();
 	
-	static {
+	@Before
+	public void setUp() {
+		buildMetaDataList.clear();
+		environmentMetaDataList.clear();
 		BuildMetaData buildMetaData1 = new BuildMetaData();
 		buildMetaData1.setApplicationName(APP_NAME);
 		buildMetaData1.setBuildVersion("1.00");
@@ -85,7 +73,7 @@ public class DeployMetaDataParameterDefinitionTest {
     	new EnvironmentDefinitionTestInput(environmentMetaDataList
     			, Arrays.asList(new String[]{"env1", "env2"}))
     };
-	
+
 	@Theory
 	public void shouldCorrectlyGetBuildVersions(BuildDefinitionTestInput input){
 		BuildMetaDataDao buildMetaDataDaoMock = mock(BuildMetaDataDao.class);
@@ -93,7 +81,8 @@ public class DeployMetaDataParameterDefinitionTest {
 		when(buildMetaDataDaoMock.findByAppName(Matchers.anyString())).thenReturn(input.getInput());
 		when(definition.getBuildMetaDataDao()).thenReturn(buildMetaDataDaoMock);
 		when(definition.getBuildVersions()).thenCallRealMethod();
-	 	assertTrue(CollectionUtils.isEqualCollection(definition.getBuildVersions(), input.getResult()));
+	 	assertThat(definition.getBuildVersions(), 
+	 			contains(input.getResult().toArray(new String[input.getResult().size()])));
 	}
 	
 	
@@ -104,6 +93,25 @@ public class DeployMetaDataParameterDefinitionTest {
 		when(environmentDaoMock.findAll()).thenReturn(input.getInput());
 		when(definition.getEnvironmentDao()).thenReturn(environmentDaoMock);
 		when(definition.getEnvironmentKeys()).thenCallRealMethod();
-	 	assertTrue(CollectionUtils.isEqualCollection(definition.getEnvironmentKeys(), input.getResult()));
+	 	assertThat(definition.getEnvironmentKeys(), 
+	 			contains(input.getResult().toArray(new String[input.getResult().size()])));
 	}
+	
+	public static class BuildDefinitionTestInput extends TestInput<Collection<BuildMetaData>, Collection<String>> {
+
+		public BuildDefinitionTestInput(Collection<BuildMetaData> input,
+				Collection<String> result) {
+			super(input, result);
+		}
+	}
+	
+	public static class EnvironmentDefinitionTestInput extends TestInput<Collection<EnvironmentMetaData>, Collection<String>> {
+
+		public EnvironmentDefinitionTestInput(Collection<EnvironmentMetaData> input,
+				Collection<String> result) {
+			super(input, result);
+		}
+
+	}
+
 }

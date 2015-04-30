@@ -17,7 +17,6 @@ import java.util.TreeMap;
 import lombok.extern.java.Log;
 
 import org.joda.time.DateTime;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -41,9 +40,21 @@ public class DeployVersionMetaDataCollectorTest {
 	
 	private static final Calendar DEPLOYMENT_DATE = new GregorianCalendar();
 	
+	@Test
+	public void shouldGetDateFromBuildAntPutInDeploymentMetaData() {
+		DeployVersionMetaDataCollector metaDataCollector = getMetaDataCollectorWithMocks();
+		AbstractBuild<?, ?> build = initBuild();
+		TaskListener listener = mock(TaskListener.class);
+		when(listener.getLogger()).thenReturn(new PrintStream(System.out));
+		
+		DeploymentMetaData result = metaDataCollector.collect(build, listener);
+		assertThat(result.getDeployedAt(),is(DateFormatUtil.formatDate(new DateTime(DEPLOYMENT_DATE))));
+	}
+	
 	private AbstractBuild<?, ?> initBuild(){
 		AbstractBuild<?, ?> build = mock(AbstractBuild.class);
 		TreeMap<String, String> treeMap = new TreeMap<String,String>();
+		when(build.due()).thenReturn(DEPLOYMENT_DATE);
 		treeMap.put(Constants.BUILD_VERSION, "1.2");
 		treeMap.put(Constants.BUILD_APP_NAME, "app-name");
 		treeMap.put(Constants.ENV_NAME, "env-name");
@@ -66,18 +77,5 @@ public class DeployVersionMetaDataCollectorTest {
 		return metaDataCollector;
 	}
 	
-	@Test
-	public void shouldGetDateFromBuildAntPutInDeploymentMetaData() {
-		DeployVersionMetaDataCollector metaDataCollector = getMetaDataCollectorWithMocks();
-		AbstractBuild<?, ?> build = initBuild();
-		
-		when(build.due()).thenReturn(DEPLOYMENT_DATE);
-		
-		TaskListener listener = mock(TaskListener.class);
-		when(listener.getLogger()).thenReturn(new PrintStream(System.out));
-		
-		DeploymentMetaData result = metaDataCollector.collect(build, listener);
-		assertThat(result.getDeployedAt(),is(DateFormatUtil.formatDate(new DateTime(DEPLOYMENT_DATE))));
-	}
 	
 }

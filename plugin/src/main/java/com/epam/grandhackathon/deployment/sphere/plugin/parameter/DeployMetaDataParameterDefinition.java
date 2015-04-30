@@ -50,19 +50,6 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
 		this.buildVersion = buildVersion;
 		this.applicationName = applicationName;
 	}
-	
-    public BuildMetaDataDao getBuildMetaDataDao() {
-    	return buildMetaDataDao;
-    }
-    
-    public EnvironmentDao getEnvironmentDao() {
-		return environmentDao;
-	}
-    
-	@Exported
-	public String getApplicationName(){
-		return applicationName;
-	}
 
 	@Override
 	public ParameterValue createValue(StaplerRequest req, JSONObject jo) {
@@ -106,5 +93,18 @@ public class DeployMetaDataParameterDefinition extends ParameterDefinition {
 		public String getDisplayName() {
 			return PluginConstants.DEPLOY_JOB_PARAMETER;
 		}
+	}
+	
+    public BuildMetaDataDao getBuildMetaDataDao() {
+    	return buildMetaDataDao;
+    }
+    
+    public EnvironmentDao getEnvironmentDao() {
+		return environmentDao;
+	}
+    
+	@Exported
+	public String getApplicationName(){
+		return applicationName;
 	}
 }
