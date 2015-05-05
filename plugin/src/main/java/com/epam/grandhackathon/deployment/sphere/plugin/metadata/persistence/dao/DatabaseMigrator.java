@@ -22,11 +22,10 @@ import com.google.common.io.ByteStreams;
 @Log
 public class DatabaseMigrator {
 	
-	private static final Character PATH_DELIMETER = '\\';
 	private static final Character CLASSPATH_DELIMETER = '/';
 	private static final String JAR_FILE_NAME = "classes.jar";
 	private static final String MIGRATION_SOURCE_PATH = "db/migration";
-	private static final String MIGRATION_DIST_PATH = PATH_DELIMETER + ".." + PATH_DELIMETER + "classes" + PATH_DELIMETER + MIGRATION_SOURCE_PATH;
+	private static final String MIGRATION_DIST_PATH = File.separator + ".." + File.separator + "classes" + File.separator + MIGRATION_SOURCE_PATH;
 	private static final String DB_VERSION_TABLE = "SCHEMA_VERSION";
 	
 	public void migrate(@NonNull DataSource dataSource) {
@@ -37,9 +36,6 @@ public class DatabaseMigrator {
 		flyway.setTable(DB_VERSION_TABLE);
 		flyway.setDataSource(dataSource);
 		flyway.setClassLoader(this.getClass().getClassLoader());
-		for (MigrationInfo i : flyway.info().all()) {
-			log.info("Migrate task: " + i.getVersion() + " : " + i.getDescription() + " from file: " + i.getScript());
-		}
         flyway.migrate();
 		log.info("Db migration successfully done");
 	}
@@ -51,8 +47,8 @@ public class DatabaseMigrator {
 			copyMigrationToClassPath(jarFile, MIGRATION_SOURCE_PATH, jarLocation + MIGRATION_DIST_PATH);
 			return "filesystem:" + jarLocation + MIGRATION_DIST_PATH;
 		} catch (IOException e) {
-			log.warning("Loading migration files error: " + e.getMessage());
-			return MIGRATION_SOURCE_PATH;
+			log.warning("message" + e);
+			return "classpath:" + MIGRATION_SOURCE_PATH;
 		}
 	}
 	
@@ -60,14 +56,18 @@ public class DatabaseMigrator {
 		String path = CLASSPATH_DELIMETER + clazz.getName().replace('.', CLASSPATH_DELIMETER) + ".class";
 		String url = clazz.getResource(path).toString();
 		String jarUriPrefix = "jar:file:";
+		int bangIndex = url.indexOf("!");
+		if (bangIndex == -1){
+			throw new IOException("Jar file not found");
+		}
 		return new JarFile(url.substring(jarUriPrefix.length() + 1, url.indexOf("!")));
 	}
 
 	private void copyMigrationToClassPath(JarFile jarFile, String jarDirectory, String destinationDirectory) throws IOException {
 		for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
 			JarEntry entry = entries.nextElement();
-			if (entry.getName().startsWith(jarDirectory + CLASSPATH_DELIMETER) && !entry.isDirectory()) {
-				String destinationFileName = destinationDirectory + PATH_DELIMETER + entry.getName().substring(jarDirectory.length());
+			if (isMigrationEntry(entry, jarDirectory)) {
+				String destinationFileName = destinationDirectory + File.separator + entry.getName().substring(jarDirectory.length());
 				File destinationFile = new File(destinationFileName);
 				File parentFile = destinationFile.getParentFile();
 				if (parentFile != null) {
@@ -79,6 +79,10 @@ public class DatabaseMigrator {
 				}
 			}
 		}
+	}
+	
+	private boolean isMigrationEntry(JarEntry entry, String jarDirectory){
+		return entry.getName().startsWith(jarDirectory + CLASSPATH_DELIMETER) && !entry.isDirectory();
 	}
 	
 }
