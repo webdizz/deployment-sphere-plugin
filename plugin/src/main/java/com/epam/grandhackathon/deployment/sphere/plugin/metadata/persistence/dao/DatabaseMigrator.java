@@ -46,7 +46,7 @@ public class DatabaseMigrator {
 			copyMigrationToClassPath(jarFile, MIGRATION_SOURCE_PATH, jarLocation + MIGRATION_DIST_PATH);
 			return "filesystem:" + jarLocation + MIGRATION_DIST_PATH;
 		} catch (IOException e) {
-			log.warning("Loading migration files error: " + e);
+			log.warning("Loading migration files error: " + e.getMessage());
 			return "classpath:" + MIGRATION_SOURCE_PATH;
 		}
 	}
