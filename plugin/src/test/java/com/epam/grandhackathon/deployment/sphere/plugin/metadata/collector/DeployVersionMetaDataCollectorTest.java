@@ -17,20 +17,20 @@ import java.util.TreeMap;
 import lombok.extern.java.Log;
 
 import org.joda.time.DateTime;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.DeploymentMetaDataDaoMock;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
-import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDaoMock;
+import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.domain.Environment;
 import com.epam.grandhackathon.deployment.sphere.plugin.utils.DateFormatUtil;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 @Log
 public class DeployVersionMetaDataCollectorTest {
@@ -38,11 +38,28 @@ public class DeployVersionMetaDataCollectorTest {
 	@Rule
 	public PluginJenkinsRule jenkinsRule = new PluginJenkinsRule();
 	
+	@Mock
+	DeploymentMetaDataDao deploymentMetaDataDao;
+	
+	@Mock
+	EnvironmentDao environmentDao;	
+	
+	
+	@InjectMocks
+	DeployVersionMetaDataCollector metaDataCollector;
+	
 	private static final Calendar DEPLOYMENT_DATE = new GregorianCalendar();
+	
+	@Before
+	public void initMocks() {
+		MockitoAnnotations.initMocks(this);
+		Environment env = new Environment();
+		env.setKey("env_key");
+		when(environmentDao.find("env-name")).thenReturn(env);
+	}
 	
 	@Test
 	public void shouldGetDateFromBuildAntPutInDeploymentMetaData() {
-		DeployVersionMetaDataCollector metaDataCollector = getMetaDataCollectorWithMocks();
 		AbstractBuild<?, ?> build = initBuild();
 		TaskListener listener = mock(TaskListener.class);
 		when(listener.getLogger()).thenReturn(new PrintStream(System.out));
@@ -65,17 +82,6 @@ public class DeployVersionMetaDataCollectorTest {
 		}
 		return build;
 	}
-	private DeployVersionMetaDataCollector getMetaDataCollectorWithMocks() {
-		Injector injector = Guice.createInjector(new AbstractModule() {
-            @Override
-            protected void configure() {
-            	bind(DeploymentMetaDataDao.class).to(DeploymentMetaDataDaoMock.class);
-            	bind(EnvironmentDao.class).to(EnvironmentDaoMock.class);
-            }
-        });
-		DeployVersionMetaDataCollector metaDataCollector = injector.getInstance(DeployVersionMetaDataCollector.class);
-		return metaDataCollector;
-	}
-	
+
 	
 }
