@@ -15,7 +15,6 @@ import lombok.NonNull;
 import lombok.extern.java.Log;
 
 import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.MigrationInfo;
 
 import com.google.common.io.ByteStreams;
 
@@ -47,7 +46,7 @@ public class DatabaseMigrator {
 			copyMigrationToClassPath(jarFile, MIGRATION_SOURCE_PATH, jarLocation + MIGRATION_DIST_PATH);
 			return "filesystem:" + jarLocation + MIGRATION_DIST_PATH;
 		} catch (IOException e) {
-			log.warning("message" + e);
+			log.warning("Loading migration files error: " + e);
 			return "classpath:" + MIGRATION_SOURCE_PATH;
 		}
 	}
