@@ -16,8 +16,10 @@ import java.util.TreeMap;
 
 import lombok.extern.java.Log;
 
+import org.junit.Rule;
 import org.junit.Test;
 
+import com.epam.grandhackathon.deployment.sphere.plugin.PluginJenkinsRule;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.Constants;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.grandhackathon.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
@@ -28,7 +30,11 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 
 @Log
+
 public class BuildVersionMetaDataCollectorTest {
+	
+	@Rule
+	public PluginJenkinsRule jenkinsRule = new PluginJenkinsRule();
 
 	private static final String JOB_URL = "http://test.com/test";
 
