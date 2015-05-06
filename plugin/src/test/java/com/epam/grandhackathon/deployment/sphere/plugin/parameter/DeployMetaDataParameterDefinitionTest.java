@@ -56,8 +56,8 @@ public class DeployMetaDataParameterDefinitionTest {
 		buildMetaDataList.add(buildMetaData2);
 		buildMetaDataList.add(buildMetaData3);
 		
-		EnvironmentMetaData environmentMetaData1 = new EnvironmentMetaData("env1");
-		EnvironmentMetaData environmentMetaData2 = new EnvironmentMetaData("env2");
+		EnvironmentMetaData environmentMetaData1 = new EnvironmentMetaData("env1", "title1");
+		EnvironmentMetaData environmentMetaData2 = new EnvironmentMetaData("env2", "title2");
 		environmentMetaDataList.add(environmentMetaData1);
 		environmentMetaDataList.add(environmentMetaData2);
 	}
@@ -71,7 +71,7 @@ public class DeployMetaDataParameterDefinitionTest {
 	@DataPoints
 	public static final EnvironmentDefinitionTestInput[] testData2 = new EnvironmentDefinitionTestInput[] {
     	new EnvironmentDefinitionTestInput(environmentMetaDataList
-    			, Arrays.asList(new String[]{"env1", "env2"}))
+    			, Arrays.asList(new String[]{"title1", "title2"}))
     };
 
 	@Theory
