@@ -27,9 +27,8 @@ allprojects { project ->
 
 }
 
-
 subprojects {
-    group = "com.epam.grand-hackathon.${githubProjectName}"
+    group = "org.jenkins-ci.plugins"
 
     apply plugin: 'groovy'
 
