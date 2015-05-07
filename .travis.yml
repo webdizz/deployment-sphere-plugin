@@ -1,7 +1,9 @@
 language: java
 jdk:
-- oraclejdk7
-before_script: echo "userName=webdizz\npassword=$JENKINS_REPO_PWD" > ~/.jenkins-ci.org
+  - oraclejdk7
+before_script:
+  - echo "userName=webdizz" > ~/.jenkins-ci.org
+  - echo "password=$JENKINS_REPO_PWD" >> ~/.jenkins-ci.org
 script: "cat ~/.jenkins-ci.org; ./gradlew :plugin:jpi"
 after_success: if [ $TRAVIS_SECURE_ENV_VARS ]; then ./gradlew :pl:publish -Pversion=0.1.$TRAVIS_BUILD_NUMBER;
   fi
