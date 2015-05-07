@@ -5,14 +5,14 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import hudson.matrix.MatrixProject;
-import hudson.model.FreeStyleProject;
-import hudson.util.FormValidation.Kind;
 
 import org.junit.experimental.theories.DataPoints;
 import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
+import hudson.matrix.MatrixProject;
+import hudson.model.FreeStyleProject;
+import hudson.util.FormValidation.Kind;
 
 
 @RunWith(Theories.class)
