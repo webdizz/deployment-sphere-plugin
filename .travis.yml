@@ -5,7 +5,7 @@ before_script:
   - echo "userName=webdizz" > ~/.jenkins-ci.org
   - echo "password=$JENKINS_REPO_PWD" >> ~/.jenkins-ci.org
 script:
-  - ./gradlew :plugin:jpi
+  - ./gradlew :pl:test :pl:jpi
   - if [ $TRAVIS_SECURE_ENV_VARS ]; then ./gradlew :pl:publish -Pversion=0.1.$TRAVIS_BUILD_NUMBER; fi
 env:
   global:

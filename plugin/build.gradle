@@ -19,11 +19,11 @@ project.status = 'release'
 jenkinsPlugin {
     coreVersion = '1.609'
     displayName = 'Deployment Sphere'
-    gitHubUrl = 'https://github.com/jenkinsci/deployment-sphere-plugin'
+    shortName = 'deployment-sphere'
     url = 'https://wiki.jenkins-ci.org/display/JENKINS/Deployment+Sphere+Plugin'
+    gitHubUrl = 'https://github.com/jenkinsci/deployment-sphere-plugin'
     compatibleSinceVersion = '1.20'
     pluginFirstClassLoader = false
-    shortName = 'deployment-sphere'
     developers {
         developer {
             id 'webdizz'
