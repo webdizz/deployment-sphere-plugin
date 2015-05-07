@@ -28,7 +28,7 @@ public class DatabaseMigrator {
     public void migrate(@NonNull DataSource dataSource) {
         log.info("Db migration started");
         Flyway flyway = new Flyway();
-        flyway.setLocations(prepareMigrationLocation());
+        flyway.setLocations(resolveMigrationResourcesLocation());
         flyway.setBaselineOnMigrate(true);
         flyway.setTable(DB_VERSION_TABLE);
         flyway.setDataSource(dataSource);
@@ -37,29 +37,28 @@ public class DatabaseMigrator {
         log.info("Db migration successfully done");
     }
 
-    private String prepareMigrationLocation() {
-        String migrationSourcePath;
+    private String resolveMigrationResourcesLocation() {
+        String sourcePath = "classpath:" + MIGRATION_SOURCE_PATH;
         try {
-            JarFile jarFile = getClassJarFile(DatabaseMigrator.class);
-            String jarLocation = jarFile.getName().replace(JAR_FILE_NAME, "");
-            copyMigrationToClassPath(jarFile, MIGRATION_SOURCE_PATH, jarLocation + MIGRATION_DIST_PATH);
-            migrationSourcePath = "filesystem:" + jarLocation + MIGRATION_DIST_PATH;
+            Class clazz = DatabaseMigrator.class;
+            String path = CLASSPATH_DELIMITER + clazz.getName().replace('.', CLASSPATH_DELIMITER) + ".class";
+            String url = clazz.getResource(path).toString();
+            if (url.contains("!")) {
+                sourcePath = resolveMigrationResourceLocationFromJarFile(sourcePath, url);
+            }
         } catch (IOException e) {
             log.warning("Loading migration files error: " + e.getMessage());
-            migrationSourcePath = "classpath:" + MIGRATION_SOURCE_PATH;
         }
-        return migrationSourcePath;
+        return sourcePath;
     }
 
-    private JarFile getClassJarFile(Class<?> clazz) throws IOException {
-        String path = CLASSPATH_DELIMITER + clazz.getName().replace('.', CLASSPATH_DELIMITER) + ".class";
-        String url = clazz.getResource(path).toString();
-        int bangIndex = url.indexOf("!");
-        if (bangIndex == -1) {
-            throw new IOException("Jar file not found");
-        }
+    private String resolveMigrationResourceLocationFromJarFile(String sourcePath, final String url) throws IOException {
         String jarUriPrefix = "jar:file:";
-        return new JarFile(url.substring(jarUriPrefix.length() + 1, url.indexOf("!")));
+        JarFile jarFile = new JarFile(url.substring(jarUriPrefix.length() + 1, url.indexOf("!")));
+        String jarLocation = jarFile.getName().replace(JAR_FILE_NAME, "");
+        copyMigrationToClassPath(jarFile, MIGRATION_SOURCE_PATH, jarLocation + MIGRATION_DIST_PATH);
+        sourcePath = "filesystem:" + jarLocation + MIGRATION_DIST_PATH;
+        return sourcePath;
     }
 
     private void copyMigrationToClassPath(JarFile jarFile, String jarDirectory, String destinationDirectory) throws IOException {
@@ -72,12 +71,12 @@ public class DatabaseMigrator {
                 if (parentFile != null) {
                     parentFile.mkdirs();
                 }
-                copyMigrationResources(jarFile, entry, destinationFile);
+                copyMigrationResource(jarFile, entry, destinationFile);
             }
         }
     }
 
-    private void copyMigrationResources(final JarFile jarFile, final JarEntry entry, final File destinationFile) throws IOException {
+    private void copyMigrationResource(final JarFile jarFile, final JarEntry entry, final File destinationFile) throws IOException {
         try (InputStream in = jarFile.getInputStream(entry);
              OutputStream out = new FileOutputStream(destinationFile)) {
             ByteStreams.copy(in, out);
