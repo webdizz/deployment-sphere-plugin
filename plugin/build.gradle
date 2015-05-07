@@ -10,7 +10,6 @@ buildscript {
     }
 }
 
-apply plugin: 'nebula-bintray'
 apply plugin: 'org.jenkins-ci.jpi'
 
 description = "Jenkins plugin to provide bird's eye view for your deployments."
@@ -65,22 +64,11 @@ dependencies {
     compile 'org.flywaydb:flyway-gradle-plugin:3.2.1'
 }
 
-bintray {
-    user = binTrayUser
-    key = binTrayKey
-    dryRun = false
-    publish = true
-    publications = ['mavenJpi']
-    pkg {
-        userOrg = 'webdizz'
-        repo = 'jenkins-plugins'
-        name = 'deployment-sphere'
-        desc = 'Jenkins plugin to provide bird\'s eye view for your deployments.'
-        issueTrackerUrl = binTrayIssueTrackerUrl
-        websiteUrl = binTrayWebsiteUrl
-        vcsUrl = binTrayVcsUrl
-        licenses = binTrayLicenses.tokenize(',')
-        labels = binTrayLabels.tokenize(',')
-        publicDownloadNumbers = true
+gradle.taskGraph.whenReady { taskGraph ->
+    if (taskGraph.hasTask(tasks.publish)) {
+        PublishingExtension publishingExtension = project.extensions.getByType(PublishingExtension)
+        publishingExtension.publications.getByName('mavenJpi') {
+            version = version
+        }
     }
 }
