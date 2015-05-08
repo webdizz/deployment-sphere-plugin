@@ -5,11 +5,10 @@ import static java.lang.String.format;
 import java.util.Collection;
 import java.util.List;
 
-import lombok.extern.java.Log;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.skife.jdbi.v2.Handle;
+import lombok.extern.java.Log;
 
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
@@ -55,8 +54,7 @@ public class EnvironmentDao extends GenericDao {
     public Environment find(final String evnKey) {
         try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
-            Environment environment = query.find(evnKey);
-            return environment;
+            return query.find(evnKey);
         }
     }
 

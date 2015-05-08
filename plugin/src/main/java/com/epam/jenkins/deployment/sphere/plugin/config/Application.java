@@ -1,37 +1,36 @@
 package com.epam.jenkins.deployment.sphere.plugin.config;
 
+import org.kohsuke.stapler.DataBoundConstructor;
 import hudson.Extension;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
 
-import org.kohsuke.stapler.DataBoundConstructor;
-
 public class Application implements Describable<Application> {
 
-	@Extension
-	public final static DescriptorImpl DESCRIPOR = new DescriptorImpl();
-	private String applicationName;
+    @Extension
+    public final static DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
-	public static class DescriptorImpl extends Descriptor<Application> {
+    private String applicationName;
 
-		@Override
-		public String getDisplayName() {
-			return "Application";
-		}
-	};
+    public static class DescriptorImpl extends Descriptor<Application> {
 
+        @Override
+        public String getDisplayName() {
+            return "Application";
+        }
+    }
 
-	@DataBoundConstructor
-	public Application(String applicationName) {
-		this.applicationName = applicationName;
-	}
+    @DataBoundConstructor
+    public Application(String applicationName) {
+        this.applicationName = applicationName;
+    }
 
-	public String getApplicationName() {
-		return applicationName;
-	}
+    public String getApplicationName() {
+        return applicationName;
+    }
 
-	@Override
-	public Descriptor<Application> getDescriptor() {
-		return DESCRIPOR;
-	}
+    @Override
+    public Descriptor<Application> getDescriptor() {
+        return DESCRIPTOR;
+    }
 }

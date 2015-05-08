@@ -1,18 +1,15 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
-import hudson.Extension;
-import hudson.model.JobProperty;
-import hudson.model.JobPropertyDescriptor;
-import hudson.model.AbstractProject;
-
 import java.util.Collection;
 import java.util.List;
-
 import javax.inject.Inject;
 
-import net.sf.json.JSONObject;
-
 import org.kohsuke.stapler.StaplerRequest;
+import net.sf.json.JSONObject;
+import hudson.Extension;
+import hudson.model.AbstractProject;
+import hudson.model.JobProperty;
+import hudson.model.JobPropertyDescriptor;
 
 import com.epam.jenkins.deployment.sphere.plugin.config.Application;
 import com.epam.jenkins.deployment.sphere.plugin.config.Environment;
@@ -28,7 +25,7 @@ public class GlobalJobProperty extends JobProperty<AbstractProject<?, ?>> {
 	@Extension
 	public static final class CustomViewsTabBarDescriptor extends JobPropertyDescriptor {
 
-		private static final String DESCRIPTOR_DISPLAY_NAME = "Deploy Sphere";
+		private static final String DESCRIPTOR_DISPLAY_NAME = "Deployment Sphere";
 
 		@Inject
 		private EnvironmentDao environmentDao;
