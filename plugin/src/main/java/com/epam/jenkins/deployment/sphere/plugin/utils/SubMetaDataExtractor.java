@@ -17,21 +17,21 @@ import com.epam.jenkins.deployment.sphere.plugin.metadata.model.SubMetaData;
 
 public class SubMetaDataExtractor {
 
-    public static String getMetaData( final AbstractBuild<?, ?> build) {
+    public static String getMetaData(final AbstractBuild<?, ?> build) {
         AbstractBuild<?, ?> tmpBuild = build;
         SubMetaData metaData = new SubMetaData();
-        if (tmpBuild.getResult() == Result.SUCCESS) {
-            metaData.setCommits(getCommits(tmpBuild));
-        } else {
-            List<Commit> commits = new ArrayList<>();
-            while (tmpBuild != null && tmpBuild.getResult() != Result.SUCCESS) {
-                commits.addAll(getCommits(tmpBuild));
-                tmpBuild = tmpBuild.getPreviousBuild();
-            }
-            metaData.setCommits(commits);
-        }
         String jsonMetaData = "";
         try {
+            if (tmpBuild.getResult() == Result.SUCCESS) {
+                metaData.setCommits(getCommits(tmpBuild));
+            } else {
+                List<Commit> commits = new ArrayList<>();
+                while (tmpBuild != null && tmpBuild.getResult() != Result.SUCCESS) {
+                    commits.addAll(getCommits(tmpBuild));
+                    tmpBuild = tmpBuild.getPreviousBuild();
+                }
+                metaData.setCommits(commits);
+            }
             jsonMetaData = new ObjectMapper().writeValueAsString(metaData);
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,8 +41,7 @@ public class SubMetaDataExtractor {
 
     private static List<Commit> getCommits(AbstractBuild<?, ?> build) {
         List<Commit> commits = new ArrayList<>();
-        ChangeLogSet<? extends Entry> changeLogSet = build.getChangeSet();
-        Iterator<? extends Entry> iterator = changeLogSet.iterator();
+        Iterator<? extends Entry> iterator = build.getChangeSet().iterator();
         while (iterator.hasNext()) {
             commits.add(commitBuilder((Entry) iterator.next()));
         }
@@ -56,5 +55,5 @@ public class SubMetaDataExtractor {
         commit.setMessage(commitEntry.getMsg());
         return commit;
     }
-    
+
 }
