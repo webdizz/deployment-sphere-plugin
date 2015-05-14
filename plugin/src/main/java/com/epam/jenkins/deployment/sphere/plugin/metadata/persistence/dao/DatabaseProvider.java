@@ -15,7 +15,7 @@ public class DatabaseProvider {
 	@Inject
 	private DatabaseMigrator databaseMigrator;
 	
-	private DBI dbi;
+	private transient DBI dbi;
 
 	public DatabaseProvider() {
 		PluginInjector.injectMembers(this);

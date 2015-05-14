@@ -26,15 +26,13 @@ import com.google.common.collect.Collections2;
 
 @Log
 public class DeployMetaDataParameterDefinition extends ParameterDefinition {
-    @Inject
-    private BuildMetaDataDao buildMetaDataDao;
     
-
+	@Inject
+    private BuildMetaDataDao buildMetaDataDao;
+	
 	@Inject
     private EnvironmentDao environmentDao;
 	
-
-
 	private String environmentKey;
     private String buildVersion;
     private String applicationName;
