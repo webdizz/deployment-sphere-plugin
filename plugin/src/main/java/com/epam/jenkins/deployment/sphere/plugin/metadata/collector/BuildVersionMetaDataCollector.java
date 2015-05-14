@@ -20,6 +20,7 @@ import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.jenkins.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.jenkins.deployment.sphere.plugin.utils.EnvVarsResolver;
+import com.epam.jenkins.deployment.sphere.plugin.utils.SubMetaDataExtractor;
 import com.google.common.base.Strings;
 
 @Log
@@ -62,6 +63,10 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
         final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
         checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
+        
+        AbstractBuild<?, ?> tmpBuild = build;
+        String subMetaData = SubMetaDataExtractor.getMetaData(tmpBuild);
+        buildMetaData.setSubMetaData(subMetaData);
         buildMetaData.setApplicationName(appName);
         buildMetaData.setBuildUrl(build.getUrl());
 
