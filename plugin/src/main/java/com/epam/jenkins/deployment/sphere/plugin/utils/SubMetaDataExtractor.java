@@ -17,15 +17,16 @@ import com.epam.jenkins.deployment.sphere.plugin.metadata.model.SubMetaData;
 
 public class SubMetaDataExtractor {
 
-    public static String getMetaData(AbstractBuild<?, ?> build) {
+    public static String getMetaData( final AbstractBuild<?, ?> build) {
+        AbstractBuild<?, ?> tmpBuild = build;
         SubMetaData metaData = new SubMetaData();
-        if (build.getResult() == Result.SUCCESS) {
-            metaData.setCommits(getCommits(build));
+        if (tmpBuild.getResult() == Result.SUCCESS) {
+            metaData.setCommits(getCommits(tmpBuild));
         } else {
             List<Commit> commits = new ArrayList<>();
-            while (build != null && build.getResult() != Result.SUCCESS) {
-                commits.addAll(getCommits(build));
-                build = build.getPreviousBuild();
+            while (tmpBuild != null && tmpBuild.getResult() != Result.SUCCESS) {
+                commits.addAll(getCommits(tmpBuild));
+                tmpBuild = tmpBuild.getPreviousBuild();
             }
             metaData.setCommits(commits);
         }
