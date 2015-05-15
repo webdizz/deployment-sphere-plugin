@@ -10,5 +10,5 @@ public class Build {
     private String buildUrl;
     private Long buildNumber;
     private DateTime builtAt;
-    private String subMetaData;
+    private String metaData;
 }

@@ -55,7 +55,7 @@ public interface BuildQuery {
                         q.bind("build_version", arg.getBuildVersion());
                         q.bind("build_number", arg.getBuildNumber());
                         q.bind("build_url", arg.getBuildUrl());
-                        q.bind("build_metadata", arg.getSubMetaData());
+                        q.bind("build_metadata", arg.getMetaData());
                         if (null != arg.getBuiltAt()) {
                             q.bind("built_at", arg.getBuiltAt().getMillis());
                         }
@@ -74,7 +74,7 @@ public interface BuildQuery {
             build.setBuildUrl(resultSet.getString("build_url"));
             build.setBuildNumber(resultSet.getLong("build_number"));
             build.setBuiltAt(new DateTime(resultSet.getLong("built_at")));
-            build.setSubMetaData(resultSet.getString("build_metadata"));
+            build.setMetaData(resultSet.getString("build_metadata"));
             return build;
         }
     }

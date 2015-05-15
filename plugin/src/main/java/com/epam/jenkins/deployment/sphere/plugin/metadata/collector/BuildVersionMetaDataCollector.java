@@ -18,9 +18,10 @@ import com.epam.jenkins.deployment.sphere.plugin.PluginInjector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.DataSourceProvider;
 import com.epam.jenkins.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.jenkins.deployment.sphere.plugin.utils.EnvVarsResolver;
-import com.epam.jenkins.deployment.sphere.plugin.utils.SubMetaDataExtractor;
+import com.epam.jenkins.deployment.sphere.plugin.utils.MetaDataExtractor;
 import com.google.common.base.Strings;
 
 @Log
@@ -28,6 +29,9 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 	
     @Inject
     private BuildMetaDataDao metadataDao;
+    
+    @Inject
+    private MetaDataExtractor metaDataExtractor;
 
     public BuildVersionMetaDataCollector() {
         PluginInjector.injectMembers(this);
@@ -64,8 +68,8 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
         checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
         
-        String subMetaData = SubMetaDataExtractor.getMetaData(build);
-        buildMetaData.setSubMetaData(subMetaData);
+        String metaData = metaDataExtractor.getMetaData(build);
+        buildMetaData.setMetaData(metaData);
         buildMetaData.setApplicationName(appName);
         buildMetaData.setBuildUrl(build.getUrl());
 

@@ -10,7 +10,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 @Data
 @ExportedBean
-public class SubMetaData {
+public class MetaData {
     @Exported
     private List<Commit> commits = new ArrayList<>();
     @Exported
