@@ -4,35 +4,20 @@ import hudson.model.Result;
 import hudson.model.AbstractBuild;
 import hudson.scm.ChangeLogSet.Entry;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-
-import lombok.extern.java.Log;
-
-import org.codehaus.jackson.map.ObjectMapper;
 
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.Commit;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
-import com.google.common.base.Throwables;
 import com.google.inject.Singleton;
 
-@Log
 @Singleton
 public class MetaDataExtractor {
 
-    public String getMetaData(final AbstractBuild<?, ?> build) {
-        String jsonMetaData = "";
-        try {
-            MetaData metaData = collectMetaData(build);
-            jsonMetaData = new ObjectMapper().writeValueAsString(metaData);
-        } catch (IOException e) {
-            log.log(Level.SEVERE, "Failed serializing MetaData to String", e);
-            throw Throwables.propagate(e);
-        }
-        return jsonMetaData;
+    public MetaData getMetaData(final AbstractBuild<?, ?> build) {
+        MetaData metaData = collectMetaData(build);
+        return metaData;
     }
 
     private MetaData collectMetaData(final AbstractBuild<?, ?> build) {

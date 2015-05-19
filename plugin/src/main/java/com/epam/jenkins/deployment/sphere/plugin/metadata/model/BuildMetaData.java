@@ -23,6 +23,6 @@ public class BuildMetaData extends ApplicationMetaData {
     @Exported
     private String buildUrl;
     @Exported
-    private String metaData;
+    private MetaData metaData;
     
 }

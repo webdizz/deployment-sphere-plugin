@@ -17,8 +17,8 @@ import org.joda.time.DateTime;
 import com.epam.jenkins.deployment.sphere.plugin.PluginInjector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.DataSourceProvider;
 import com.epam.jenkins.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.jenkins.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.epam.jenkins.deployment.sphere.plugin.utils.MetaDataExtractor;
@@ -68,7 +68,7 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
         checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
         
-        String metaData = metaDataExtractor.getMetaData(build);
+        MetaData metaData = metaDataExtractor.getMetaData(build);
         buildMetaData.setMetaData(metaData);
         buildMetaData.setApplicationName(appName);
         buildMetaData.setBuildUrl(build.getUrl());
