@@ -93,8 +93,7 @@ public interface BuildQuery {
             build.setBuildUrl(resultSet.getString("build_url"));
             build.setBuildNumber(resultSet.getLong("build_number"));
             build.setBuiltAt(new DateTime(resultSet.getLong("built_at")));
-            Clob clob = resultSet.getClob("build_metadata");
-            build.setMetaData(fromJson(clob));
+            build.setMetaData(fromJson(resultSet.getClob("build_metadata")));
             return build;
         }
 
