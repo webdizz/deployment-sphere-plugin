@@ -57,14 +57,14 @@ public class JiraMetaDataCollector implements Collector<Set<JiraIssueMetaData>> 
     @Override
     public Set<JiraIssueMetaData> collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         // We can obtain JIRA connection details from JIRA Plugin only.
-        if (!isJiraPluginInstalled()) {
+        if (isJiraPluginInstalled()) {
+            return collectJiraIssuesMetaData(build, taskListener);
+        } else {
             String jiraPluginNotInstalledMsg = "JIRA Plugin, which should provide connection to JIRA, is not installed, so JIRA metadata cannot be obtained.";
             log.log(Level.WARNING, jiraPluginNotInstalledMsg);
             taskListener.getLogger().append(jiraPluginNotInstalledMsg + "\n");
 
             return Collections.emptySet();
-        } else {
-            return collectJiraIssuesMetaData(build, taskListener);
         }
     }
 

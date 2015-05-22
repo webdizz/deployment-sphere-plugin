@@ -8,7 +8,7 @@ import com.google.inject.Singleton;
 public class JiraIssueIdComparator implements Comparator<JiraIssueMetaData> {
 
     @Override
-    public int compare(JiraIssueMetaData issue_1, JiraIssueMetaData issue_2) {
-        return issue_1.getId().compareTo(issue_2.getId());
+    public int compare(JiraIssueMetaData issue1, JiraIssueMetaData issue2) {
+        return issue1.getId().compareTo(issue2.getId());
     }
 }
