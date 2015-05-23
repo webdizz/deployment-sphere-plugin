@@ -1,7 +1,5 @@
 package com.epam.jenkins.deployment.sphere.plugin.metadata.collector;
 
-import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
 import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
 import hudson.scm.ChangeLogSet;
@@ -16,17 +14,26 @@ import org.joda.time.DateTime;
 
 import com.epam.jenkins.deployment.sphere.plugin.PluginInjector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.jira.JiraMetaDataCollector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.JiraIssueMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.jenkins.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.jenkins.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.google.common.base.Strings;
 
+import static java.lang.String.format;
+
+import static com.google.common.base.Preconditions.checkState;
+
 @Log
 public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
-	
+
     @Inject
     private BuildMetaDataDao metadataDao;
+
+    @Inject
+    private JiraMetaDataCollector jiraMetaDataCollector;
 
     public BuildVersionMetaDataCollector() {
         PluginInjector.injectMembers(this);
@@ -64,6 +71,11 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
         checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
         buildMetaData.setApplicationName(appName);
         buildMetaData.setBuildUrl(build.getUrl());
+
+        // FIXME Temporary code. The sole purpose - to check whether the JiraMetaDataCollector works appropriately.
+        for (JiraIssueMetaData metaData : jiraMetaDataCollector.collect(build, listener)) {
+            logger.append("From JIRA:\n" + metaData);
+        } // End of temporary code
 
         metadataDao.save(buildMetaData);
         return buildMetaData;
