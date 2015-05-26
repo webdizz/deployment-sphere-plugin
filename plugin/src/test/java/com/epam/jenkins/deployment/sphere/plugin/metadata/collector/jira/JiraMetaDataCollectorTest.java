@@ -49,7 +49,7 @@ public class JiraMetaDataCollectorTest {
 
         Set<JiraIssueMetaData> jiraIssues = jiraMetaDataCollector.collect(currentBuild, taskListener);
 
-        assertTrue("The list of Jira issues from involved builds should be empty.", jiraIssues.size() == 0);
+        assertTrue("The list of Jira issues from involved builds should be empty.", jiraIssues.isEmpty());
     }
 
 }

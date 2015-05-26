@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.epam.jenkins.deployment.sphere.plugin.mock.EmptyChangeLogSet;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
@@ -51,7 +52,7 @@ public class InvolvedBuildChangesCollectorTest {
 
         List<? extends Entry> entries = involvedBuildChangesCollector.collect(currentBuild, taskListener);
 
-        assertTrue("The list of changes from involved builds should be empty.", entries.size() == 0);
+        assertTrue("The list of changes from involved builds should be empty.", entries.isEmpty());
     }
 
     @Test
@@ -63,8 +64,9 @@ public class InvolvedBuildChangesCollectorTest {
 
         List<? extends Entry> entries = involvedBuildChangesCollector.collect(currentBuild, taskListener);
 
-        assertTrue("The list of changes should have size == 1.", entries.size() == 1);
-        assertTrue("The list of changes should contain passed entry.", entries.contains(entry));
+        assertFalse("The list of changes should contain the entry.", entries.isEmpty());
+        assertTrue("The list of changes should contain only a single entry.", entries.size() == 1);
+        assertTrue("The list of changes should contain the passed entry.", entries.contains(entry));
     }
 
 }
