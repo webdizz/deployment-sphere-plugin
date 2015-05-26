@@ -7,7 +7,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 
 @Data
 @ExportedBean
-public class Commit {
+public class CommitMetaData {
     @Exported
     private String author;
     @Exported

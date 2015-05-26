@@ -28,7 +28,6 @@ import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.domain.Build;
-import com.google.common.base.Throwables;
 
 @RegisterMapper(BuildQuery.Mapper.class)
 public interface BuildQuery {
@@ -77,7 +76,6 @@ public interface BuildQuery {
                     jsonMetaData = new ObjectMapper().writeValueAsString(metaData);
                 } catch (IOException e) {
                     log.log(Level.SEVERE, "Failed serializing MetaData to Json", e);
-                    throw Throwables.propagate(e);
                 }
                 return jsonMetaData;
             }
@@ -93,7 +91,8 @@ public interface BuildQuery {
             build.setBuildUrl(resultSet.getString("build_url"));
             build.setBuildNumber(resultSet.getLong("build_number"));
             build.setBuiltAt(new DateTime(resultSet.getLong("built_at")));
-            build.setMetaData(fromJson(resultSet.getClob("build_metadata")));
+            Clob clob = resultSet.getClob("build_metadata");
+            build.setMetaData(fromJson(clob));
             return build;
         }
 
@@ -104,7 +103,6 @@ public interface BuildQuery {
                 metaData = new ObjectMapper().readValue(jsonString, MetaData.class);
             } catch (IOException e) {
                 log.log(Level.SEVERE, "Failed deserializing Json to MetaData", e);
-                throw Throwables.propagate(e);
             }
             return metaData;
         }

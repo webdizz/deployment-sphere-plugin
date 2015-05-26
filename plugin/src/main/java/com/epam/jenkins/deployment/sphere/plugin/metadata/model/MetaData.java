@@ -1,7 +1,7 @@
 package com.epam.jenkins.deployment.sphere.plugin.metadata.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import lombok.Data;
 
@@ -12,8 +12,7 @@ import org.kohsuke.stapler.export.ExportedBean;
 @ExportedBean
 public class MetaData {
     @Exported
-    private List<Commit> commits = new ArrayList<>();
+    private Set<CommitMetaData> commits = new HashSet<>();
     @Exported
-    private List<Ticket> tickets = new ArrayList<>();
-
+    private Set<JiraIssueMetaData> tickets = new HashSet<>();
 }
