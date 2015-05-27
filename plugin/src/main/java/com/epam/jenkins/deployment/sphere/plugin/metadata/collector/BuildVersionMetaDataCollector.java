@@ -12,17 +12,15 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
-import jenkins.model.Jenkins;
 import lombok.extern.java.Log;
 
 import org.joda.time.DateTime;
 
-import com.epam.jenkins.deployment.sphere.plugin.PluginConstants;
+import com.epam.jenkins.deployment.sphere.plugin.JiraInjectionFactory;
 import com.epam.jenkins.deployment.sphere.plugin.PluginInjector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.jira.JiraMetaDataCollector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.model.CommitMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.JiraIssueMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
@@ -35,10 +33,13 @@ import com.google.common.base.Strings;
 public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
 	@Inject
+	private JiraInjectionFactory jiraInjectionFactory;
+
+	@Inject
 	private BuildMetaDataDao metadataDao;
 
 	@Inject
-	private CommitMetaDataCollector commitMetaDatacollector;
+	private CommitMetaDataCollector commitMetaDataCollector;
 
 	public BuildVersionMetaDataCollector() {
 		PluginInjector.injectMembers(this);
@@ -77,7 +78,7 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 		buildMetaData.setApplicationName(appName);
 		buildMetaData.setBuildUrl(build.getUrl());
 		MetaData metaData = new MetaData();
-		metaData.setCommits(commitMetaDatacollector.collect(build, listener));
+		metaData.setCommits(commitMetaDataCollector.collect(build, listener));
 		metaData.setTickets(populateTickets(build, listener));
 		buildMetaData.setMetaData(metaData);
 		metadataDao.save(buildMetaData);
@@ -86,12 +87,9 @@ public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
 
 	private Set<JiraIssueMetaData> populateTickets(AbstractBuild<?, ?> build, final TaskListener listener) {
 		Set<JiraIssueMetaData> tickets = Collections.emptySet();
-		if (Jenkins.getInstance().getPlugin(PluginConstants.JENKINS_JIRA_PLUGIN_NAME) != null) {
-			tickets.addAll((new JiraMetaDataCollector().collect(build, listener)));
-		} else {
-			listener.getLogger().append(
-					"JIRA Plugin, which should provide connection to JIRA, is not installed, so JIRA metadata cannot be obtained."
-							+ "\n");
+		JiraMetaDataCollector jiraMetaDataCollector = jiraInjectionFactory.getJiraMetaDataCollector();
+		if (jiraMetaDataCollector != null) {
+			tickets.addAll((jiraMetaDataCollector.collect(build, listener)));
 		}
 		return tickets;
 	}

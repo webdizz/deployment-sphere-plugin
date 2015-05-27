@@ -5,7 +5,7 @@ import hudson.model.TaskListener;
 import hudson.model.AbstractBuild;
 import hudson.scm.ChangeLogSet.Entry;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -23,7 +23,7 @@ public class CommitMetaDataCollector implements Collector<Set<CommitMetaData>> {
 	}
 
 	private Set<CommitMetaData> collectCommits(final AbstractBuild<?, ?> build) {
-		Set<CommitMetaData> commits = new HashSet<>();
+		Set<CommitMetaData> commits = Collections.emptySet();
 		if (Result.SUCCESS == build.getResult()) {
 			commits.addAll(getCommits(build));
 		} else {
@@ -34,8 +34,8 @@ public class CommitMetaDataCollector implements Collector<Set<CommitMetaData>> {
 	}
 
 	private Set<CommitMetaData> getFailedBuildCommits(AbstractBuild<?, ?> tmpBuild) {
-		Set<CommitMetaData> commits = new HashSet<>();
-		while (null != tmpBuild && Result.SUCCESS != tmpBuild.getResult()) {
+		Set<CommitMetaData> commits = Collections.emptySet();
+		while (tmpBuild != null && Result.SUCCESS != tmpBuild.getResult()) {
 			commits.addAll(getCommits(tmpBuild));
 			tmpBuild = tmpBuild.getPreviousBuild();
 		}
@@ -43,7 +43,7 @@ public class CommitMetaDataCollector implements Collector<Set<CommitMetaData>> {
 	}
 
 	private Set<CommitMetaData> getCommits(AbstractBuild<?, ?> build) {
-		Set<CommitMetaData> commits = new HashSet<>();
+		Set<CommitMetaData> commits = Collections.emptySet();
 		Iterator<? extends Entry> iterator = build.getChangeSet().iterator();
 		while (iterator.hasNext()) {
 			commits.add(buildCommit(iterator.next()));

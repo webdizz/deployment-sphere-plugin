@@ -10,7 +10,6 @@ import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
 
 import lombok.extern.java.Log;
 
@@ -75,7 +74,7 @@ public interface BuildQuery {
                 try {
                     jsonMetaData = new ObjectMapper().writeValueAsString(metaData);
                 } catch (IOException e) {
-                    log.log(Level.SEVERE, "Failed serializing MetaData to Json", e);
+                	 log.warning("Failed serializing MetaData to Json" + e.getMessage());
                 }
                 return jsonMetaData;
             }
@@ -102,7 +101,7 @@ public interface BuildQuery {
             try {
                 metaData = new ObjectMapper().readValue(jsonString, MetaData.class);
             } catch (IOException e) {
-                log.log(Level.SEVERE, "Failed deserializing Json to MetaData", e);
+            	log.warning("Failed deserializing Json to MetaData" + e.getMessage());
             }
             return metaData;
         }
