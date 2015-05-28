@@ -17,10 +17,10 @@ import com.google.inject.Singleton;
 
 @Log
 @Singleton
-public class InvolvedBuildChangesCollector implements Collector<List<Entry>> {
+public class InvolvedBuildChangesCollector implements Collector<List<? extends Entry>> {
 
     @Override
-    public List<Entry> collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
+    public List<? extends Entry> collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
         List<Entry> allInvolvedChanges = new ArrayList<>();
 
         for (AbstractBuild<?, ?> involvedBuild : getAllInvolvedBuilds(build, taskListener)) {

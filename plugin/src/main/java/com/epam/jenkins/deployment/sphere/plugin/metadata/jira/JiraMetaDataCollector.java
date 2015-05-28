@@ -40,7 +40,6 @@ import com.google.inject.Singleton;
 @Singleton
 public class JiraMetaDataCollector implements Collector<Set<JiraIssueMetaData>> {
 
-
 	@Inject
 	private JiraIssueIdComparator jiraIssueIdComparator;
 
@@ -53,28 +52,34 @@ public class JiraMetaDataCollector implements Collector<Set<JiraIssueMetaData>> 
 	}
 
 	@Override
-	public Set<JiraIssueMetaData> collect(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
+	public Set<JiraIssueMetaData> collect(final AbstractBuild<?, ?> build,
+			final TaskListener taskListener) {
 		// We can obtain JIRA connection details from JIRA Plugin only.
-			return collectJiraIssuesMetaData(build, taskListener);
+		return collectJiraIssuesMetaData(build, taskListener);
 	}
 
-	private Set<JiraIssueMetaData> collectJiraIssuesMetaData(final AbstractBuild<?, ?> build,
-			final TaskListener taskListener) {
+	private Set<JiraIssueMetaData> collectJiraIssuesMetaData(
+			final AbstractBuild<?, ?> build, final TaskListener taskListener) {
 		Set<String> jiraIssuesIds = getJiraIssuesIds(build, taskListener);
-		Set<JiraIssueMetaData> jiraIssues = new TreeSet<JiraIssueMetaData>(jiraIssueIdComparator);
+		Set<JiraIssueMetaData> jiraIssues = new TreeSet<JiraIssueMetaData>(
+				jiraIssueIdComparator);
 
 		for (JiraSite jiraSite : getJiraSites(taskListener)) {
-			populateJiraIssues(jiraSite, jiraIssuesIds, taskListener, jiraIssues);
+			populateJiraIssues(jiraSite, jiraIssuesIds, taskListener,
+					jiraIssues);
 		}
 
 		return jiraIssues;
 	}
 
-	private Set<String> getJiraIssuesIds(final AbstractBuild<?, ?> build, final TaskListener taskListener) {
+	private Set<String> getJiraIssuesIds(final AbstractBuild<?, ?> build,
+			final TaskListener taskListener) {
 		Set<String> jiraIssuesIds = new TreeSet<>();
 
-		for (Entry buildChange : buildChangesCollector.collect(build, taskListener)) {
-			Set<String> issuesIds = extractJiraIssuesIdsFrom(buildChange, taskListener);
+		for (Entry buildChange : buildChangesCollector.collect(build,
+				taskListener)) {
+			Set<String> issuesIds = extractJiraIssuesIdsFrom(buildChange,
+					taskListener);
 			if (issuesIds != null) {
 				jiraIssuesIds.addAll(issuesIds);
 			}
@@ -82,7 +87,8 @@ public class JiraMetaDataCollector implements Collector<Set<JiraIssueMetaData>> 
 		return jiraIssuesIds;
 	}
 
-	private Set<String> extractJiraIssuesIdsFrom(final Entry buildChange, final TaskListener taskListener) {
+	private Set<String> extractJiraIssuesIdsFrom(final Entry buildChange,
+			final TaskListener taskListener) {
 		Set<String> issuesIds = new TreeSet<>();
 
 		for (Pattern pattern : getAllIssuePatterns(taskListener)) {
@@ -114,13 +120,17 @@ public class JiraMetaDataCollector implements Collector<Set<JiraIssueMetaData>> 
 		return descriptor.getSites();
 	}
 
-	private void populateJiraIssues(final JiraSite jiraSite, final Set<String> jiraIssuesIds,
-			final TaskListener taskListener, final Set<JiraIssueMetaData> jiraIssues) {
+	private void populateJiraIssues(final JiraSite jiraSite,
+			final Set<String> jiraIssuesIds, final TaskListener taskListener,
+			final Set<JiraIssueMetaData> jiraIssues) {
 
-		try (JiraRestClient restClient = getJiraRestClient(jiraSite, taskListener)) {
+		try (JiraRestClient restClient = getJiraRestClient(jiraSite,
+				taskListener)) {
 			for (String jiraIssueId : jiraIssuesIds) {
-				Issue issue = restClient.getIssueClient().getIssue(jiraIssueId).claim();
-				jiraIssues.add(new JiraIssueMetaData(issue.getKey(), issue.getSummary(), issue.getStatus().getName()));
+				Issue issue = restClient.getIssueClient().getIssue(jiraIssueId)
+						.claim();
+				jiraIssues.add(new JiraIssueMetaData(issue.getKey(), issue
+						.getSummary(), issue.getStatus().getName()));
 			}
 		} catch (IOException ex) {
 			String cannotCloseClientMsg = "Cannot close the JIRA Rest Client instanse.";
@@ -129,19 +139,24 @@ public class JiraMetaDataCollector implements Collector<Set<JiraIssueMetaData>> 
 		}
 	}
 
-	private JiraRestClient getJiraRestClient(final JiraSite jiraSite, final TaskListener taskListener) {
-		AuthenticationHandler authenticationHandler = new BasicHttpAuthenticationHandler(jiraSite.userName,
-				jiraSite.password);
+	private JiraRestClient getJiraRestClient(final JiraSite jiraSite,
+			final TaskListener taskListener) {
+		AuthenticationHandler authenticationHandler = new BasicHttpAuthenticationHandler(
+				jiraSite.userName, jiraSite.password);
 		JiraRestClientFactory restClientFactory = new AsynchronousJiraRestClientFactory();
-		return restClientFactory.create(getJiraUri(jiraSite, taskListener), authenticationHandler);
+		return restClientFactory.create(getJiraUri(jiraSite, taskListener),
+				authenticationHandler);
 	}
 
-	private URI getJiraUri(final JiraSite jiraSite, final TaskListener taskListener) {
+	private URI getJiraUri(final JiraSite jiraSite,
+			final TaskListener taskListener) {
 		URI jiraUri = null;
 		try {
 			jiraUri = jiraSite.url.toURI();
 		} catch (URISyntaxException ex) {
-			String uriSyntaxExceptionMsg = format("JIRA site URL %s cannot be converted to a URI.\n", jiraSite.url);
+			String uriSyntaxExceptionMsg = format(
+					"JIRA site URL %s cannot be converted to a URI.\n",
+					jiraSite.url);
 			log.log(Level.SEVERE, uriSyntaxExceptionMsg);
 			taskListener.getLogger().append(uriSyntaxExceptionMsg + "\n" + ex);
 		}
