@@ -1,0 +1,262 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:g="glide" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:define="jelly:define" >
+	<link href="${it.resourceUrl}/plugin/deployment-sphere/css/bootstrap.min.css" rel="stylesheet"/>
+	<link href="${it.resourceUrl}/plugin/deployment-sphere/css/styles.css" rel="stylesheet" />
+	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/jquery-1.11.2.min.js"></script>
+	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/bootstrap.min.js"></script>
+
+
+
+	<l:layout title="Commit Sphere">
+		<st:include page="sidepanel.jelly"/>
+		<l:main-panel>
+			<div class="col-xs-12 col-md-22 main-panel-content">
+				<div>
+					<span class="plugin-panel-title">Application builds</span>
+					<span class="plugin-panel-header-datails">${it.applications.size()} Total applications</span>
+				</div>
+				
+				
+				
+				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					<div class="env-panel-header" role="tab" id="heading">
+						<span class="env-panel-title" id = "headerAppName">Application 1</span>
+						<span class="env-panel-details" id = "headerAppNum">No Builds</span>
+					</div>
+					<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>selected</th>
+									<th>${%Build Version}</th>
+									<th>${%Application}</th>
+									<th>${%Build Job}</th>
+									<th>${%Build Time}</th>
+								</tr>
+							</thead>
+							<tbody id = "appTableBody">
+							</tbody>
+					</table>
+					
+				</div>
+				<form action="" id = "radios" onchange = "redrawInfoTable()">
+							<input type="radio" name="radioB" id="radioCommits" value="commits" disabled="true" checked="checked">Commits</input>
+							<input type="radio" name="radioB" id="radioTickets" value="tickets" disabled="true">Tickets</input>
+					</form>
+					<table id = "buildInfoTable" class="table table-striped">
+						<thead id = "tableHead"/>
+						<tbody id = "tableBody"/>
+					</table>
+			</div>
+		</l:main-panel>
+	</l:layout>
+	
+	<script>
+		
+		function createTableHeaderCell(text, row){
+			var cell = document.createElement('th');
+			var cellText = document.createTextNode(text);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+		}
+		
+		function createTableCell(text, row){
+			var cell = document.createElement('td');
+			var cellText = document.createTextNode(text);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+		}
+		
+		function getAppTitleFromUrl(){
+			var currentURL = document.URL;
+			var equalsIndex = currentURL.lastIndexOf('=') + 1;
+			if (equalsIndex>0){
+				return currentURL.substring(equalsIndex);
+			}else if ('${it.applications.size()}'>0){
+				return '${it.applications[0].applicationName}';
+			}else{
+				return '';
+			}
+		}
+		
+		function getBuilds(){
+			var str = '${it.builds}';
+			return JSON.parse(str);
+		}
+		
+		function mockMetaData(index){
+			var currInfo =  {'commits':[{'author':'TarasPavliuchyn','id':'2692ff7612f9d0e6b03c206844c2093f590de211','message':'added comment'},{'author':'TarasPavliuchyn','id':'71afb9f6064d70fbcd2534761fbee365691aa154','message':'added error'}],'tickets':[{'id':'1','title':'Some Job'},{'id':'2','title':'Some Job'}]};
+			currInfo.commits[0].message += index;
+			currInfo.tickets[0].title += index;
+			return currInfo;
+		}
+		
+		function filterBuildsForApp(builds, appTitle, minBuildNum, maxBuildNum){
+			currentBuilds = [];
+			for (var index = builds.length - 1; index > 0 ; index--){
+				if (builds[index].applicationName == appTitle &amp;&amp; builds[index].number > minBuildNum &amp;&amp; maxBuildNum >= builds[index].number){
+					currentBuilds.push(builds[index]);
+				}
+			}
+			return currentBuilds;
+		}
+		
+		function getBuildsForApp(builds, appTitle){
+			currentBuilds = [];
+			for (var index = builds.length - 1; index > 0 ; index--){
+				if (builds[index].applicationName == appTitle){
+					currentBuilds.push(builds[index]);
+				}
+			}
+			return currentBuilds;
+		}
+		
+		
+		function getMinMaxChecked(arr){
+			var checkedNumArr = [];
+			for (var cbNum = 0; arr.length>cbNum; cbNum++){
+				if (arr[cbNum].checked){
+					checkedNumArr.push(arr[cbNum].id);
+				}
+			}
+			var buildNum = {min:0, max:0};
+			buildNum.min = Math.min.apply(Math, checkedNumArr);
+			buildNum.max = Math.max.apply(Math, checkedNumArr);
+			return buildNum;
+		}
+		
+		function appendMetaDataTableBodyRows(tableBody, arr){
+			for (var i = 0; arr.length >i; i++){
+				var row = document.createElement('tr');
+				var metaDataEntry = arr[i];
+				
+				for (var key in metaDataEntry) {
+					createTableCell(metaDataEntry[key], row)
+				}
+				tableBody.appendChild(row);
+			}
+		}
+		
+		function redrawInfoTable(){
+				
+				var appTitle = getAppTitleFromUrl();
+				var builds = getBuilds();
+				for (var index = 0; builds.length > index ; index++){
+					builds[index].metaData = mockMetaData(index);
+				}
+				
+				var arr = document.getElementsByName('chBox');
+				var buildMinMaxNum = getMinMaxChecked(arr);
+				currentBuilds = filterBuildsForApp(builds, appTitle, buildMinMaxNum.min, buildMinMaxNum.max);
+				
+				if (currentBuilds.length == 0)
+					return;
+				
+				var table = document.getElementById('buildInfoTable');
+				var head = document.createElement('thead');
+				var tableBody = document.createElement('tbody');
+				var headRow = document.createElement('tr');
+				
+				var info = currentBuilds[0].metaData;
+				
+				if (document.getElementById('radioCommits').checked){
+					createTableHeaderCell('author', headRow);
+					createTableHeaderCell('id', headRow);
+					createTableHeaderCell('message', headRow);
+					head.appendChild(headRow);
+					for (var index = 0; currentBuilds.length > index ; index++){
+						var commits = currentBuilds[index].metaData.commits;
+						appendMetaDataTableBodyRows(tableBody, commits);
+					}
+					
+				}else{
+					
+					createTableHeaderCell('id', headRow);
+					createTableHeaderCell('title', headRow);
+					head.appendChild(headRow);
+					for (var index = 0; currentBuilds.length > index ; index++){
+						var tickets = currentBuilds[index].metaData.tickets;
+						appendMetaDataTableBodyRows(tableBody, tickets);
+					}
+				}
+				table.replaceChild(head, document.getElementById('tableHead'));
+				table.replaceChild(tableBody, document.getElementById('tableBody'));
+				head.id = 'tableHead';
+				tableBody.id = 'tableBody';
+
+		}
+		
+		var appTitle = getAppTitleFromUrl();
+		var builds = getBuilds();
+		var accordion = document.getElementById('accordion');
+		var tableBody = document.getElementById('appTableBody');
+		
+		var buildList = getBuildsForApp(builds, appTitle);
+		
+		document.getElementById('headerAppName').innerHTML = appTitle;
+		document.getElementById('headerAppNum').innerHTML = buildList.length + ' Builds';
+		
+		for (var buildNum = buildList.length-1; buildNum >=0; buildNum--){
+			
+
+			var row = document.createElement('tr');
+			
+			// create checkbox column
+			var cell = document.createElement('td');
+			var box = document.createElement('input');
+			box.type = 'checkbox';
+			box.name = 'chBox';
+			box.id = buildList[buildNum].number;
+			box.onclick = function(){
+			
+				var counter = 0;
+				var arr = document.getElementsByName('chBox');
+				var radios = document.getElementsByName('radioB');
+				var unCheckedArr = [];
+				for (var cbNum = arr.length-1; cbNum>=0; cbNum--){
+					if (arr[cbNum].checked){
+						counter++;
+					}else{
+						unCheckedArr.push(arr[cbNum]);
+					}
+				}
+				if (counter >= 2){
+					for (var cbNum = unCheckedArr.length-1; cbNum>=0; cbNum--){
+						unCheckedArr[cbNum].disabled = true;
+					}
+					radios[0].disabled = false;
+					radios[1].disabled = false;
+					redrawInfoTable();
+				}else{
+					for (var cbNum = arr.length-1; cbNum>=0; cbNum--){
+						arr[cbNum].disabled = false;
+					}
+					radios[0].disabled = true;
+					radios[1].disabled = true;
+				}
+
+			
+			};
+			cell.appendChild(box);
+			row.appendChild(cell);
+			
+			// create other columns
+			createTableCell(buildList[buildNum].buildVersion, row);
+			createTableCell(buildList[buildNum].applicationName, row);
+			
+			cell =  document.createElement('td');
+			var a = document.createElement('a');
+			a.href =  '/'+buildList[buildNum].buildUrl;
+			a.innerHTML = buildList[buildNum].jobName +" #"+ buildList[buildNum].number;
+			cell.appendChild(a);
+			row.appendChild(cell);
+			
+			createTableCell(buildList[buildNum].builtAt, row);
+			
+			tableBody.appendChild(row);
+		}
+		
+
+	</script>
+
+</j:jelly>

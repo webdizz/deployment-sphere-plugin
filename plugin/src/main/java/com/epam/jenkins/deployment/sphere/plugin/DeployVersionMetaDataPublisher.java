@@ -33,10 +33,6 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
 
     @DataBoundSetter
     private String deployedAppName;
-    @Inject
-    private EnvironmentDao environmentDao;
-    @Inject
-    private BuildMetaDataDao buildMetaDataDao;
 
     @DataBoundConstructor
     public DeployVersionMetaDataPublisher() {

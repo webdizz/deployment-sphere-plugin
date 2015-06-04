@@ -1,6 +1,10 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import com.google.common.collect.Lists;
 
@@ -31,17 +35,20 @@ import java.util.List;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
-public class DeploymentSphereDashboardAction implements RootAction, AccessControlled{
+public class CommitSphereDashboardAction implements RootAction, AccessControlled{
 
 	
 	
     @Inject
-    private EnvironmentDao environmentDao;
+    private ApplicationDao applicationDao;
+    
+    @Inject
+    private BuildMetaDataDao buildMetaDataDao;
 
     public String environment = "";
     
     @DataBoundConstructor
-    public DeploymentSphereDashboardAction() {
+    public CommitSphereDashboardAction() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
@@ -52,13 +59,13 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
 
     @Override
     public String getDisplayName() {
-        return Messages.plugin_title();
+        return "Commit Sphere";
     }
 
 
 	@Override
     public String getUrlName() {
-        return "/"+ PluginConstants.PLUGIN_CONTEXT;
+        return "/"+ "commit-sphere";
     }
 
     @Exported
@@ -66,50 +73,17 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
         return Functions.getResourcePath();
     }
 
+    
     @Exported
-    public Collection<EnvironmentMetaData> getEnvironments(@QueryParameter String environmentTitle) {
-    	Collection<EnvironmentMetaData> environments = environmentDao.findAll();
-		List<EnvironmentMetaData> list = Lists.newArrayList();
-		for (EnvironmentMetaData environment: environments){
-			if (environment.getTitle().equals(environmentTitle)){
-				list.add(environment);
-			}
-		}
-		if (list.isEmpty()) list.addAll(environments);
-		return list;
+    public Collection<ApplicationMetaData> getApplications() {
+		return applicationDao.findAll();
     }
     
     @Exported
-    public Collection<EnvironmentMetaData> getEnvironments() {
-		return environmentDao.findAll();
+    public Collection<BuildMetaData> getBuilds() {
+		return buildMetaDataDao.findAll();
     }
     
-//    @Extension
-//    public static final DeploymentSphereDashboardActionDescriptorImpl DESCRIPTOR = new DeploymentSphereDashboardActionDescriptorImpl();
-//    
-//    @Extension
-//	public static final class DeploymentSphereDashboardActionDescriptorImpl extends Descriptor<DeploymentSphereDashboardAction> {
-//    	
-//    	 public DeploymentSphereDashboardActionDescriptorImpl() {
-//             load();
-//         }
-//
-//	    public ListBoxModel doFillEnvironmentItems() {
-////    	ArrayList<ListBoxModel.Option> options = new ArrayList<>();
-////    	for (EnvironmentMetaData environment: getEnvironments()){
-////    		options.add(new ListBoxModel.Option(environment.getTitle(), environment.getTitle(), selection.matches(environment.getTitle())));
-////    	}
-//        return new ListBoxModel(new ListBoxModel.Option("1.13", "1.13"),
-//                new ListBoxModel.Option("1.14", "1.14"),
-//                new ListBoxModel.Option("1.15", "1.15"));
-//	    }
-//
-//		@Override
-//		public String getDisplayName() {
-//			return "";
-//		}
-//	}
-
     @Nonnull
     @Override
     public ACL getACL() {
@@ -127,10 +101,6 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
         return getACL().hasPermission(permission);
     }
 
-//	@Override
-//	public Descriptor<DeploymentSphereDashboardAction> getDescriptor() {
-//		return DESCRIPTOR;
-//	}
 	
 	
     

@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 
 import lombok.Data;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
 
+import java.io.IOException;
 import java.util.List;
 
 @Data
@@ -32,4 +34,13 @@ public class EnvironmentMetaData {
 		this.deployments = deployments;
 	}
     
+    @Override
+    public String toString() {
+        String toString = null;
+        try {
+            toString =  new ObjectMapper().writeValueAsString(this);
+        } catch (IOException e) {
+        }
+        return toString;
+    }
 }
