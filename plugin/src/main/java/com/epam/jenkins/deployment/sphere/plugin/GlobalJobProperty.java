@@ -28,10 +28,10 @@ public class GlobalJobProperty extends JobProperty<AbstractProject<?, ?>> {
 		private static final String DESCRIPTOR_DISPLAY_NAME = "Deployment Sphere";
 
 		@Inject
-		private transient EnvironmentDao environmentDao;
+		private EnvironmentDao environmentDao;
 		
 		@Inject
-		private transient ApplicationDao applicationDao;
+		private ApplicationDao applicationDao;
 
 		private Converter<Application, ApplicationMetaData> applicationConverter = new Converter<Application, ApplicationMetaData>(){
 			@Override

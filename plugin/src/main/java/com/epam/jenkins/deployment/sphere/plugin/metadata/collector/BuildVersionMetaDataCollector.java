@@ -7,6 +7,8 @@ import hudson.model.AbstractBuild;
 import hudson.scm.ChangeLogSet;
 
 import java.io.PrintStream;
+import java.util.Collections;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -14,58 +16,81 @@ import lombok.extern.java.Log;
 
 import org.joda.time.DateTime;
 
+import com.epam.jenkins.deployment.sphere.plugin.JiraInjectionFactory;
 import com.epam.jenkins.deployment.sphere.plugin.PluginInjector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.jira.JiraMetaDataCollector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.JiraIssueMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.scm.CommitMetaDataCollector;
 import com.epam.jenkins.deployment.sphere.plugin.utils.DateFormatUtil;
 import com.epam.jenkins.deployment.sphere.plugin.utils.EnvVarsResolver;
 import com.google.common.base.Strings;
 
 @Log
 public class BuildVersionMetaDataCollector implements Collector<BuildMetaData> {
-	
-    @Inject
-    private BuildMetaDataDao metadataDao;
 
-    public BuildVersionMetaDataCollector() {
-        PluginInjector.injectMembers(this);
-    }
+	@Inject
+	private JiraInjectionFactory jiraInjectionFactory;
 
-    @Override
-    public BuildMetaData collect(AbstractBuild<?, ?> build, final TaskListener listener) {
-        Long buildNumber = (long) build.getNumber();
-        PrintStream logger = listener.getLogger();
-        final String thisClassName = getClass().getName();
+	@Inject
+	private BuildMetaDataDao metadataDao;
 
-        logger.append(String.format("[%s]Build type: %s\n", thisClassName, build.getClass().getName()));
-        logger.append(String.format("[%s]Build instance: %s\n", thisClassName, build));
+	@Inject
+	private CommitMetaDataCollector commitMetaDataCollector;
 
-        logger.append(String.format("[%s]Build Listener type: %s\n", thisClassName, listener.getClass().getName()));
-        logger.append(String.format("[%s]Build Listener instance: %s\n", thisClassName, listener));
+	public BuildVersionMetaDataCollector() {
+		PluginInjector.injectMembers(this);
+	}
 
-        String buildId = build.getId();
-        ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry> changeSet = build.getChangeSet();
-        log.fine(format("Resolved build buildNumber: %s, build id: %s, changeSet emptiness: %s", buildNumber, buildId,
-                changeSet.isEmptySet()));
+	@Override
+	public BuildMetaData collect(AbstractBuild<?, ?> build, final TaskListener listener) {
+		Long buildNumber = (long) build.getNumber();
+		PrintStream logger = listener.getLogger();
+		final String thisClassName = getClass().getName();
 
-        final BuildMetaData buildMetaData = new BuildMetaData();
-        buildMetaData.setNumber(buildNumber);
-        buildMetaData.setJobName(build.getDisplayName());
-        buildMetaData.setBuiltAt(DateFormatUtil.formatDate(new DateTime(build.due())));
+		logger.append(String.format("[%s]Build type: %s\n", thisClassName, build.getClass().getName()));
+		logger.append(String.format("[%s]Build instance: %s\n", thisClassName, build));
 
-        final EnvVarsResolver envResolver = new EnvVarsResolver(build, listener);
+		logger.append(String.format("[%s]Build Listener type: %s\n", thisClassName, listener.getClass().getName()));
+		logger.append(String.format("[%s]Build Listener instance: %s\n", thisClassName, listener));
 
-        final String buildVersion = envResolver.getValue(Constants.BUILD_VERSION);
-        checkState(!Strings.isNullOrEmpty(buildVersion), String.format("Build version '%s' is not valid", buildVersion));
-        buildMetaData.setBuildVersion(buildVersion);
+		String buildId = build.getId();
+		ChangeLogSet<? extends hudson.scm.ChangeLogSet.Entry> changeSet = build.getChangeSet();
+		log.fine(format("Resolved build buildNumber: %s, build id: %s, changeSet emptiness: %s", buildNumber, buildId,
+				changeSet.isEmptySet()));
 
-        final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
-        checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
-        buildMetaData.setApplicationName(appName);
-        buildMetaData.setBuildUrl(build.getUrl());
+		final BuildMetaData buildMetaData = new BuildMetaData();
+		buildMetaData.setNumber(buildNumber);
+		buildMetaData.setJobName(build.getDisplayName());
+		buildMetaData.setBuiltAt(DateFormatUtil.formatDate(new DateTime(build.due())));
 
-        metadataDao.save(buildMetaData);
-        return buildMetaData;
-    }
+		final EnvVarsResolver envResolver = new EnvVarsResolver(build, listener);
+
+		final String buildVersion = envResolver.getValue(Constants.BUILD_VERSION);
+		checkState(!Strings.isNullOrEmpty(buildVersion), String.format("Build version '%s' is not valid", buildVersion));
+		buildMetaData.setBuildVersion(buildVersion);
+
+		final String appName = envResolver.getValue(Constants.BUILD_APP_NAME);
+		checkState(!Strings.isNullOrEmpty(appName), String.format("App Name '%s' is not valid", appName));
+		buildMetaData.setApplicationName(appName);
+		buildMetaData.setBuildUrl(build.getUrl());
+		MetaData metaData = new MetaData();
+		metaData.setCommits(commitMetaDataCollector.collect(build, listener));
+		metaData.setTickets(populateTickets(build, listener));
+		buildMetaData.setMetaData(metaData);
+		metadataDao.save(buildMetaData);
+		return buildMetaData;
+	}
+
+	private Set<JiraIssueMetaData> populateTickets(AbstractBuild<?, ?> build, final TaskListener listener) {
+		Set<JiraIssueMetaData> tickets = Collections.emptySet();
+		JiraMetaDataCollector jiraMetaDataCollector = jiraInjectionFactory.getJiraMetaDataCollector();
+		if (jiraMetaDataCollector != null) {
+			tickets.addAll((jiraMetaDataCollector.collect(build, listener)));
+		}
+		return tickets;
+	}
 }

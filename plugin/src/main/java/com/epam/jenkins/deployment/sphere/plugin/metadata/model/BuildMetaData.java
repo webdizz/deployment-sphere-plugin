@@ -26,7 +26,9 @@ public class BuildMetaData extends ApplicationMetaData {
     private String buildVersion;
     @Exported
     private String buildUrl;
-    
+    @Exported
+    private MetaData metaData;
+
     @Override
     public String toString() {
         String toString = null;

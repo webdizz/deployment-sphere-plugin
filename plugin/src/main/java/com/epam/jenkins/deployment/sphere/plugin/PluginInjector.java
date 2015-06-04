@@ -9,10 +9,15 @@ import lombok.extern.java.Log;
 public class PluginInjector {
 	public static void injectMembers(Object target) {
 		Jenkins instance = Jenkins.getInstance();
-		if(instance == null){
+		if (instance == null) {
 			log.log(Level.SEVERE, "Jenkins Instance cannot be loaded");
 		} else {
-			instance.getInjector().injectMembers(target);
+			try {
+				instance.getInjector().injectMembers(target);
+			} catch (Throwable ex) {
+				log.log(Level.WARNING,
+						"JIRA Plugin, which should provide connection to JIRA, is not installed, so JIRA metadata cannot be obtained.");
+			}
 		}
 	}
 }
