@@ -104,6 +104,7 @@ public class EnvironmentDao extends GenericDao {
 	         cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
 	         cqBuild.setJobName(foundBuild.getApplicationName());
 	         cqBuild.setBuildUrl(foundBuild.getBuildUrl());
+	         cqBuild.setMetaData(foundBuild.getMetaData());
          }
          return cqBuild;
     }

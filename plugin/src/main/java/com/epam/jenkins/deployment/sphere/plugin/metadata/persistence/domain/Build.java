@@ -1,7 +1,10 @@
 package com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.domain;
 
-import org.joda.time.DateTime;
 import lombok.Data;
+
+import org.joda.time.DateTime;
+
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 
 @Data
 public class Build {
@@ -10,4 +13,5 @@ public class Build {
     private String buildUrl;
     private Long buildNumber;
     private DateTime builtAt;
+    private MetaData metaData;
 }
