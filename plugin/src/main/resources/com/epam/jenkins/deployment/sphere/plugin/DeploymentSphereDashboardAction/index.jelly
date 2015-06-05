@@ -30,7 +30,12 @@
 			var envStr = '${it.environments}';
 			return JSON.parse(envStr);
 		}
+		function getBuildVersion(){return '${%Build Version}'}
+		function getApplication(){return '${%Application}'}
+		function getDeploymentTime(){return '${%Deployment Time}'}
+		function getBuildJob(){return '${%Build Job}'}
+		function getBuildTime(){return '${%Build Time}'}
 	</script>
-	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/dDynamicGeneration.js"></script>
+	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/deployDynamicGeneration.js"></script>
 
 </j:jelly>
