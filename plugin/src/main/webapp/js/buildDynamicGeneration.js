@@ -1,58 +1,3 @@
-<?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:g="glide" xmlns:l="/lib/layout"
-         xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:define="jelly:define" >
-	<link href="${it.resourceUrl}/plugin/deployment-sphere/css/bootstrap.min.css" rel="stylesheet"/>
-	<link href="${it.resourceUrl}/plugin/deployment-sphere/css/styles.css" rel="stylesheet" />
-	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/jquery-1.11.2.min.js"></script>
-	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/bootstrap.min.js"></script>
-
-
-
-	<l:layout title="Commit Sphere">
-		<st:include page="sidepanel.jelly"/>
-		<l:main-panel>
-			<div class="col-xs-12 col-md-22 main-panel-content">
-				<div>
-					<span class="plugin-panel-title">Application builds</span>
-					<span class="plugin-panel-header-datails">${it.applications.size()} Total applications</span>
-				</div>
-				
-				
-				
-				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-					<div class="env-panel-header" role="tab" id="heading">
-						<span class="env-panel-title" id = "headerAppName">Application 1</span>
-						<span class="env-panel-details" id = "headerAppNum">No Builds</span>
-					</div>
-					<table class="table table-striped">
-							<thead>
-								<tr>
-									<th>selected</th>
-									<th>${%Build Version}</th>
-									<th>${%Application}</th>
-									<th>${%Build Job}</th>
-									<th>${%Build Time}</th>
-								</tr>
-							</thead>
-							<tbody id = "appTableBody">
-							</tbody>
-					</table>
-					
-				</div>
-				<form action="" id = "radios" onchange = "redrawInfoTable()">
-							<input type="radio" name="radioB" id="radioCommits" value="commits" disabled="true" checked="checked">Commits</input>
-							<input type="radio" name="radioB" id="radioTickets" value="tickets" disabled="true">Tickets</input>
-					</form>
-					<table id = "buildInfoTable" class="table table-striped">
-						<thead id = "tableHead"/>
-						<tbody id = "tableBody"/>
-					</table>
-			</div>
-		</l:main-panel>
-	</l:layout>
-	
-	<script>
-		
 		function createTableHeaderCell(text, row){
 			var cell = document.createElement('th');
 			var cellText = document.createTextNode(text);
@@ -67,34 +12,12 @@
 			row.appendChild(cell);
 		}
 		
-		function getAppTitleFromUrl(){
-			var currentURL = document.URL;
-			var equalsIndex = currentURL.lastIndexOf('=') + 1;
-			if (equalsIndex>0){
-				return currentURL.substring(equalsIndex);
-			}else if ('${it.applications.size()}'>0){
-				return '${it.applications[0].applicationName}';
-			}else{
-				return '';
-			}
-		}
 		
-		function getBuilds(){
-			var str = '${it.builds}';
-			return JSON.parse(str);
-		}
-		
-		function mockMetaData(index){
-			var currInfo =  {'commits':[{'author':'TarasPavliuchyn','id':'2692ff7612f9d0e6b03c206844c2093f590de211','message':'added comment'},{'author':'TarasPavliuchyn','id':'71afb9f6064d70fbcd2534761fbee365691aa154','message':'added error'}],'tickets':[{'id':'1','title':'Some Job'},{'id':'2','title':'Some Job'}]};
-			currInfo.commits[0].message += index;
-			currInfo.tickets[0].title += index;
-			return currInfo;
-		}
 		
 		function filterBuildsForApp(builds, appTitle, minBuildNum, maxBuildNum){
 			currentBuilds = [];
 			for (var index = builds.length - 1; index > 0 ; index--){
-				if (builds[index].applicationName == appTitle &amp;&amp; builds[index].number > minBuildNum &amp;&amp; maxBuildNum >= builds[index].number){
+				if (builds[index].applicationName == appTitle && builds[index].number > minBuildNum && maxBuildNum >= builds[index].number){
 					currentBuilds.push(builds[index]);
 				}
 			}
@@ -141,9 +64,6 @@
 				
 				var appTitle = getAppTitleFromUrl();
 				var builds = getBuilds();
-				for (var index = 0; builds.length > index ; index++){
-					builds[index].metaData = mockMetaData(index);
-				}
 				
 				var arr = document.getElementsByName('chBox');
 				var buildMinMaxNum = getMinMaxChecked(arr);
@@ -179,13 +99,17 @@
 						appendMetaDataTableBodyRows(tableBody, tickets);
 					}
 				}
-				table.replaceChild(head, document.getElementById('tableHead'));
+				if (tableBody.childNodes.length>0){
+					table.replaceChild(head, document.getElementById('tableHead'));
+				}
 				table.replaceChild(tableBody, document.getElementById('tableBody'));
 				head.id = 'tableHead';
 				tableBody.id = 'tableBody';
 
 		}
 		
+		
+		// generate appTable
 		var appTitle = getAppTitleFromUrl();
 		var builds = getBuilds();
 		var accordion = document.getElementById('accordion');
@@ -256,7 +180,3 @@
 			tableBody.appendChild(row);
 		}
 		
-
-	</script>
-
-</j:jelly>

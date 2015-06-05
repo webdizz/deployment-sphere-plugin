@@ -38,7 +38,6 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
     @Inject
     private EnvironmentDao environmentDao;
 
-    public String environment = "";
     
     @DataBoundConstructor
     public DeploymentSphereDashboardAction() {
@@ -65,50 +64,13 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
     public String getResourceUrl() {
         return Functions.getResourcePath();
     }
-
-    @Exported
-    public Collection<EnvironmentMetaData> getEnvironments(@QueryParameter String environmentTitle) {
-    	Collection<EnvironmentMetaData> environments = environmentDao.findAll();
-		List<EnvironmentMetaData> list = Lists.newArrayList();
-		for (EnvironmentMetaData environment: environments){
-			if (environment.getTitle().equals(environmentTitle)){
-				list.add(environment);
-			}
-		}
-		if (list.isEmpty()) list.addAll(environments);
-		return list;
-    }
+    
     
     @Exported
     public Collection<EnvironmentMetaData> getEnvironments() {
 		return environmentDao.findAll();
     }
     
-//    @Extension
-//    public static final DeploymentSphereDashboardActionDescriptorImpl DESCRIPTOR = new DeploymentSphereDashboardActionDescriptorImpl();
-//    
-//    @Extension
-//	public static final class DeploymentSphereDashboardActionDescriptorImpl extends Descriptor<DeploymentSphereDashboardAction> {
-//    	
-//    	 public DeploymentSphereDashboardActionDescriptorImpl() {
-//             load();
-//         }
-//
-//	    public ListBoxModel doFillEnvironmentItems() {
-////    	ArrayList<ListBoxModel.Option> options = new ArrayList<>();
-////    	for (EnvironmentMetaData environment: getEnvironments()){
-////    		options.add(new ListBoxModel.Option(environment.getTitle(), environment.getTitle(), selection.matches(environment.getTitle())));
-////    	}
-//        return new ListBoxModel(new ListBoxModel.Option("1.13", "1.13"),
-//                new ListBoxModel.Option("1.14", "1.14"),
-//                new ListBoxModel.Option("1.15", "1.15"));
-//	    }
-//
-//		@Override
-//		public String getDisplayName() {
-//			return "";
-//		}
-//	}
 
     @Nonnull
     @Override
@@ -127,10 +89,6 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
         return getACL().hasPermission(permission);
     }
 
-//	@Override
-//	public Descriptor<DeploymentSphereDashboardAction> getDescriptor() {
-//		return DESCRIPTOR;
-//	}
 	
 	
     

@@ -35,7 +35,7 @@ import java.util.List;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
-public class CommitSphereDashboardAction implements RootAction, AccessControlled{
+public class BuildSphereDashboardAction implements RootAction, AccessControlled{
 
 	
 	
@@ -48,7 +48,7 @@ public class CommitSphereDashboardAction implements RootAction, AccessControlled
     public String environment = "";
     
     @DataBoundConstructor
-    public CommitSphereDashboardAction() {
+    public BuildSphereDashboardAction() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
@@ -59,13 +59,13 @@ public class CommitSphereDashboardAction implements RootAction, AccessControlled
 
     @Override
     public String getDisplayName() {
-        return "Commit Sphere";
+        return Messages.build_plugin_title();
     }
 
 
 	@Override
     public String getUrlName() {
-        return "/"+ "commit-sphere";
+        return "/"+ PluginConstants.BUILD_PLUGIN_CONTEXT;
     }
 
     @Exported
