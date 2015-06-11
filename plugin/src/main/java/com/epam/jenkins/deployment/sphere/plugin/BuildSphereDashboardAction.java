@@ -1,6 +1,10 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import com.google.common.collect.Lists;
 
@@ -31,16 +35,20 @@ import java.util.List;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
-public class DeploymentSphereDashboardAction implements RootAction, AccessControlled{
+public class BuildSphereDashboardAction implements RootAction, AccessControlled{
 
 	
 	
     @Inject
-    private EnvironmentDao environmentDao;
+    private ApplicationDao applicationDao;
+    
+    @Inject
+    private BuildMetaDataDao buildMetaDataDao;
 
+    public String environment = "";
     
     @DataBoundConstructor
-    public DeploymentSphereDashboardAction() {
+    public BuildSphereDashboardAction() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
 
@@ -51,27 +59,31 @@ public class DeploymentSphereDashboardAction implements RootAction, AccessContro
 
     @Override
     public String getDisplayName() {
-        return Messages.plugin_title();
+        return Messages.build_plugin_title();
     }
 
 
 	@Override
     public String getUrlName() {
-        return "/"+ PluginConstants.PLUGIN_CONTEXT;
+        return "/"+ PluginConstants.BUILD_PLUGIN_CONTEXT;
     }
 
     @Exported
     public String getResourceUrl() {
         return Functions.getResourcePath();
     }
-    
+
     
     @Exported
-    public Collection<EnvironmentMetaData> getEnvironments() {
-		return environmentDao.findAll();
+    public Collection<ApplicationMetaData> getApplications() {
+		return applicationDao.findAll();
     }
     
-
+    @Exported
+    public Collection<BuildMetaData> getBuilds() {
+		return buildMetaDataDao.findAll();
+    }
+    
     @Nonnull
     @Override
     public ACL getACL() {

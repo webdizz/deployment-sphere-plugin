@@ -38,6 +38,22 @@ public class BuildMetaDataDao extends GenericDao {
         }
     }
 
+    public Collection<BuildMetaData> findAll() {
+        try (Handle handle = database().open()) {
+            BuildQuery query = handle.attach(BuildQuery.class);
+            List<Build> foundBuilds = query.all();
+            log.fine("Here are all builds");
+            
+            return Lists.transform(foundBuilds, new Function<Build, BuildMetaData>() {
+                @Override
+                public BuildMetaData apply(final Build build) {
+                    return getModelMapper().map(build, BuildMetaData.class);
+                }
+            });
+        }
+    }
+
+    
     public Collection<BuildMetaData> findByAppName(final String applicationName) {
         try (Handle handle = database().open()) {
             BuildQuery query = handle.attach(BuildQuery.class);
