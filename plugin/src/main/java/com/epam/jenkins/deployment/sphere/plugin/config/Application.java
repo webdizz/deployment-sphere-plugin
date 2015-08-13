@@ -12,14 +12,6 @@ public class Application implements Describable<Application> {
 
     private String applicationName;
 
-    public static class DescriptorImpl extends Descriptor<Application> {
-
-        @Override
-        public String getDisplayName() {
-            return "Application";
-        }
-    }
-
     @DataBoundConstructor
     public Application(String applicationName) {
         this.applicationName = applicationName;
@@ -32,5 +24,13 @@ public class Application implements Describable<Application> {
     @Override
     public Descriptor<Application> getDescriptor() {
         return DESCRIPTOR;
+    }
+
+    public static class DescriptorImpl extends Descriptor<Application> {
+
+        @Override
+        public String getDisplayName() {
+            return "Application";
+        }
     }
 }

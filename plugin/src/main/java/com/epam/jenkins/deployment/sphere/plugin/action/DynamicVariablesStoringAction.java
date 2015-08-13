@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import hudson.EnvVars;
+import hudson.model.AbstractBuild;
 import hudson.model.EnvironmentContributingAction;
 import hudson.model.InvisibleAction;
-import hudson.model.AbstractBuild;
 
 public class DynamicVariablesStoringAction extends InvisibleAction implements EnvironmentContributingAction {
 

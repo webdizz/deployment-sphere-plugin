@@ -22,75 +22,75 @@ import com.google.common.collect.Lists;
 
 public class GlobalJobProperty extends JobProperty<AbstractProject<?, ?>> {
 
-	@Extension
-	public static final class CustomViewsTabBarDescriptor extends JobPropertyDescriptor {
+    @Extension
+    public static final class CustomViewsTabBarDescriptor extends JobPropertyDescriptor {
 
-		private static final String DESCRIPTOR_DISPLAY_NAME = "Deployment Sphere";
+        private static final String DESCRIPTOR_DISPLAY_NAME = "Deployment Sphere";
 
-		@Inject
-		private EnvironmentDao environmentDao;
-		
-		@Inject
-		private ApplicationDao applicationDao;
+        @Inject
+        private EnvironmentDao environmentDao;
 
-		private Converter<Application, ApplicationMetaData> applicationConverter = new Converter<Application, ApplicationMetaData>(){
-			@Override
-			protected ApplicationMetaData doForward(Application application) {
-				return new ApplicationMetaData(application.getApplicationName());
-			}
+        @Inject
+        private ApplicationDao applicationDao;
 
-			@Override
-			protected Application doBackward(ApplicationMetaData metaData) {
-				return new Application(metaData.getApplicationName());
-			}
-			
-		};
-		
-		private Converter<Environment, EnvironmentMetaData> environmentConverter = new Converter<Environment, EnvironmentMetaData>(){
-			@Override
-			protected EnvironmentMetaData doForward(Environment environment) {
-				return new EnvironmentMetaData(environment.getTitle(), environment.getTitle());
-			}
+        private Converter<Application, ApplicationMetaData> applicationConverter = new Converter<Application, ApplicationMetaData>() {
+            @Override
+            protected ApplicationMetaData doForward(Application application) {
+                return new ApplicationMetaData(application.getApplicationName());
+            }
 
-			@Override
-			protected Environment doBackward(EnvironmentMetaData metaData) {
-				return new Environment(metaData.getKey());
-			}
-		};
-		
-		public CustomViewsTabBarDescriptor() {
-			super(GlobalJobProperty.class);
-			PluginInjector.injectMembers(this);
-			load();
-		}
-		
-		
-		public List<Application> getApplications() {
-			Collection<ApplicationMetaData> metaDatas = applicationDao.findAll();
-			return Lists.newArrayList(applicationConverter.reverse().convertAll(metaDatas));
-		}
-		
+            @Override
+            protected Application doBackward(ApplicationMetaData metaData) {
+                return new Application(metaData.getApplicationName());
+            }
 
-		public List<Environment> getEnvironments() {
-			Collection<EnvironmentMetaData> metaDatas = environmentDao.findAll();
-			return Lists.newArrayList(environmentConverter.reverse().convertAll(metaDatas));
-		}
+        };
 
-		@Override
-		public String getDisplayName() {
-			return DESCRIPTOR_DISPLAY_NAME;
-		}
+        private Converter<Environment, EnvironmentMetaData> environmentConverter = new Converter<Environment, EnvironmentMetaData>() {
+            @Override
+            protected EnvironmentMetaData doForward(Environment environment) {
+                return new EnvironmentMetaData(environment.getTitle(), environment.getTitle());
+            }
 
-		@Override
-		public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
-			List<Application> applications = req.bindJSONToList(Application.class, formData.get("applications"));
-			applicationDao.saveAll(applicationConverter.convertAll(applications));
-			
-			List<Environment> environments = req.bindJSONToList(Environment.class, formData.get("environments"));
-			environmentDao.saveAll(environmentConverter.convertAll(environments));
-			
-			save();
-			return false;
-		}
-	}
+            @Override
+            protected Environment doBackward(EnvironmentMetaData metaData) {
+                return new Environment(metaData.getKey());
+            }
+        };
+
+        public CustomViewsTabBarDescriptor() {
+            super(GlobalJobProperty.class);
+            PluginInjector.injectMembers(this);
+            load();
+        }
+
+
+        public List<Application> getApplications() {
+            Collection<ApplicationMetaData> metaDatas = applicationDao.findAll();
+            return Lists.newArrayList(applicationConverter.reverse().convertAll(metaDatas));
+        }
+
+
+        public List<Environment> getEnvironments() {
+            Collection<EnvironmentMetaData> metaDatas = environmentDao.findAll();
+            return Lists.newArrayList(environmentConverter.reverse().convertAll(metaDatas));
+        }
+
+        @Override
+        public String getDisplayName() {
+            return DESCRIPTOR_DISPLAY_NAME;
+        }
+
+        @Override
+        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
+            List<Application> applications = req.bindJSONToList(Application.class, formData.get("applications"));
+            applicationDao.saveAll(applicationConverter.convertAll(applications));
+
+            List<Environment> environments = req.bindJSONToList(Environment.class, formData.get("environments"));
+            environmentDao.saveAll(environmentConverter.convertAll(environments));
+
+            save();
+            return false;
+        }
+    }
 }

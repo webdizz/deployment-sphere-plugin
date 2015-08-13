@@ -2,13 +2,12 @@ package com.epam.jenkins.deployment.sphere.plugin.metadata.model;
 
 import java.io.IOException;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -33,7 +32,7 @@ public class BuildMetaData extends ApplicationMetaData {
     public String toString() {
         String toString = null;
         try {
-            toString =  new ObjectMapper().writeValueAsString(this);
+            toString = new ObjectMapper().writeValueAsString(this);
         } catch (IOException e) {
         }
         return toString;

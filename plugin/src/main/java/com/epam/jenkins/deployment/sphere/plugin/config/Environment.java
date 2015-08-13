@@ -10,14 +10,6 @@ public class Environment implements Describable<Environment> {
     public final static DescriptorImpl DESCRIPTOR = new DescriptorImpl();
     private String title;
 
-    public static class DescriptorImpl extends Descriptor<Environment> {
-
-        @Override
-        public String getDisplayName() {
-            return "Environment";
-        }
-    }
-
     @DataBoundConstructor
     public Environment(String title) {
         this.title = title;
@@ -30,5 +22,13 @@ public class Environment implements Describable<Environment> {
     @Override
     public Descriptor<Environment> getDescriptor() {
         return DESCRIPTOR;
+    }
+
+    public static class DescriptorImpl extends Descriptor<Environment> {
+
+        @Override
+        public String getDisplayName() {
+            return "Environment";
+        }
     }
 }

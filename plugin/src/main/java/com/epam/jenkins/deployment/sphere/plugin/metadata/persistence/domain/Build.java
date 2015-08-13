@@ -1,8 +1,7 @@
 package com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.domain;
 
-import lombok.Data;
-
 import org.joda.time.DateTime;
+import lombok.Data;
 
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 

@@ -1,22 +1,19 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import javax.inject.Inject;
+import javax.servlet.ServletException;
+
+import org.kohsuke.stapler.QueryParameter;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
-
-import java.io.IOException;
-import java.util.logging.Level;
-
-import javax.inject.Inject;
-import javax.servlet.ServletException;
-
 import jenkins.YesNoMaybe;
 import lombok.extern.java.Log;
-
-import org.kohsuke.stapler.QueryParameter;
 
 import com.epam.jenkins.deployment.sphere.plugin.config.GlobalConfigHelper;
 import com.google.common.base.Strings;
@@ -24,11 +21,11 @@ import com.google.common.base.Strings;
 @Log
 @Extension(dynamicLoadable = YesNoMaybe.YES)
 public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
-	
-	@Inject
-	private GlobalConfigHelper configHelper;
-	
-	public DeployVersionMetaDataCollectorDescriptor() {
+
+    @Inject
+    private GlobalConfigHelper configHelper;
+
+    public DeployVersionMetaDataCollectorDescriptor() {
         super(DeployVersionMetaDataPublisher.class);
         load();
         PluginInjector.injectMembers(this);
@@ -52,8 +49,8 @@ public class DeployVersionMetaDataCollectorDescriptor extends BuildStepDescripto
         }
         return FormValidation.ok();
     }
-    
+
     public ListBoxModel doFillDeployedAppNameItems() {
-		return configHelper.getApplications();
-	}
+        return configHelper.getApplications();
+    }
 }

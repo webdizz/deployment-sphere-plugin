@@ -10,14 +10,14 @@ import com.google.inject.Singleton;
 @Singleton
 public class JiraInjectionFactory {
 
-	private JiraMetaDataCollector jiraMetaDataCollector;
+    private JiraMetaDataCollector jiraMetaDataCollector;
 
-	public JiraMetaDataCollector getJiraMetaDataCollector() {
-		if (Jenkins.getInstance().getPlugin(PluginConstants.JENKINS_JIRA_PLUGIN_NAME) != null) {
-			jiraMetaDataCollector = jiraMetaDataCollector == null ? new JiraMetaDataCollector() : null;
-		} else {
-			log.warning("JIRA Plugin, which should provide connection to JIRA, is not installed, so JIRA metadata cannot be obtained.");
-		}
-		return jiraMetaDataCollector;
-	}
+    public JiraMetaDataCollector getJiraMetaDataCollector() {
+        if (Jenkins.getInstance().getPlugin(PluginConstants.JENKINS_JIRA_PLUGIN_NAME) != null) {
+            jiraMetaDataCollector = jiraMetaDataCollector == null ? new JiraMetaDataCollector() : null;
+        } else {
+            log.warning("JIRA Plugin, which should provide connection to JIRA, is not installed, so JIRA metadata cannot be obtained.");
+        }
+        return jiraMetaDataCollector;
+    }
 }

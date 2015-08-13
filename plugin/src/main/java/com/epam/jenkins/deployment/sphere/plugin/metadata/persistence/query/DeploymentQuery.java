@@ -40,7 +40,7 @@ public interface DeploymentQuery {
     List<Deployment> find(@Bind("application_name") String applicationName, @Bind("environment_key") String environmentKey);
 
     @SqlQuery("SELECT * FROM DEPLOYMENTS AS data WHERE deployed_at = (SELECT MAX(deployed_at) FROM DEPLOYMENTS WHERE application_name = data.application_name AND environment_key = data.environment_key) AND environment_key = :environment_key ORDER BY deployed_at DESC")
-    List<Deployment> find( @Bind("environment_key") String environmentKey);
+    List<Deployment> find(@Bind("environment_key") String environmentKey);
 
     @BindingAnnotation(BindDeployment.BinderFactory.class)
     @Retention(RetentionPolicy.RUNTIME)

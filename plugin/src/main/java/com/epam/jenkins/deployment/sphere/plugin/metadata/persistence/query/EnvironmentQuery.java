@@ -23,10 +23,10 @@ import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.domain.Env
 
 @RegisterMapper(EnvironmentQuery.Mapper.class)
 public interface EnvironmentQuery {
-	
-	@SqlUpdate("TRUNCATE TABLE ENVIRONMENTS")
-	void truncate();
-	
+
+    @SqlUpdate("TRUNCATE TABLE ENVIRONMENTS")
+    void truncate();
+
     @SqlQuery("SELECT * FROM ENVIRONMENTS WHERE key = :key AND title = :title")
     Environment find(@Bind("key") String applicationName, @Bind("title") String title);
 

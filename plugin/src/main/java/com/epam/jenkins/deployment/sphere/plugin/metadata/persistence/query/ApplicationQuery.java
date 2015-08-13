@@ -23,13 +23,13 @@ import com.epam.jenkins.deployment.sphere.plugin.metadata.model.ApplicationMetaD
 @RegisterMapper(ApplicationQuery.Mapper.class)
 public interface ApplicationQuery {
 
-	@SqlUpdate("MERGE INTO APPLICATIONS (applicationName) values (:applicationName)")
+    @SqlUpdate("MERGE INTO APPLICATIONS (applicationName) values (:applicationName)")
     int save(@BindApplication ApplicationMetaData applicationMetaData);
-	
-	@SqlQuery("SELECT * FROM APPLICATIONS ORDER BY applicationName")
+
+    @SqlQuery("SELECT * FROM APPLICATIONS ORDER BY applicationName")
     List<ApplicationMetaData> findAll();
-	
-	@BindingAnnotation(BindApplication.BinderFactory.class)
+
+    @BindingAnnotation(BindApplication.BinderFactory.class)
     @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.PARAMETER})
     @interface BindApplication {
@@ -45,10 +45,10 @@ public interface ApplicationQuery {
         }
     }
 
-	class Mapper implements ResultSetMapper<ApplicationMetaData> {
+    class Mapper implements ResultSetMapper<ApplicationMetaData> {
         @Override
         public ApplicationMetaData map(final int index, final ResultSet resultSet, final StatementContext ctx) throws SQLException {
-        	ApplicationMetaData build = new ApplicationMetaData();
+            ApplicationMetaData build = new ApplicationMetaData();
             build.setApplicationName(resultSet.getString("applicationName"));
             return build;
         }

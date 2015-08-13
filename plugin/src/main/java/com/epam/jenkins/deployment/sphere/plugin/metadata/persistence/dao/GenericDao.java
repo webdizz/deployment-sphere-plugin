@@ -16,18 +16,18 @@ public class GenericDao {
     @Inject
     private DatabaseProvider databaseProvider;
 
-    public GenericDao () {
-    	PluginInjector.injectMembers(this);
+    public GenericDao() {
+        PluginInjector.injectMembers(this);
     }
 
-    public DBI database () {
+    public DBI database() {
         return databaseProvider.database();
     }
 
-    public ModelMapper getModelMapper () {
+    public ModelMapper getModelMapper() {
         modelMapper.addConverter(new AbstractConverter<DateTime, Long>() {
             @Override
-            protected Long convert (final DateTime source) {
+            protected Long convert(final DateTime source) {
                 return source.getMillis();
             }
         });

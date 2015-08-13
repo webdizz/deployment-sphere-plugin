@@ -1,12 +1,7 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
-import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.tasks.BuildStepMonitor;
-import hudson.tasks.Notifier;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -14,10 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import lombok.extern.java.Log;
-
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
+import hudson.Launcher;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
+import hudson.tasks.BuildStepMonitor;
+import hudson.tasks.Notifier;
+import lombok.extern.java.Log;
 
 import com.epam.jenkins.deployment.sphere.plugin.action.DynamicVariablesStoringAction;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;

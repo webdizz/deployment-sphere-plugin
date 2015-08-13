@@ -1,52 +1,37 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
-import com.epam.jenkins.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.model.EnvironmentMetaData;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
-import com.google.common.collect.Lists;
-
-import hudson.Extension;
-import hudson.Functions;
-import hudson.model.Describable;
-import hudson.model.RootAction;
-import hudson.model.Descriptor;
-import hudson.model.ParameterDefinition.ParameterDescriptor;
-import hudson.security.ACL;
-import hudson.security.AccessControlled;
-import hudson.security.Permission;
-import hudson.util.ListBoxModel;
-import jenkins.model.Jenkins;
-
-import org.acegisecurity.AccessDeniedException;
-import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
-import org.kohsuke.stapler.export.Exported;
-import org.kohsuke.stapler.export.ExportedBean;
-
+import java.util.Collection;
 import javax.annotation.Nonnull;
 import javax.inject.Inject;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.acegisecurity.AccessDeniedException;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.export.Exported;
+import org.kohsuke.stapler.export.ExportedBean;
+import hudson.Extension;
+import hudson.Functions;
+import hudson.model.RootAction;
+import hudson.security.ACL;
+import hudson.security.AccessControlled;
+import hudson.security.Permission;
+import jenkins.model.Jenkins;
+
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.ApplicationMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
+import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 
 @ExportedBean(defaultVisibility = 999)
 @Extension
-public class BuildSphereDashboardAction implements RootAction, AccessControlled{
+public class BuildSphereDashboardAction implements RootAction, AccessControlled {
 
-	
-	
+
+    public String environment = "";
     @Inject
     private ApplicationDao applicationDao;
-    
     @Inject
     private BuildMetaDataDao buildMetaDataDao;
 
-    public String environment = "";
-    
     @DataBoundConstructor
     public BuildSphereDashboardAction() {
         Jenkins.getInstance().getInjector().injectMembers(this);
@@ -63,9 +48,9 @@ public class BuildSphereDashboardAction implements RootAction, AccessControlled{
     }
 
 
-	@Override
+    @Override
     public String getUrlName() {
-        return "/"+ PluginConstants.BUILD_PLUGIN_CONTEXT;
+        return "/" + PluginConstants.BUILD_PLUGIN_CONTEXT;
     }
 
     @Exported
@@ -73,17 +58,17 @@ public class BuildSphereDashboardAction implements RootAction, AccessControlled{
         return Functions.getResourcePath();
     }
 
-    
+
     @Exported
     public Collection<ApplicationMetaData> getApplications() {
-		return applicationDao.findAll();
+        return applicationDao.findAll();
     }
-    
+
     @Exported
     public Collection<BuildMetaData> getBuilds() {
-		return buildMetaDataDao.findAll();
+        return buildMetaDataDao.findAll();
     }
-    
+
     @Nonnull
     @Override
     public ACL getACL() {
@@ -101,8 +86,5 @@ public class BuildSphereDashboardAction implements RootAction, AccessControlled{
         return getACL().hasPermission(permission);
     }
 
-	
-	
-    
 
 }

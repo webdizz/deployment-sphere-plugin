@@ -1,16 +1,15 @@
 package com.epam.jenkins.deployment.sphere.plugin.metadata.collector;
 
-import hudson.model.Result;
-import hudson.model.TaskListener;
-import hudson.model.AbstractBuild;
-import hudson.scm.ChangeLogSet;
-import hudson.scm.ChangeLogSet.Entry;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import hudson.model.AbstractBuild;
+import hudson.model.Result;
+import hudson.model.TaskListener;
+import hudson.scm.ChangeLogSet;
+import hudson.scm.ChangeLogSet.Entry;
 import lombok.extern.java.Log;
 
 import com.google.inject.Singleton;
@@ -36,7 +35,7 @@ public class InvolvedBuildChangesCollector implements Collector<List<? extends E
 
     // We need all builds from current build (inclusively) up to last successful build (exclusively)
     private Set<AbstractBuild<?, ?>> getAllInvolvedBuilds(final AbstractBuild<?, ?> build,
-            final TaskListener taskListener) {
+                                                          final TaskListener taskListener) {
 
         Set<AbstractBuild<?, ?>> involvedBuilds = new HashSet<>();
         involvedBuilds.add(build); // We need current build

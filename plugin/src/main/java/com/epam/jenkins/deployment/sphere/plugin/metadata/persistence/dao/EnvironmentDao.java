@@ -26,14 +26,14 @@ import com.google.common.collect.Lists;
 @Log
 public class EnvironmentDao extends GenericDao {
 
-	public void deleteAll(){
-		try (Handle handle = database().open()) {
+    public void deleteAll() {
+        try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
             query.truncate();
         }
-	}
-	
-	public void save(final EnvironmentMetaData environmentMetaData) {
+    }
+
+    public void save(final EnvironmentMetaData environmentMetaData) {
         Environment environment = getModelMapper().map(environmentMetaData, Environment.class);
 
         try (Handle handle = database().open()) {
@@ -42,15 +42,15 @@ public class EnvironmentDao extends GenericDao {
             log.fine(format("Environment '%s' was saved", environment));
         }
     }
-	
-	public void saveAll(Iterable<EnvironmentMetaData> convertAll) {
-		for (EnvironmentMetaData environmentMetaData : convertAll) {
-			if(StringUtils.isNotEmpty(environmentMetaData.getKey()) && StringUtils.isNotEmpty(environmentMetaData.getTitle())){
-				save(environmentMetaData);
-			}
-		}	
-	}
-	
+
+    public void saveAll(Iterable<EnvironmentMetaData> convertAll) {
+        for (EnvironmentMetaData environmentMetaData : convertAll) {
+            if (StringUtils.isNotEmpty(environmentMetaData.getKey()) && StringUtils.isNotEmpty(environmentMetaData.getTitle())) {
+                save(environmentMetaData);
+            }
+        }
+    }
+
     public Environment find(final String evnKey) {
         try (Handle handle = database().open()) {
             EnvironmentQuery query = handle.attach(EnvironmentQuery.class);
@@ -81,31 +81,31 @@ public class EnvironmentDao extends GenericDao {
         final DeploymentQuery deploymentQuery = handle.attach(DeploymentQuery.class);
         List<Deployment> deploymentList = deploymentQuery.find(environment.getKey());
         if (CollectionUtils.isNotEmpty(deploymentList)) {
-        	for (Deployment deployment : deploymentList){
-	            final DeploymentMetaData prodDeploy = new DeploymentMetaData();
-	            prodDeploy.setBuildVersion(deployment.getBuild().getBuildVersion());
-	            prodDeploy.setDeployedAt(DateFormatUtil.formatDate(deployment.getDeployedAt()));
-	            prodDeploy.setApplicationName(deployment.getBuild().getApplicationName());
-	            prodDeploy.setBuild(loadBuildInfo(handle, deployment));
-	            environmentMetaData.getDeployments().add(prodDeploy);
-        	}
+            for (Deployment deployment : deploymentList) {
+                final DeploymentMetaData prodDeploy = new DeploymentMetaData();
+                prodDeploy.setBuildVersion(deployment.getBuild().getBuildVersion());
+                prodDeploy.setDeployedAt(DateFormatUtil.formatDate(deployment.getDeployedAt()));
+                prodDeploy.setApplicationName(deployment.getBuild().getApplicationName());
+                prodDeploy.setBuild(loadBuildInfo(handle, deployment));
+                environmentMetaData.getDeployments().add(prodDeploy);
+            }
         }
     }
-    
-    private BuildMetaData loadBuildInfo(final Handle handle, final Deployment deployment){
-    	 final BuildQuery query = handle.attach(BuildQuery.class);
-         Build foundBuild = query.find(deployment.getBuild().getApplicationName(), deployment.getBuild().getBuildVersion());
-         BuildMetaData cqBuild = null;
-         if (null != foundBuild){ 
-        	 cqBuild = new BuildMetaData();
-	         cqBuild.setApplicationName(foundBuild.getApplicationName());
-	         cqBuild.setNumber(foundBuild.getBuildNumber());
-	         cqBuild.setBuildVersion(foundBuild.getBuildVersion());
-	         cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
-	         cqBuild.setJobName(foundBuild.getApplicationName());
-	         cqBuild.setBuildUrl(foundBuild.getBuildUrl());
-	         cqBuild.setMetaData(foundBuild.getMetaData());
-         }
-         return cqBuild;
+
+    private BuildMetaData loadBuildInfo(final Handle handle, final Deployment deployment) {
+        final BuildQuery query = handle.attach(BuildQuery.class);
+        Build foundBuild = query.find(deployment.getBuild().getApplicationName(), deployment.getBuild().getBuildVersion());
+        BuildMetaData cqBuild = null;
+        if (null != foundBuild) {
+            cqBuild = new BuildMetaData();
+            cqBuild.setApplicationName(foundBuild.getApplicationName());
+            cqBuild.setNumber(foundBuild.getBuildNumber());
+            cqBuild.setBuildVersion(foundBuild.getBuildVersion());
+            cqBuild.setBuiltAt(DateFormatUtil.formatDate(foundBuild.getBuiltAt()));
+            cqBuild.setJobName(foundBuild.getApplicationName());
+            cqBuild.setBuildUrl(foundBuild.getBuildUrl());
+            cqBuild.setMetaData(foundBuild.getMetaData());
+        }
+        return cqBuild;
     }
 }

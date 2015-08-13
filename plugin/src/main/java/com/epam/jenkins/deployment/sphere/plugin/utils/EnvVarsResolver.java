@@ -1,12 +1,11 @@
 package com.epam.jenkins.deployment.sphere.plugin.utils;
 
-import hudson.EnvVars;
-import hudson.model.TaskListener;
-import hudson.model.AbstractBuild;
-
 import java.io.IOException;
 import java.util.logging.Level;
 
+import hudson.EnvVars;
+import hudson.model.AbstractBuild;
+import hudson.model.TaskListener;
 import lombok.extern.java.Log;
 
 import com.google.common.base.Throwables;

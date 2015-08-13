@@ -1,31 +1,26 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
+import static java.lang.String.format;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
-import static java.lang.String.format;
-import hudson.Launcher;
-import hudson.model.BuildListener;
-import hudson.model.AbstractBuild;
-import hudson.tasks.BuildStepMonitor;
 
 import java.io.IOException;
 import java.util.logging.Level;
 
-import javax.inject.Inject;
-
-import jenkins.model.Jenkins;
-import lombok.extern.java.Log;
-
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
+import hudson.Launcher;
+import hudson.model.AbstractBuild;
+import hudson.model.BuildListener;
+import hudson.tasks.BuildStepMonitor;
+import jenkins.model.Jenkins;
+import lombok.extern.java.Log;
 
 import com.epam.jenkins.deployment.sphere.plugin.action.DynamicVariablesStoringAction;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.Constants;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.collector.Collector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.collector.DeployVersionMetaDataCollector;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.DeploymentMetaData;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
-import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.EnvironmentDao;
 import com.google.common.base.Strings;
 
 @Log
@@ -38,9 +33,9 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
     public DeployVersionMetaDataPublisher() {
         Jenkins.getInstance().getInjector().injectMembers(this);
     }
-    
-    public DeployVersionMetaDataPublisher(String deployedAppName){
-    	this.deployedAppName = deployedAppName;
+
+    public DeployVersionMetaDataPublisher(String deployedAppName) {
+        this.deployedAppName = deployedAppName;
     }
 
     @Override
@@ -61,7 +56,7 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
         checkArgument(null != build, "Current build is null, something was wrong.");
 
         listener.getLogger().append("[deployment-sphere] Collecting deploy metadata\n");
-		repopulateEnvValues(build);
+        repopulateEnvValues(build);
         Collector<DeploymentMetaData> collector = new DeployVersionMetaDataCollector();
         DeploymentMetaData metaData = collector.collect(build, listener);
 
@@ -70,11 +65,11 @@ public class DeployVersionMetaDataPublisher extends hudson.tasks.Notifier {
         return true;
     }
 
-	private void repopulateEnvValues(final AbstractBuild<?, ?> build) {
+    private void repopulateEnvValues(final AbstractBuild<?, ?> build) {
         getDescriptor().load();
         final String appName = getDeployedAppName();
         checkState(!Strings.isNullOrEmpty(appName), String.format("Invalid application name %s", appName));
         build.addAction(new DynamicVariablesStoringAction(Constants.BUILD_APP_NAME, appName));
-	}
+    }
 
 }

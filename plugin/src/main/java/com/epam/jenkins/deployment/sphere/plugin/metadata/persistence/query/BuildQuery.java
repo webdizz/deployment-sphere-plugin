@@ -11,8 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import lombok.extern.java.Log;
-
 import org.codehaus.jackson.map.ObjectMapper;
 import org.joda.time.DateTime;
 import org.skife.jdbi.v2.SQLStatement;
@@ -24,6 +22,7 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
+import lombok.extern.java.Log;
 
 import com.epam.jenkins.deployment.sphere.plugin.metadata.model.MetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.domain.Build;
@@ -48,7 +47,7 @@ public interface BuildQuery {
 
     @BindingAnnotation(BindBuild.BinderFactory.class)
     @Retention(RetentionPolicy.RUNTIME)
-    @Target({ ElementType.PARAMETER })
+    @Target({ElementType.PARAMETER})
     @interface BindBuild {
 
         @Log
@@ -74,12 +73,13 @@ public interface BuildQuery {
                 try {
                     jsonMetaData = new ObjectMapper().writeValueAsString(metaData);
                 } catch (IOException e) {
-                	 log.warning("Failed serializing MetaData to Json" + e.getMessage());
+                    log.warning("Failed serializing MetaData to Json" + e.getMessage());
                 }
                 return jsonMetaData;
             }
         }
     }
+
     @Log
     class Mapper implements ResultSetMapper<Build> {
         @Override
@@ -101,7 +101,7 @@ public interface BuildQuery {
             try {
                 metaData = new ObjectMapper().readValue(jsonString, MetaData.class);
             } catch (IOException e) {
-            	log.warning("Failed deserializing Json to MetaData" + e.getMessage());
+                log.warning("Failed deserializing Json to MetaData" + e.getMessage());
             }
             return metaData;
         }

@@ -1,9 +1,9 @@
 package com.epam.jenkins.deployment.sphere.plugin.metadata.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

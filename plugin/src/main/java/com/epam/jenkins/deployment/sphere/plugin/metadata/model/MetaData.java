@@ -3,10 +3,9 @@ package com.epam.jenkins.deployment.sphere.plugin.metadata.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import lombok.Data;
-
 import org.kohsuke.stapler.export.Exported;
 import org.kohsuke.stapler.export.ExportedBean;
+import lombok.Data;
 
 @Data
 @ExportedBean

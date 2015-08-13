@@ -1,22 +1,19 @@
 package com.epam.jenkins.deployment.sphere.plugin;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import javax.inject.Inject;
+import javax.servlet.ServletException;
+
+import org.kohsuke.stapler.QueryParameter;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
 import hudson.util.ListBoxModel;
-
-import java.io.IOException;
-import java.util.logging.Level;
-
-import javax.inject.Inject;
-import javax.servlet.ServletException;
-
 import jenkins.YesNoMaybe;
 import lombok.extern.java.Log;
-
-import org.kohsuke.stapler.QueryParameter;
 
 import com.epam.jenkins.deployment.sphere.plugin.config.GlobalConfigHelper;
 import com.google.common.base.Strings;
@@ -25,9 +22,9 @@ import com.google.common.base.Strings;
 @Extension(dynamicLoadable = YesNoMaybe.YES)
 public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor<Publisher> {
 
-	@Inject
-	private GlobalConfigHelper configHelper;
-	
+    @Inject
+    private GlobalConfigHelper configHelper;
+
     public BuildVersionMetaDataCollectorDescriptor() {
         super(BuildVersionMetaDataPublisher.class);
         load();
@@ -59,7 +56,7 @@ public class BuildVersionMetaDataCollectorDescriptor extends BuildStepDescriptor
         return FormValidation.ok();
     }
 
-	public ListBoxModel doFillAppNameItems() {
-		return configHelper.getApplications();
-	}
+    public ListBoxModel doFillAppNameItems() {
+        return configHelper.getApplications();
+    }
 }
