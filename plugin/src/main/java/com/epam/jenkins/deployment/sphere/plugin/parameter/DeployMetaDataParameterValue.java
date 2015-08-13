@@ -31,21 +31,6 @@ public class DeployMetaDataParameterValue extends ParameterValue {
         this.applicationName = applicationName;
     }
 
-    @Exported
-    public String getEnvironmentKey() {
-        return environmentKey;
-    }
-
-    @Exported
-    public String getBuildVersion() {
-        return buildVersion;
-    }
-
-    @Exported
-    public String getApplicationName() {
-        return applicationName;
-    }
-
     @Override
     public void buildEnvVars(AbstractBuild<?, ?> build, EnvVars env) {
         env.put(Constants.ENV_NAME, environmentKey);
@@ -61,6 +46,21 @@ public class DeployMetaDataParameterValue extends ParameterValue {
                 return resolveVariableValue(name);
             }
         };
+    }
+
+    @Exported
+    public String getEnvironmentKey() {
+        return environmentKey;
+    }
+
+    @Exported
+    public String getBuildVersion() {
+        return buildVersion;
+    }
+
+    @Exported
+    public String getApplicationName() {
+        return applicationName;
     }
 
     private String resolveVariableValue(String property) {
