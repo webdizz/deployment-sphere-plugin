@@ -32,14 +32,14 @@ Add deployment-sphere-plugin to eclipse:
 
 1. Install in IDE [lombok](http://projectlombok.org/download.html).
 2. From Eclipse Marketplace install Gradle IDE.
-3. Before adding project into IDE go to _deployment-sphere-plugin_ and run ```bash ./gradlew :pl:build```.
-4. In IDE go to _Import -> Gradle-> Gradle Project_, select directory with project and click _Build Model_. After that just add it into IDE.
+3. Before adding project into IDE go to ```deployment-sphere-plugin``` and run ```bash ./gradlew :pl:build```.
+4. In IDE go to ```Import -> Gradle-> Gradle Project```, select directory with project and click ```Build Model```. After that just add it into IDE.
 
 Install plugin on Jenkins local mode:
 ------
 1. Go to Jenkins dashboard. On the menu to the left, pick up ```Manage Jenkins``` option.
 2. Select ```Manage plugins```.
-3. Install dependency plugins _H2 Database Plugin_.
+3. Install dependency plugins ```H2 Database Plugin```.
 4. Goto ```Advanced``` tab and use ```Upload plugin``` feature.
 
 Building
@@ -64,22 +64,22 @@ Install plugin on Jenkins from [Jenkins Plugins](https://wiki.jenkins-ci.org/dis
 ------
 1. Go to Jenkins dashboard. On the menu to the left, pick up ```Manage Jenkins``` option.
 2. Select ```Manage plugins```.
-3. Install dependency plugins _H2 Database Plugin_.
-4. Install _Deployment Sphere Plugin_.
+3. Install dependency plugins ```H2 Database Plugin```.
+4. Install ```Deployment Sphere Plugin```.
 
 Jenkins configuration initial jobs:
 ------
 
 0. Go to ```Manage plugins```->```Configure System```.
-  * Navigate to _Deployment Sphere configuration_ section;
+  * Navigate to ```Deployment Sphere configuration``` section;
   * Add environments you're working with;
   * Add applications names you're working with.
 1. Create build project.
-  * After configuration of build navigate to _Add post-build action_ and select _Collect Build metadata_;
-  * Select _"Application Name"_ this project is responsible to build;
-  * Modify _"Build version Pattern"_ if your versioning strategy is different by specifying your pattern;
+  * After configuration of build navigate to ```Add post-build action``` and select ```Collect Build metadata```;
+  * Select ```"Application Name"``` this project is responsible to build;
+  * Modify ```"Build version Pattern"``` if your versioning strategy is different by specifying your pattern;
   * Save project.
 2. Create deploy project.
-  * After configuration of deployment navigate to _Add post-build action_ and select _Collect Deploy metadata_;
+  * After configuration of deployment navigate to ```Add post-build action``` and select ```Collect Deploy metadata```;
   * Select application this project is responsible to deploy;
   * Save project.
