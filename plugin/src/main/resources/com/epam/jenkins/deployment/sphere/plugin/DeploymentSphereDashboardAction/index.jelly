@@ -6,20 +6,16 @@
 	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/bootstrap.min.js"></script>
 
-
-
 	<l:layout title="${%Deployment Sphere}">
 		<st:include page="sidepanel.jelly"/>
 		<l:main-panel>
 			<div class="col-xs-12 col-md-22 main-panel-content">
 				<div>
-					<span class="plugin-panel-title">${%Environments State}</span>
+					<span class="plugin-panel-title">${%Deployments across environments}</span>
 					<span class="plugin-panel-header-datails">${it.environments.size()} ${%Environments}</span>
 				</div>
-			
-				
-				
 				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+				    <div><br/><br/><strong>${%Currently there is no deployments}</strong></div>
 				</div>
 			</div>
 		</l:main-panel>
@@ -37,5 +33,4 @@
 		function getBuildTime(){return '${%Build Time}'}
 	</script>
 	<script type="text/javascript" src="${it.resourceUrl}/plugin/deployment-sphere/js/deployDynamicGeneration.js"></script>
-
 </j:jelly>
