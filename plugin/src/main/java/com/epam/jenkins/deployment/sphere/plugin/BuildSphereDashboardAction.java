@@ -21,8 +21,9 @@ import com.epam.jenkins.deployment.sphere.plugin.metadata.model.BuildMetaData;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.ApplicationDao;
 import com.epam.jenkins.deployment.sphere.plugin.metadata.persistence.dao.BuildMetaDataDao;
 
-@ExportedBean(defaultVisibility = 999)
-@Extension
+//@ExportedBean(defaultVisibility = 999)
+//@Extension
+// Disabled for now as it's lightly overhead for the plugin purpose.
 public class BuildSphereDashboardAction implements RootAction, AccessControlled {
 
 
